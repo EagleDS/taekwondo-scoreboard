@@ -22,8 +22,6 @@
   h1.brand { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.4rem,4vw,2.4rem); letter-spacing:.15em; color:var(--gold); text-shadow:0 0 30px rgba(245,197,24,.5); text-align:center; }
   .brand-sub { font-size:.78rem; letter-spacing:.35em; color:var(--muted); text-transform:uppercase; text-align:center; margin-bottom:6px; }
   .card { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:20px; width:100%; }
-
-  /* BUTTONS */
   .btn { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:.85rem; letter-spacing:.1em; border:none; border-radius:8px; cursor:pointer; padding:7px 14px; transition:transform .1s,box-shadow .2s; text-transform:uppercase; user-select:none; }
   .btn:active { transform:scale(.93); }
   .btn-pt { font-size:1.05rem; padding:8px 0; width:46px; text-align:center; }
@@ -115,19 +113,12 @@
   .vote-count { font-size:.82rem; color:rgba(255,255,255,.7); min-height:1.2em; }
   .judge-instructions { text-align:center; color:var(--muted); font-size:.85rem; line-height:1.6; max-width:380px; }
 
-  /* WINNER */
   .winner-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.88); z-index:100; align-items:center; justify-content:center; flex-direction:column; gap:18px; }
   .winner-overlay.show { display:flex; }
   .winner-text { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,12vw,6rem); letter-spacing:.1em; color:var(--gold); text-shadow:0 0 60px currentColor; animation:pulse 1s ease-in-out infinite alternate; }
   @keyframes pulse { from{opacity:.7;transform:scale(.97)} to{opacity:1;transform:scale(1.03)} }
   .winner-sub { font-size:1.2rem; letter-spacing:.2em; color:var(--muted); }
-
-  @media(max-width:580px) {
-    .scoreboard { grid-template-columns:1fr 1fr; }
-    .center-panel { display:none; }
-    .setup-form { grid-template-columns:1fr; }
-    .divider-v { display:none; }
-  }
+  @media(max-width:580px) { .scoreboard{grid-template-columns:1fr 1fr} .center-panel{display:none} .setup-form{grid-template-columns:1fr} .divider-v{display:none} }
 </style>
 </head>
 <body>
@@ -136,21 +127,17 @@
 <div class="page" id="page-setup">
   <h1 class="brand">⬡ Taekwondo Scoreboard</h1>
   <p class="brand-sub">Multi-Judge Setup</p>
-
   <div class="card" style="max-width:700px;">
     <div class="step">
       <div class="step-num">1</div>
-      <div><div class="step-title">Create Firebase project</div><div class="step-desc">Go to <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> → Add project → Build → Realtime Database → Create database → Test mode</div></div>
+      <div><div class="step-title">Paste your Firebase config</div>
+      <div class="step-desc">Go to <a href="https://console.firebase.google.com" target="_blank">Firebase console</a> → ⚙️ Project Settings → Your apps → copy the config values below.</div></div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
-      <div><div class="step-title">Get your config</div><div class="step-desc">⚙️ Project Settings → Your apps → Web app → copy the firebaseConfig values below</div></div>
+      <div><div class="step-title">Generate &amp; share links</div>
+      <div class="step-desc">Click Generate. Send the 3 judge links via WhatsApp or text. Judges just tap the link — no setup needed on their end.</div></div>
     </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div><div class="step-title">Paste values &amp; generate links</div><div class="step-desc">Fill in all fields below and click Generate. Share links to judges via WhatsApp or text.</div></div>
-    </div>
-
     <form id="setupForm">
       <div class="setup-form">
         <div class="form-full"><label>Session Name</label><input id="f-session" value="main" /></div>
@@ -167,9 +154,8 @@
       </div>
     </form>
   </div>
-
   <div class="card" id="generatedLinks" style="display:none;max-width:700px;">
-    <p style="font-size:.8rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;">📋 Share these links</p>
+    <p style="font-size:.8rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;">📋 Share these links — judges just tap, no setup needed!</p>
     <div class="link-box">
       <div class="link-row"><label>🖥 Host</label><input id="link-host" readonly /><button class="btn btn-ghost btn-sm" onclick="copyLink('link-host',this)">Copy</button></div>
       <div class="link-row"><label>👁 Judge 1</label><input id="link-judge1" readonly /><button class="btn btn-ghost btn-sm" onclick="copyLink('link-judge1',this)">Copy</button></div>
@@ -186,7 +172,6 @@
 <div class="page" id="page-host">
   <h1 class="brand">⬡ Taekwondo Scoreboard</h1>
   <p class="brand-sub">Host View — Live</p>
-
   <div class="top-bar">
     <div style="text-align:center;">
       <div class="timer-display" id="h-timer">2:00</div>
@@ -216,7 +201,6 @@
       <div style="font-size:.7rem;color:var(--muted);">within 3s</div>
     </div>
   </div>
-
   <div class="scoreboard">
     <div class="fighter-panel red-panel">
       <span class="corner-tag">🔴 Red Corner</span>
@@ -238,7 +222,6 @@
       <button class="btn btn-danger btn-sm" id="h-blueUndo">− Undo</button>
     </div>
   </div>
-
   <div class="deductions-row">
     <div class="ded-block red-ded">
       <div class="ded-title">Deductions — Red</div>
@@ -261,13 +244,11 @@
       </div>
     </div>
   </div>
-
   <div class="reset-bar">
     <button class="btn btn-ghost" id="h-resetScores">Reset Scores</button>
     <button class="btn btn-ghost" id="h-resetAll">Full Reset</button>
     <button class="btn btn-gold" id="h-declareWinner">Declare Winner</button>
   </div>
-
   <div class="winner-overlay" id="h-winnerOverlay">
     <div class="winner-text" id="h-winnerText">WINNER!</div>
     <div class="winner-sub">by Points Decision</div>
@@ -285,7 +266,6 @@
       <span class="j-timer" id="j-timer">2:00</span>
     </div>
   </div>
-
   <div class="live-score-strip">
     <div style="text-align:center;">
       <div class="strip-score red" id="j-redScore">0</div>
@@ -297,7 +277,6 @@
       <div class="strip-label" id="j-blueNameStrip">FIGHTER 2</div>
     </div>
   </div>
-
   <div class="judge-vote-area">
     <button class="vote-card red-card" id="j-voteRed">
       <div class="vote-corner">🔴 Red Corner</div>
@@ -314,7 +293,6 @@
       <div class="vote-count" id="j-blueVoteCount"></div>
     </button>
   </div>
-
   <div class="judge-instructions">
     Tap the fighter who scored.<br>
     A point registers when <strong style="color:var(--gold);">2 of 3 judges</strong> tap the same fighter within <strong style="color:var(--gold);">3 seconds</strong>.
@@ -326,54 +304,60 @@
   import { getDatabase, ref, set, get, onValue }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-  // ── Read config from localStorage ─────────────────────────────────────────
-  const p = new URLSearchParams(location.search);
-  const MODE     = p.get("mode") || "setup";
-  const JUDGE_ID = p.get("judge") || "1";
+  // ── Parse URL params ───────────────────────────────────────────────────────
+  const p       = new URLSearchParams(location.search);
+  const MODE     = p.get("mode")    || "setup";
+  const JUDGE_ID = p.get("judge")   || "1";
   const SESSION  = p.get("session") || "main";
 
-  // Config stored in localStorage so URLs stay short
-  const STORAGE_KEY = "tkd_firebase_cfg";
-
-  function saveConfig(cfg) { localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg)); }
-  function loadConfig() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch(e) { return {}; }
+  // Config comes from URL hash (so it doesn't appear in server logs)
+  // Format: #apiKey=xxx&authDomain=xxx&...
+  function getCfgFromHash() {
+    const hash = location.hash.replace(/^#/, "");
+    if (!hash) return null;
+    const h = new URLSearchParams(hash);
+    const cfg = {
+      apiKey:            h.get("apiKey")            || "",
+      authDomain:        h.get("authDomain")        || "",
+      databaseURL:       h.get("databaseURL")       || "",
+      projectId:         h.get("projectId")         || "",
+      storageBucket:     h.get("storageBucket")     || "",
+      messagingSenderId: h.get("messagingSenderId") || "",
+      appId:             h.get("appId")             || "",
+    };
+    return cfg.apiKey && cfg.databaseURL ? cfg : null;
   }
 
-  // ── Show correct page ──────────────────────────────────────────────────────
-  document.querySelectorAll(".page").forEach(p => p.style.display = "none");
+  function makeCfgHash(cfg) {
+    return "#" + Object.entries(cfg).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join("&");
+  }
 
-  const cfg = loadConfig();
-  const hasConfig = cfg.apiKey && cfg.databaseURL;
+  // ── Show page ──────────────────────────────────────────────────────────────
+  document.querySelectorAll(".page").forEach(el => el.style.display = "none");
 
-  if (MODE === "host" && hasConfig) {
-    show("page-host");
-    startHost(cfg, SESSION);
-  } else if (MODE === "judge" && hasConfig) {
-    show("page-judge");
-    document.getElementById("j-badge").textContent = `JUDGE ${JUDGE_ID}`;
-    startJudge(cfg, SESSION, JUDGE_ID);
+  const cfg = getCfgFromHash();
+
+  if ((MODE === "host" || MODE === "judge") && cfg) {
+    if (MODE === "host") {
+      document.getElementById("page-host").style.display = "flex";
+      startHost(cfg, SESSION);
+    } else {
+      document.getElementById("page-judge").style.display = "flex";
+      document.getElementById("j-badge").textContent = `JUDGE ${JUDGE_ID}`;
+      startJudge(cfg, SESSION, JUDGE_ID);
+    }
   } else {
-    show("page-setup");
+    document.getElementById("page-setup").style.display = "flex";
     startSetup();
   }
-
-  function show(id) { document.getElementById(id).style.display = "flex"; }
 
   // ══════════════════════════════════════════════════════════════════════════
   // SETUP
   // ══════════════════════════════════════════════════════════════════════════
   function startSetup() {
-    // Pre-fill if config exists
-    const cfg = loadConfig();
-    if (cfg.apiKey) {
-      ["apiKey","authDomain","databaseURL","projectId","storageBucket","messagingSenderId","appId"]
-        .forEach(k => { const el = document.getElementById("f-"+k); if(el && cfg[k]) el.value = cfg[k]; });
-    }
-
     document.getElementById("setupForm").onsubmit = (e) => {
       e.preventDefault();
-      const newCfg = {
+      const cfg = {
         apiKey:            document.getElementById("f-apiKey").value.trim(),
         authDomain:        document.getElementById("f-authDomain").value.trim(),
         databaseURL:       document.getElementById("f-databaseURL").value.trim(),
@@ -382,19 +366,18 @@
         messagingSenderId: document.getElementById("f-messagingSenderId").value.trim(),
         appId:             document.getElementById("f-appId").value.trim(),
       };
+      if (!cfg.apiKey || !cfg.databaseURL) {
+        alert("Please fill in at least API Key and Database URL!"); return;
+      }
       const session = document.getElementById("f-session").value.trim() || "main";
+      const base    = location.origin + location.pathname;
+      const hash    = makeCfgHash(cfg);
 
-      // Save to localStorage
-      saveConfig(newCfg);
-
-      const base = location.origin + location.pathname;
-      document.getElementById("link-host").value    = `${base}?mode=host&session=${session}`;
-      document.getElementById("link-judge1").value  = `${base}?mode=judge&judge=1&session=${session}`;
-      document.getElementById("link-judge2").value  = `${base}?mode=judge&judge=2&session=${session}`;
-      document.getElementById("link-judge3").value  = `${base}?mode=judge&judge=3&session=${session}`;
+      document.getElementById("link-host").value    = `${base}?mode=host&session=${session}${hash}`;
+      document.getElementById("link-judge1").value  = `${base}?mode=judge&judge=1&session=${session}${hash}`;
+      document.getElementById("link-judge2").value  = `${base}?mode=judge&judge=2&session=${session}${hash}`;
+      document.getElementById("link-judge3").value  = `${base}?mode=judge&judge=3&session=${session}${hash}`;
       document.getElementById("generatedLinks").style.display = "block";
-
-      alert("✅ Config saved! Share the links below. All devices that open this page first will save the config automatically.");
     };
   }
 
@@ -407,44 +390,36 @@
     const stateRef = ref(db, `sessions/${session}/state`);
     const votesRef = ref(db, `sessions/${session}/votes`);
 
-    // Init if needed
     get(stateRef).then(snap => { if (!snap.exists()) initState(db, session); });
 
-    // Listen state
     onValue(stateRef, snap => { if (snap.exists()) renderHost(snap.val()); });
-    onValue(votesRef, snap => { renderVotes(snap.val() || {}); });
+    onValue(votesRef, snap => { renderVoteIndicator(snap.val() || {}); });
 
-    // Timer
-    let ts = null; let localRunning = false; let tickInt = null; let lastTick = null;
+    // Timer driver
+    let ts = null; let running = false; let tickInt = null; let lastTick = null;
     onValue(stateRef, snap => {
       if (!snap.exists()) return;
       ts = snap.val();
-      if (ts.timerRunning && !localRunning) {
-        localRunning = true; lastTick = Date.now();
+      if (ts.timerRunning && !running) {
+        running = true; lastTick = Date.now();
         tickInt = setInterval(async () => {
-          if (!ts || !ts.timerRunning) { clearInterval(tickInt); localRunning = false; return; }
-          const elapsed = Math.floor((Date.now() - lastTick) / 1000);
-          if (elapsed >= 1) {
+          if (!ts?.timerRunning) { clearInterval(tickInt); running = false; return; }
+          const e = Math.floor((Date.now()-lastTick)/1000);
+          if (e >= 1) {
             lastTick = Date.now();
-            const newSecs = Math.max(0, ts.timerSeconds - elapsed);
-            await set(ref(db, `sessions/${session}/state/timerSeconds`), newSecs);
-            if (newSecs <= 0) {
-              await set(ref(db, `sessions/${session}/state/timerRunning`), false);
-              clearInterval(tickInt); localRunning = false;
-            }
+            const s = Math.max(0, ts.timerSeconds - e);
+            await set(ref(db,`sessions/${session}/state/timerSeconds`), s);
+            if (s <= 0) { await set(ref(db,`sessions/${session}/state/timerRunning`), false); clearInterval(tickInt); running = false; }
           }
         }, 250);
-      } else if (!ts.timerRunning && localRunning) {
-        clearInterval(tickInt); localRunning = false;
-      }
+      } else if (!ts.timerRunning && running) { clearInterval(tickInt); running = false; }
     });
 
-    // Vote processor
     setInterval(() => processVotes(db, session), 500);
 
-    // Controls
+    // Wire controls
     document.getElementById("h-startStop").onclick = async () => {
-      const r = ref(db, `sessions/${session}/state/timerRunning`);
+      const r = ref(db,`sessions/${session}/state/timerRunning`);
       await set(r, !(await get(r)).val());
     };
     document.getElementById("h-resetTimer").onclick = async () => {
@@ -458,186 +433,137 @@
       await set(ref(db,`sessions/${session}/state/timerSeconds`), v);
       await set(ref(db,`sessions/${session}/state/timerRunning`), false);
     };
-    document.getElementById("h-roundUp").onclick   = () => changeRound(db, session, 1);
-    document.getElementById("h-roundDown").onclick = () => changeRound(db, session, -1);
-    document.getElementById("h-redDedAdd").onclick  = () => changeDed(db, session, "red", 1);
-    document.getElementById("h-redDedRem").onclick  = () => changeDed(db, session, "red", -1);
-    document.getElementById("h-blueDedAdd").onclick = () => changeDed(db, session, "blue", 1);
-    document.getElementById("h-blueDedRem").onclick = () => changeDed(db, session, "blue", -1);
-    document.getElementById("h-redUndo").onclick    = () => changeScore(db, session, "red", -1);
-    document.getElementById("h-blueUndo").onclick   = () => changeScore(db, session, "blue", -1);
+    document.getElementById("h-roundUp").onclick    = () => changeRound(db,session,1);
+    document.getElementById("h-roundDown").onclick  = () => changeRound(db,session,-1);
+    document.getElementById("h-redDedAdd").onclick  = () => changeDed(db,session,"red",1);
+    document.getElementById("h-redDedRem").onclick  = () => changeDed(db,session,"red",-1);
+    document.getElementById("h-blueDedAdd").onclick = () => changeDed(db,session,"blue",1);
+    document.getElementById("h-blueDedRem").onclick = () => changeDed(db,session,"blue",-1);
+    document.getElementById("h-redUndo").onclick    = () => changeScore(db,session,"red",-1);
+    document.getElementById("h-blueUndo").onclick   = () => changeScore(db,session,"blue",-1);
     document.getElementById("h-resetScores").onclick = async () => {
-      await set(ref(db,`sessions/${session}/state/redScore`), 0);
-      await set(ref(db,`sessions/${session}/state/blueScore`), 0);
-      await set(ref(db,`sessions/${session}/votes`), null);
+      await set(ref(db,`sessions/${session}/state/redScore`),0);
+      await set(ref(db,`sessions/${session}/state/blueScore`),0);
+      await set(ref(db,`sessions/${session}/votes`),null);
     };
-    document.getElementById("h-resetAll").onclick = () => { if(confirm("Full reset?")) initState(db, session); };
-    document.getElementById("h-declareWinner").onclick = () => declareWinner(db, session);
-    document.getElementById("h-closeWinner").onclick = () => set(ref(db,`sessions/${session}/state/winner`), "");
-    document.getElementById("h-redName").oninput  = e => set(ref(db,`sessions/${session}/state/redName`),  e.target.value);
-    document.getElementById("h-blueName").oninput = e => set(ref(db,`sessions/${session}/state/blueName`), e.target.value);
+    document.getElementById("h-resetAll").onclick = () => { if(confirm("Full reset?")) initState(db,session); };
+    document.getElementById("h-declareWinner").onclick = () => declareWinner(db,session);
+    document.getElementById("h-closeWinner").onclick   = () => set(ref(db,`sessions/${session}/state/winner`),"");
+    document.getElementById("h-redName").oninput  = e => set(ref(db,`sessions/${session}/state/redName`), e.target.value);
+    document.getElementById("h-blueName").oninput = e => set(ref(db,`sessions/${session}/state/blueName`),e.target.value);
 
-    // Manual score buttons
     ["red","blue"].forEach(side => {
       const c = document.getElementById(`h-${side}ManualBtns`);
       [1,2,3,4,5].forEach(pts => {
         const btn = document.createElement("button");
         btn.className = `btn btn-pt btn-${side}`;
         btn.textContent = "+" + pts;
-        btn.onclick = () => changeScore(db, session, side, pts);
+        btn.onclick = () => changeScore(db,session,side,pts);
         c.appendChild(btn);
       });
     });
   }
 
-  function initState(db, session) {
-    set(ref(db, `sessions/${session}/state`), {
-      redScore:0, blueScore:0, redDed:0, blueDed:0,
-      redName:"FIGHTER 1", blueName:"FIGHTER 2",
-      round:1, timerSeconds:120, timerMax:120, timerRunning:false, winner:""
-    });
-    set(ref(db, `sessions/${session}/votes`), null);
+  function initState(db,session) {
+    set(ref(db,`sessions/${session}/state`),{redScore:0,blueScore:0,redDed:0,blueDed:0,redName:"FIGHTER 1",blueName:"FIGHTER 2",round:1,timerSeconds:120,timerMax:120,timerRunning:false,winner:""});
+    set(ref(db,`sessions/${session}/votes`),null);
   }
 
   function renderHost(s) {
-    setText("h-redScore",  s.redScore  ?? 0);
-    setText("h-blueScore", s.blueScore ?? 0);
-    setText("h-redDed",    s.redDed    ?? 0);
-    setText("h-blueDed",   s.blueDed   ?? 0);
-    setText("h-round",     s.round     ?? 1);
-    setText("h-timer",     fmt(s.timerSeconds ?? 120));
-    document.getElementById("h-timer").classList.toggle("warning", (s.timerSeconds??120) <= 30);
-    document.getElementById("h-startStop").textContent = s.timerRunning ? "⏸ Pause" : "▶ Start";
-    setInp("h-redName",  s.redName  || "FIGHTER 1");
-    setInp("h-blueName", s.blueName || "FIGHTER 2");
-    setText("h-redDedName",  (s.redName  || "FIGHTER 1").toUpperCase());
-    setText("h-blueDedName", (s.blueName || "FIGHTER 2").toUpperCase());
-    dots("h-redDots",  s.redDed  ?? 0, "red");
-    dots("h-blueDots", s.blueDed ?? 0, "blue");
-    if (s.winner) {
-      setText("h-winnerText", s.winner);
-      document.getElementById("h-winnerOverlay").classList.add("show");
-    } else {
-      document.getElementById("h-winnerOverlay").classList.remove("show");
-    }
+    T("h-redScore", s.redScore??0); T("h-blueScore",s.blueScore??0);
+    T("h-redDed",   s.redDed??0);   T("h-blueDed",  s.blueDed??0);
+    T("h-round",    s.round??1);    T("h-timer",     fmt(s.timerSeconds??120));
+    el("h-timer").classList.toggle("warning",(s.timerSeconds??120)<=30);
+    el("h-startStop").textContent = s.timerRunning ? "⏸ Pause" : "▶ Start";
+    I("h-redName", s.redName||"FIGHTER 1"); I("h-blueName",s.blueName||"FIGHTER 2");
+    T("h-redDedName",(s.redName||"FIGHTER 1").toUpperCase());
+    T("h-blueDedName",(s.blueName||"FIGHTER 2").toUpperCase());
+    dots("h-redDots",s.redDed??0,"red"); dots("h-blueDots",s.blueDed??0,"blue");
+    if(s.winner){T("h-winnerText",s.winner);el("h-winnerOverlay").classList.add("show");}
+    else el("h-winnerOverlay").classList.remove("show");
   }
 
-  function renderVotes(votes) {
-    const now = Date.now();
-    let rv = 0, bv = 0;
-    Object.values(votes).forEach(v => {
-      if (now - v.ts < 3000) { if(v.side==="red") rv++; else bv++; }
-    });
-    setText("h-redVotes",  rv ? `🟡 ${rv}/3 judges voted` : "");
-    setText("h-blueVotes", bv ? `🟡 ${bv}/3 judges voted` : "");
+  function renderVoteIndicator(votes) {
+    const now=Date.now(); let rv=0,bv=0;
+    Object.values(votes).forEach(v=>{if(now-v.ts<3000){if(v.side==="red")rv++;else bv++;}});
+    T("h-redVotes", rv?`🟡 ${rv}/3 judges voted`:"");
+    T("h-blueVotes",bv?`🟡 ${bv}/3 judges voted`:"");
   }
 
-  async function processVotes(db, session) {
-    const vRef = ref(db, `sessions/${session}/votes`);
-    const snap = await get(vRef);
-    if (!snap.exists()) return;
-    const votes = snap.val();
-    const now = Date.now();
-    const byJudge = {};
-    Object.entries(votes).forEach(([k,v]) => {
-      if (now - v.ts < 3000) {
-        if (!byJudge[v.judgeId] || v.ts > byJudge[v.judgeId].ts) byJudge[v.judgeId] = v;
-      }
-    });
-    const sides = { red:[], blue:[] };
-    Object.values(byJudge).forEach(v => { if(sides[v.side]) sides[v.side].push(v); });
-    for (const side of ["red","blue"]) {
-      if (sides[side].length >= 2) {
-        await changeScore(db, session, side, 1);
-        await set(vRef, null);
-        const el = document.getElementById("h-"+side+"Score");
-        el.classList.add("pop"); setTimeout(()=>el.classList.remove("pop"),300);
+  async function processVotes(db,session) {
+    const vRef=ref(db,`sessions/${session}/votes`);
+    const snap=await get(vRef); if(!snap.exists())return;
+    const votes=snap.val(); const now=Date.now();
+    const byJudge={};
+    Object.entries(votes).forEach(([k,v])=>{if(now-v.ts<3000){if(!byJudge[v.judgeId]||v.ts>byJudge[v.judgeId].ts)byJudge[v.judgeId]=v;}});
+    const sides={red:[],blue:[]};
+    Object.values(byJudge).forEach(v=>{if(sides[v.side])sides[v.side].push(v);});
+    for(const side of["red","blue"]){
+      if(sides[side].length>=2){
+        await changeScore(db,session,side,1);
+        await set(vRef,null);
+        const e=el("h-"+side+"Score"); e.classList.add("pop"); setTimeout(()=>e.classList.remove("pop"),300);
         return;
       }
     }
-    // Clean expired
-    const fresh = {};
-    Object.entries(votes).forEach(([k,v])=>{ if(now-v.ts<3000) fresh[k]=v; });
-    if (Object.keys(fresh).length !== Object.keys(votes).length)
-      await set(vRef, Object.keys(fresh).length ? fresh : null);
+    const fresh={};
+    Object.entries(votes).forEach(([k,v])=>{if(now-v.ts<3000)fresh[k]=v;});
+    if(Object.keys(fresh).length!==Object.keys(votes).length)
+      await set(vRef,Object.keys(fresh).length?fresh:null);
   }
 
-  async function changeScore(db, session, side, delta) {
-    const r = ref(db, `sessions/${session}/state/${side}Score`);
-    const v = (await get(r)).val() || 0;
-    await set(r, Math.max(0, v + delta));
-  }
-  async function changeRound(db, session, delta) {
-    const r = ref(db, `sessions/${session}/state/round`);
-    const v = (await get(r)).val() || 1;
-    await set(r, Math.max(1, Math.min(9, v + delta)));
-  }
-  async function changeDed(db, session, side, delta) {
-    const r = ref(db, `sessions/${session}/state/${side}Ded`);
-    const v = (await get(r)).val() || 0;
-    await set(r, Math.max(0, v + delta));
-  }
-  async function declareWinner(db, session) {
-    const s = (await get(ref(db,`sessions/${session}/state`))).val();
-    const rn = (s.redScore||0)-(s.redDed||0), bn = (s.blueScore||0)-(s.blueDed||0);
-    const msg = rn>bn ? (s.redName||"RED").toUpperCase()+" WINS!" : bn>rn ? (s.blueName||"BLUE").toUpperCase()+" WINS!" : "IT'S A DRAW!";
-    await set(ref(db,`sessions/${session}/state/winner`), msg);
+  async function changeScore(db,session,side,delta){const r=ref(db,`sessions/${session}/state/${side}Score`);await set(r,Math.max(0,((await get(r)).val()||0)+delta));}
+  async function changeRound(db,session,delta){const r=ref(db,`sessions/${session}/state/round`);await set(r,Math.max(1,Math.min(9,((await get(r)).val()||1)+delta)));}
+  async function changeDed(db,session,side,delta){const r=ref(db,`sessions/${session}/state/${side}Ded`);await set(r,Math.max(0,((await get(r)).val()||0)+delta));}
+  async function declareWinner(db,session){
+    const s=(await get(ref(db,`sessions/${session}/state`))).val();
+    const rn=(s.redScore||0)-(s.redDed||0),bn=(s.blueScore||0)-(s.blueDed||0);
+    const msg=rn>bn?(s.redName||"RED").toUpperCase()+" WINS!":bn>rn?(s.blueName||"BLUE").toUpperCase()+" WINS!":"IT'S A DRAW!";
+    await set(ref(db,`sessions/${session}/state/winner`),msg);
   }
 
   // ══════════════════════════════════════════════════════════════════════════
   // JUDGE
   // ══════════════════════════════════════════════════════════════════════════
-  function startJudge(cfg, session, judgeId) {
-    const app = initializeApp(cfg, "judge-app");
-    const db  = getDatabase(app);
-    const stateRef = ref(db, `sessions/${session}/state`);
-    const votesRef = ref(db, `sessions/${session}/votes`);
-
-    onValue(stateRef, snap => {
-      if (!snap.exists()) return;
-      const s = snap.val();
-      setText("j-redScore",  s.redScore  ?? 0);
-      setText("j-blueScore", s.blueScore ?? 0);
-      setText("j-round",     s.round     ?? 1);
-      setText("j-timer",     fmt(s.timerSeconds ?? 120));
-      setText("j-redNameStrip",  (s.redName  || "FIGHTER 1").toUpperCase());
-      setText("j-blueNameStrip", (s.blueName || "FIGHTER 2").toUpperCase());
-      setText("j-redName",  s.redName  || "Fighter 1");
-      setText("j-blueName", s.blueName || "Fighter 2");
-      document.getElementById("j-timer").classList.toggle("warning", (s.timerSeconds??0) <= 30);
+  function startJudge(cfg,session,judgeId) {
+    const app=initializeApp(cfg,"judge");
+    const db=getDatabase(app);
+    onValue(ref(db,`sessions/${session}/state`),snap=>{
+      if(!snap.exists())return; const s=snap.val();
+      T("j-redScore",s.redScore??0); T("j-blueScore",s.blueScore??0);
+      T("j-round",s.round??1); T("j-timer",fmt(s.timerSeconds??120));
+      T("j-redNameStrip",(s.redName||"FIGHTER 1").toUpperCase());
+      T("j-blueNameStrip",(s.blueName||"FIGHTER 2").toUpperCase());
+      T("j-redName",s.redName||"Fighter 1"); T("j-blueName",s.blueName||"Fighter 2");
+      el("j-timer").classList.toggle("warning",(s.timerSeconds??0)<=30);
     });
-
-    onValue(votesRef, snap => {
-      const votes = snap.val() || {};
-      const now = Date.now();
-      let rv=0, bv=0;
-      Object.values(votes).forEach(v=>{ if(now-v.ts<3000){if(v.side==="red")rv++;else bv++;} });
-      setText("j-redVoteCount",  rv ? `${rv}/3 judges` : "");
-      setText("j-blueVoteCount", bv ? `${bv}/3 judges` : "");
+    onValue(ref(db,`sessions/${session}/votes`),snap=>{
+      const votes=snap.val()||{}; const now=Date.now(); let rv=0,bv=0;
+      Object.values(votes).forEach(v=>{if(now-v.ts<3000){if(v.side==="red")rv++;else bv++;}});
+      T("j-redVoteCount",rv?`${rv}/3 judges`:""); T("j-blueVoteCount",bv?`${bv}/3 judges`:"");
     });
-
-    async function vote(side) {
-      await set(ref(db, `sessions/${session}/votes/judge${judgeId}`), { judgeId, side, ts: Date.now() });
-      const btn = document.getElementById(side==="red"?"j-voteRed":"j-voteBlue");
+    async function vote(side){
+      await set(ref(db,`sessions/${session}/votes/judge${judgeId}`),{judgeId,side,ts:Date.now()});
+      const btn=el(side==="red"?"j-voteRed":"j-voteBlue");
       btn.classList.add("voted"); setTimeout(()=>btn.classList.remove("voted"),400);
     }
-
-    document.getElementById("j-voteRed").onclick  = () => vote("red");
-    document.getElementById("j-voteBlue").onclick = () => vote("blue");
+    el("j-voteRed").onclick=()=>vote("red");
+    el("j-voteBlue").onclick=()=>vote("blue");
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
-  function fmt(s) { s=Math.max(0,s||0); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
-  function setText(id,v){ const e=document.getElementById(id); if(e) e.textContent=v; }
-  function setInp(id,v){ const e=document.getElementById(id); if(e&&document.activeElement!==e) e.value=v; }
-  function dots(cid, count, side) {
-    const c=document.getElementById(cid); if(!c)return; c.innerHTML="";
+  function fmt(s){s=Math.max(0,s||0);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0");}
+  function el(id){return document.getElementById(id);}
+  function T(id,v){const e=el(id);if(e)e.textContent=v;}
+  function I(id,v){const e=el(id);if(e&&document.activeElement!==e)e.value=v;}
+  function dots(cid,count,side){
+    const c=el(cid);if(!c)return;c.innerHTML="";
     for(let i=0;i<10;i++){const d=document.createElement("div");d.className="ded-dot"+(i<count?" active "+side:"");c.appendChild(d);}
   }
 </script>
 
 <script>
-  function copyLink(id, btn) {
+  function copyLink(id,btn){
     navigator.clipboard.writeText(document.getElementById(id).value).then(()=>{
       btn.textContent="✓ Copied"; setTimeout(()=>btn.textContent="Copy",1500);
     });
