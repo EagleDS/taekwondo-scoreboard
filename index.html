@@ -6,528 +6,721 @@
 <title>Taekwondo Scoreboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --red: #e02020; --red-dark: #9b1414; --red-glow: rgba(224,32,32,0.35);
-    --blue: #1a6fd4; --blue-dark: #0f4a8e; --blue-glow: rgba(26,111,212,0.35);
-    --gold: #f5c518; --bg: #0a0a0f; --panel: #13131c; --border: #2a2a3a;
-    --text: #f0f0f8; --muted: #7a7a9a;
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --red:#e02020;--red-dark:#9b1414;--red-glow:rgba(224,32,32,.35);
+    --blue:#1a6fd4;--blue-dark:#0f4a8e;--blue-glow:rgba(26,111,212,.35);
+    --gold:#f5c518;--bg:#0a0a0f;--panel:#13131c;--border:#2a2a3a;
+    --text:#f0f0f8;--muted:#7a7a9a;--green:#1db954;
   }
-  body {
-    background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-serif;
-    min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 16px;
-    background-image: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(245,197,24,0.06) 0%, transparent 70%);
-  }
-  .page { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 900px; gap: 14px; }
-  h1.brand { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.4rem,4vw,2.4rem); letter-spacing:.15em; color:var(--gold); text-shadow:0 0 30px rgba(245,197,24,.5); text-align:center; }
-  .brand-sub { font-size:.78rem; letter-spacing:.35em; color:var(--muted); text-transform:uppercase; text-align:center; margin-bottom:6px; }
-  .card { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:20px; width:100%; }
-  .btn { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:.85rem; letter-spacing:.1em; border:none; border-radius:8px; cursor:pointer; padding:7px 14px; transition:transform .1s,box-shadow .2s; text-transform:uppercase; user-select:none; }
-  .btn:active { transform:scale(.93); }
-  .btn-pt { font-size:1.05rem; padding:8px 0; width:46px; text-align:center; }
-  .btn-red { background:var(--red); color:#fff; box-shadow:0 2px 10px rgba(224,32,32,.3); }
-  .btn-blue { background:var(--blue); color:#fff; box-shadow:0 2px 10px rgba(26,111,212,.3); }
-  .btn-gold { background:var(--gold); color:#1a1200; }
-  .btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); }
-  .btn-ghost:hover { border-color:var(--text); color:var(--text); }
-  .btn-sm { padding:4px 10px; font-size:.75rem; }
-  .btn-danger { background:#3a1010; color:#ff6060; border:1px solid #5a1515; }
+  body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px;
+    background-image:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(245,197,24,.06) 0%,transparent 70%)}
+  .page{display:none;flex-direction:column;align-items:center;width:100%;max-width:960px;gap:12px}
+  h1.brand{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.4rem,4vw,2.4rem);letter-spacing:.15em;color:var(--gold);text-shadow:0 0 30px rgba(245,197,24,.5);text-align:center}
+  .brand-sub{font-size:.78rem;letter-spacing:.35em;color:var(--muted);text-transform:uppercase;text-align:center;margin-bottom:6px}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;width:100%}
+
+  /* BUTTONS */
+  .btn{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.1em;border:none;border-radius:8px;cursor:pointer;padding:7px 14px;transition:transform .1s,box-shadow .2s;text-transform:uppercase;user-select:none}
+  .btn:active{transform:scale(.93)}
+  .btn-pt{font-size:1rem;padding:8px 0;width:46px;text-align:center}
+  .btn-red{background:var(--red);color:#fff;box-shadow:0 2px 10px rgba(224,32,32,.3)}
+  .btn-blue{background:var(--blue);color:#fff;box-shadow:0 2px 10px rgba(26,111,212,.3)}
+  .btn-gold{background:var(--gold);color:#1a1200}
+  .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+  .btn-ghost:hover{border-color:var(--text);color:var(--text)}
+  .btn-green{background:var(--green);color:#fff}
+  .btn-sm{padding:4px 10px;font-size:.75rem}
+  .btn-danger{background:#3a1010;color:#ff6060;border:1px solid #5a1515}
+  .btn-warn{background:#3a2a00;color:#ffb800;border:1px solid #5a4000}
 
   /* SETUP */
-  .step { display:flex; gap:12px; margin-bottom:16px; }
-  .step-num { min-width:28px; height:28px; border-radius:50%; background:var(--gold); color:#111; font-family:'Bebas Neue',sans-serif; font-size:1rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .step-title { font-weight:700; font-size:1rem; margin-bottom:3px; }
-  .step-desc { color:var(--muted); font-size:.88rem; line-height:1.5; }
-  .step-desc a { color:var(--gold); }
-  .setup-form { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
-  .setup-form label { font-size:.72rem; color:var(--muted); letter-spacing:.15em; text-transform:uppercase; display:block; margin-bottom:3px; }
-  .setup-form input { width:100%; background:rgba(255,255,255,.05); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'Rajdhani',sans-serif; font-size:.9rem; padding:7px 10px; }
-  .setup-form input:focus { outline:none; border-color:var(--gold); }
-  .form-full { grid-column:1/-1; }
-  .link-box { display:flex; flex-direction:column; gap:10px; }
-  .link-row { display:flex; gap:8px; align-items:center; }
-  .link-row label { min-width:75px; font-size:.75rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; flex-shrink:0; }
-  .link-row input { flex:1; background:rgba(255,255,255,.05); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:monospace; font-size:.7rem; padding:6px 10px; }
+  .step{display:flex;gap:12px;margin-bottom:14px}
+  .step-num{min-width:28px;height:28px;border-radius:50%;background:var(--gold);color:#111;font-family:'Bebas Neue',sans-serif;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .step-title{font-weight:700;font-size:1rem;margin-bottom:3px}
+  .step-desc{color:var(--muted);font-size:.88rem;line-height:1.5}
+  .step-desc a{color:var(--gold)}
+  .setup-form{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .setup-form label{font-size:.72rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:3px}
+  .setup-form input,.setup-form select{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:.9rem;padding:7px 10px}
+  .setup-form input:focus,.setup-form select:focus{outline:none;border-color:var(--gold)}
+  .form-full{grid-column:1/-1}
+  .link-box{display:flex;flex-direction:column;gap:10px}
+  .link-row{display:flex;gap:8px;align-items:center}
+  .link-row label{min-width:75px;font-size:.75rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;flex-shrink:0}
+  .link-row input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:monospace;font-size:.7rem;padding:6px 10px}
 
-  /* HOST */
-  .top-bar { display:flex; align-items:center; justify-content:center; gap:24px; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px 28px; width:100%; flex-wrap:wrap; }
-  .timer-display { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,10vw,5.5rem); line-height:1; color:var(--gold); text-shadow:0 0 40px rgba(245,197,24,.6); transition:color .3s; }
-  .timer-display.warning { color:#ff6020; }
-  .timer-label,.round-label { font-size:.7rem; letter-spacing:.3em; color:var(--muted); text-transform:uppercase; margin-top:2px; }
-  .round-number { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.2rem,6vw,3.8rem); color:var(--text); line-height:1; }
-  .divider-v { width:1px; height:80px; background:var(--border); }
-  .timer-controls,.round-controls { display:flex; gap:8px; margin-top:8px; justify-content:center; flex-wrap:wrap; }
-  .scoreboard { display:grid; grid-template-columns:1fr auto 1fr; gap:12px; width:100%; }
-  .fighter-panel { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:18px 16px; display:flex; flex-direction:column; align-items:center; gap:10px; position:relative; overflow:hidden; }
-  .fighter-panel::before { content:''; position:absolute; inset:0; border-radius:14px; pointer-events:none; }
-  .red-panel::before { box-shadow:inset 0 0 60px var(--red-glow); }
-  .blue-panel::before { box-shadow:inset 0 0 60px var(--blue-glow); }
-  .corner-tag { padding:3px 12px; border-radius:20px; font-size:.75rem; font-weight:700; letter-spacing:.1em; }
-  .red-panel .corner-tag { background:var(--red-dark); color:#ffcdd2; }
-  .blue-panel .corner-tag { background:var(--blue-dark); color:#bbdefb; }
-  .name-input { background:rgba(255,255,255,.05); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:.08em; text-align:center; padding:6px 10px; width:100%; text-transform:uppercase; }
-  .name-input:focus { outline:none; border-color:var(--gold); }
-  .score-display { font-family:'Bebas Neue',sans-serif; font-size:clamp(5rem,18vw,9rem); line-height:1; transition:transform .15s; }
-  .red-panel .score-display { color:var(--red); text-shadow:0 0 50px var(--red-glow); }
-  .blue-panel .score-display { color:var(--blue); text-shadow:0 0 50px var(--blue-glow); }
-  .score-display.pop { transform:scale(1.18); }
-  .point-buttons { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
-  .vote-indicator { font-size:.78rem; color:var(--gold); min-height:1.2em; }
-  .center-panel { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; }
-  .vs-badge { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:var(--muted); }
-  .deductions-row { background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px 20px; width:100%; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  .ded-block { display:flex; flex-direction:column; align-items:center; gap:6px; }
-  .ded-title { font-size:.7rem; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); }
-  .ded-count { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; line-height:1; }
-  .red-ded .ded-count { color:var(--red); }
-  .blue-ded .ded-count { color:var(--blue); }
-  .ded-dots { display:flex; gap:5px; flex-wrap:wrap; justify-content:center; }
-  .ded-dot { width:10px; height:10px; border-radius:50%; border:1.5px solid var(--border); transition:background .2s; }
-  .ded-dot.active.red { background:var(--red); border-color:var(--red); }
-  .ded-dot.active.blue { background:var(--blue); border-color:var(--blue); }
-  .ded-name { font-size:.82rem; font-weight:600; color:var(--muted); }
-  .reset-bar { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; width:100%; }
+  /* HOST TOP BAR */
+  .top-bar{display:flex;align-items:center;justify-content:center;gap:20px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 20px;width:100%;flex-wrap:wrap}
+  .timer-display{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.8rem,9vw,5rem);line-height:1;color:var(--gold);text-shadow:0 0 40px rgba(245,197,24,.6);transition:color .3s}
+  .timer-display.warning{color:#ff6020;text-shadow:0 0 40px rgba(255,96,32,.7)}
+  .timer-label,.round-label{font-size:.7rem;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;margin-top:2px}
+  .round-number{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.4rem);color:var(--text);line-height:1}
+  .divider-v{width:1px;height:70px;background:var(--border);flex-shrink:0}
+  .timer-controls,.round-controls{display:flex;gap:6px;margin-top:6px;justify-content:center;flex-wrap:wrap}
 
-  /* JUDGE */
-  .judge-badge { display:inline-block; font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:.2em; padding:4px 16px; border-radius:20px; background:rgba(245,197,24,.15); color:var(--gold); border:1px solid rgba(245,197,24,.3); margin-bottom:8px; }
-  .judge-info { display:flex; gap:16px; justify-content:center; align-items:center; font-size:.9rem; }
-  .j-timer { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; color:var(--gold); }
-  .j-timer.warning { color:#ff6020; }
-  .live-score-strip { display:flex; gap:12px; justify-content:center; align-items:center; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:10px 20px; width:100%; max-width:500px; }
-  .strip-score { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; line-height:1; }
-  .strip-score.red { color:var(--red); }
-  .strip-score.blue { color:var(--blue); }
-  .strip-label { font-size:.7rem; color:var(--muted); letter-spacing:.2em; text-transform:uppercase; }
-  .strip-vs { font-family:'Bebas Neue',sans-serif; font-size:1rem; color:var(--border); }
-  .judge-vote-area { display:grid; grid-template-columns:1fr 1fr; gap:16px; width:100%; max-width:500px; }
-  .vote-card { border-radius:18px; padding:24px 16px; display:flex; flex-direction:column; align-items:center; gap:12px; cursor:pointer; border:none; transition:transform .1s,box-shadow .2s; user-select:none; }
-  .vote-card:active { transform:scale(.95); }
-  .vote-card.red-card { background:linear-gradient(135deg,var(--red-dark) 0%,#6a0f0f 100%); box-shadow:0 4px 30px rgba(224,32,32,.4); }
-  .vote-card.blue-card { background:linear-gradient(135deg,var(--blue-dark) 0%,#0a2a5e 100%); box-shadow:0 4px 30px rgba(26,111,212,.4); }
-  .vote-card.voted { animation:voteFlash .4s ease; }
-  @keyframes voteFlash { 0%,100%{opacity:1} 30%{opacity:.3;transform:scale(1.08)} }
-  .vote-corner { font-size:.7rem; letter-spacing:.2em; opacity:.7; text-transform:uppercase; color:#fff; }
-  .vote-name { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:#fff; }
-  .vote-icon { font-size:2.8rem; }
-  .vote-btn-label { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:.75rem; letter-spacing:.2em; opacity:.8; text-transform:uppercase; color:#fff; }
-  .vote-count { font-size:.82rem; color:rgba(255,255,255,.7); min-height:1.2em; }
-  .judge-instructions { text-align:center; color:var(--muted); font-size:.85rem; line-height:1.6; max-width:380px; }
+  /* ROUND WINS */
+  .round-wins{display:flex;gap:6px;justify-content:center;margin-top:4px}
+  .win-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--border);transition:background .2s}
+  .win-dot.won-red{background:var(--red);border-color:var(--red)}
+  .win-dot.won-blue{background:var(--blue);border-color:var(--blue)}
 
-  .winner-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.88); z-index:100; align-items:center; justify-content:center; flex-direction:column; gap:18px; }
-  .winner-overlay.show { display:flex; }
-  .winner-text { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,12vw,6rem); letter-spacing:.1em; color:var(--gold); text-shadow:0 0 60px currentColor; animation:pulse 1s ease-in-out infinite alternate; }
-  @keyframes pulse { from{opacity:.7;transform:scale(.97)} to{opacity:1;transform:scale(1.03)} }
-  .winner-sub { font-size:1.2rem; letter-spacing:.2em; color:var(--muted); }
-  @media(max-width:580px) { .scoreboard{grid-template-columns:1fr 1fr} .center-panel{display:none} .setup-form{grid-template-columns:1fr} .divider-v{display:none} }
+  /* SCOREBOARD */
+  .scoreboard{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;width:100%}
+  .fighter-panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;overflow:hidden}
+  .fighter-panel::before{content:'';position:absolute;inset:0;border-radius:14px;pointer-events:none}
+  .red-panel::before{box-shadow:inset 0 0 60px var(--red-glow)}
+  .blue-panel::before{box-shadow:inset 0 0 60px var(--blue-glow)}
+  .corner-tag{padding:3px 12px;border-radius:20px;font-size:.75rem;font-weight:700;letter-spacing:.1em}
+  .red-panel .corner-tag{background:var(--red-dark);color:#ffcdd2}
+  .blue-panel .corner-tag{background:var(--blue-dark);color:#bbdefb}
+  .name-input{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.08em;text-align:center;padding:6px 10px;width:100%;text-transform:uppercase}
+  .name-input:focus{outline:none;border-color:var(--gold)}
+  .score-display{font-family:'Bebas Neue',sans-serif;font-size:clamp(4.5rem,16vw,8rem);line-height:1;transition:transform .15s}
+  .red-panel .score-display{color:var(--red);text-shadow:0 0 50px var(--red-glow)}
+  .blue-panel .score-display{color:var(--blue);text-shadow:0 0 50px var(--blue-glow)}
+  .score-display.pop{transform:scale(1.18)}
+  .point-buttons{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+  .vote-indicator{font-size:.76rem;color:var(--gold);min-height:1.1em;text-align:center}
+  .center-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+  .vs-badge{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--muted)}
+
+  /* PENALTIES ROW */
+  .penalties-row{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .pen-block{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .pen-title{font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted)}
+  .pen-name{font-size:.8rem;font-weight:600;color:var(--muted)}
+  .pen-counts{display:flex;gap:16px;align-items:center}
+  .pen-item{text-align:center}
+  .pen-num{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;line-height:1}
+  .pen-label{font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+  .red-pen .pen-num{color:var(--red)}
+  .blue-pen .pen-num{color:var(--blue)}
+  .pen-dots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+  .pen-dot{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--border);transition:background .2s}
+  .pen-dot.active.red{background:var(--red);border-color:var(--red)}
+  .pen-dot.active.blue{background:var(--blue);border-color:var(--blue)}
+  .pen-dot.active.warn{background:#ffb800;border-color:#ffb800}
+  .pen-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+
+  /* RESET BAR */
+  .reset-bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;width:100%}
+
+  /* JUDGE MODE SELECTOR */
+  .mode-selector{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .mode-btn{padding:10px 20px;font-size:.9rem;border-radius:10px}
+  .mode-btn.active{background:var(--gold);color:#1a1200;box-shadow:0 0 20px rgba(245,197,24,.4)}
+
+  /* JUDGE PAGE */
+  .judge-badge{display:inline-block;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.2em;padding:4px 16px;border-radius:20px;background:rgba(245,197,24,.15);color:var(--gold);border:1px solid rgba(245,197,24,.3);margin-bottom:6px}
+  .judge-info{display:flex;gap:14px;justify-content:center;align-items:center;font-size:.9rem;flex-wrap:wrap}
+  .j-timer{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold)}
+  .j-timer.warning{color:#ff6020}
+  .live-score-strip{display:flex;gap:12px;justify-content:center;align-items:center;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 20px;width:100%;max-width:540px}
+  .strip-score{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;line-height:1}
+  .strip-score.red{color:var(--red)}
+  .strip-score.blue{color:var(--blue)}
+  .strip-label{font-size:.68rem;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
+  .strip-vs{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--border)}
+  .round-wins-strip{display:flex;gap:8px;align-items:center;justify-content:center}
+  .rw-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--border)}
+  .rw-dot.red{background:var(--red);border-color:var(--red)}
+  .rw-dot.blue{background:var(--blue);border-color:var(--blue)}
+
+  /* TECHNIQUE SELECTOR */
+  .section-label{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:8px}
+  .tech-grid{display:grid;gap:8px;width:100%;max-width:540px}
+  .tech-grid.cols-3{grid-template-columns:1fr 1fr 1fr}
+  .tech-grid.cols-2{grid-template-columns:1fr 1fr}
+  .tech-btn{background:var(--panel);border:2px solid var(--border);border-radius:12px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:all .15s;user-select:none}
+  .tech-btn:active{transform:scale(.95)}
+  .tech-btn.selected{border-color:var(--gold);background:rgba(245,197,24,.1)}
+  .tech-icon{font-size:1.6rem}
+  .tech-name{font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:.06em;color:var(--text);text-align:center}
+  .tech-pts{font-size:.7rem;color:var(--gold);font-weight:700;letter-spacing:.1em}
+
+  /* FIGHTER VOTE */
+  .pending-display{background:rgba(245,197,24,.07);border:1px solid rgba(245,197,24,.2);border-radius:10px;padding:8px 14px;text-align:center;width:100%;max-width:540px;font-size:.82rem;color:var(--gold);min-height:34px;letter-spacing:.04em}
+  .vote-area{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:540px}
+  .vote-card{border-radius:16px;padding:18px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;border:none;transition:transform .1s,box-shadow .2s,opacity .2s;user-select:none}
+  .vote-card:active{transform:scale(.95)}
+  .vote-card.disabled{opacity:.3;pointer-events:none}
+  .vote-card.red-card{background:linear-gradient(135deg,var(--red-dark) 0%,#6a0f0f 100%);box-shadow:0 4px 28px rgba(224,32,32,.4)}
+  .vote-card.blue-card{background:linear-gradient(135deg,var(--blue-dark) 0%,#0a2a5e 100%);box-shadow:0 4px 28px rgba(26,111,212,.4)}
+  .vote-card.voted{animation:voteFlash .4s ease}
+  @keyframes voteFlash{0%,100%{opacity:1}30%{opacity:.2;transform:scale(1.06)}}
+  .vote-corner{font-size:.68rem;letter-spacing:.2em;opacity:.7;text-transform:uppercase;color:#fff}
+  .vote-name{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:#fff}
+  .vote-pts-badge{background:rgba(255,255,255,.2);border-radius:20px;padding:2px 12px;font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:#fff;letter-spacing:.08em}
+  .vote-count{font-size:.78rem;color:rgba(255,255,255,.7);min-height:1.1em}
+  .judge-instructions{text-align:center;color:var(--muted);font-size:.82rem;line-height:1.7;max-width:440px}
+
+  /* WINNER / ROUND WIN OVERLAY */
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:100;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+  .overlay.show{display:flex}
+  .overlay-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1rem,4vw,1.6rem);letter-spacing:.3em;color:var(--muted);text-transform:uppercase}
+  .overlay-winner{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,12vw,6rem);letter-spacing:.1em;text-shadow:0 0 60px currentColor;animation:pulse 1s ease-in-out infinite alternate}
+  @keyframes pulse{from{opacity:.7;transform:scale(.97)}to{opacity:1;transform:scale(1.03)}}
+  .overlay-sub{font-size:1.1rem;letter-spacing:.2em;color:var(--muted)}
+  .overlay-score{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.1em;color:var(--text)}
+
+  @media(max-width:600px){
+    .scoreboard{grid-template-columns:1fr 1fr}.center-panel{display:none}
+    .setup-form{grid-template-columns:1fr}.divider-v{display:none}
+    .tech-grid.cols-3{grid-template-columns:1fr 1fr}
+  }
 </style>
 </head>
 <body>
 
-<!-- ═══ SETUP PAGE ═══ -->
+<!-- ═══ SETUP ═══ -->
 <div class="page" id="page-setup">
   <h1 class="brand">⬡ Taekwondo Scoreboard</h1>
   <p class="brand-sub">Multi-Judge Setup</p>
-  <div class="card" style="max-width:700px;">
-    <div class="step">
-      <div class="step-num">1</div>
-      <div><div class="step-title">Paste your Firebase config</div>
-      <div class="step-desc">Go to <a href="https://console.firebase.google.com" target="_blank">Firebase console</a> → ⚙️ Project Settings → Your apps → copy the config values below.</div></div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div><div class="step-title">Generate &amp; share links</div>
-      <div class="step-desc">Click Generate. Send the 3 judge links via WhatsApp or text. Judges just tap the link — no setup needed on their end.</div></div>
-    </div>
+  <div class="card" style="max-width:720px">
+    <div class="step"><div class="step-num">1</div><div><div class="step-title">Firebase config</div><div class="step-desc">Go to <a href="https://console.firebase.google.com" target="_blank">Firebase console</a> → ⚙️ Project Settings → Your apps → copy the config values.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div><div class="step-title">Choose judge mode &amp; generate links</div><div class="step-desc">Select 1, 2, or 3 judges. Click Generate. Share links via WhatsApp — judges just tap, no setup needed.</div></div></div>
     <form id="setupForm">
       <div class="setup-form">
-        <div class="form-full"><label>Session Name</label><input id="f-session" value="main" /></div>
-        <div><label>API Key</label><input id="f-apiKey" placeholder="AIza..." /></div>
-        <div><label>Auth Domain</label><input id="f-authDomain" placeholder="yourapp.firebaseapp.com" /></div>
-        <div class="form-full"><label>Database URL</label><input id="f-databaseURL" placeholder="https://yourapp-default-rtdb.firebaseio.com" /></div>
-        <div><label>Project ID</label><input id="f-projectId" placeholder="yourapp-id" /></div>
-        <div><label>Storage Bucket</label><input id="f-storageBucket" placeholder="yourapp.firebasestorage.app" /></div>
-        <div><label>Messaging Sender ID</label><input id="f-messagingSenderId" placeholder="123456789" /></div>
-        <div class="form-full"><label>App ID</label><input id="f-appId" placeholder="1:123:web:abc..." /></div>
-        <div class="form-full" style="text-align:center;margin-top:8px;">
-          <button type="submit" class="btn btn-gold" style="padding:10px 32px;font-size:1rem;">⚡ Generate Links</button>
+        <div class="form-full"><label>Session Name</label><input id="f-session" value="main"/></div>
+        <div class="form-full">
+          <label>Number of Judges</label>
+          <select id="f-judgeCount">
+            <option value="1">1 Judge (single official — full control)</option>
+            <option value="2">2 Judges (both must agree)</option>
+            <option value="3" selected>3 Judges (2 of 3 must agree)</option>
+          </select>
+        </div>
+        <div><label>API Key</label><input id="f-apiKey" placeholder="AIza..."/></div>
+        <div><label>Auth Domain</label><input id="f-authDomain" placeholder="yourapp.firebaseapp.com"/></div>
+        <div class="form-full"><label>Database URL</label><input id="f-databaseURL" placeholder="https://yourapp-default-rtdb.firebaseio.com"/></div>
+        <div><label>Project ID</label><input id="f-projectId" placeholder="yourapp-id"/></div>
+        <div><label>Storage Bucket</label><input id="f-storageBucket" placeholder="yourapp.firebasestorage.app"/></div>
+        <div><label>Messaging Sender ID</label><input id="f-messagingSenderId" placeholder="123456789"/></div>
+        <div class="form-full"><label>App ID</label><input id="f-appId" placeholder="1:123:web:abc..."/></div>
+        <div class="form-full" style="text-align:center;margin-top:8px">
+          <button type="submit" class="btn btn-gold" style="padding:10px 32px;font-size:1rem">⚡ Generate Links</button>
         </div>
       </div>
     </form>
   </div>
-  <div class="card" id="generatedLinks" style="display:none;max-width:700px;">
-    <p style="font-size:.8rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;">📋 Share these links — judges just tap, no setup needed!</p>
+  <div class="card" id="generatedLinks" style="display:none;max-width:720px">
+    <p style="font-size:.8rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px">📋 Share these links</p>
     <div class="link-box">
-      <div class="link-row"><label>🖥 Host</label><input id="link-host" readonly /><button class="btn btn-ghost btn-sm" onclick="copyLink('link-host',this)">Copy</button></div>
-      <div class="link-row"><label>👁 Judge 1</label><input id="link-judge1" readonly /><button class="btn btn-ghost btn-sm" onclick="copyLink('link-judge1',this)">Copy</button></div>
-      <div class="link-row"><label>👁 Judge 2</label><input id="link-judge2" readonly /><button class="btn btn-ghost btn-sm" onclick="copyLink('link-judge2',this)">Copy</button></div>
-      <div class="link-row"><label>👁 Judge 3</label><input id="link-judge3" readonly /><button class="btn btn-ghost btn-sm" onclick="copyLink('link-judge3',this)">Copy</button></div>
+      <div class="link-row"><label>🖥 Host</label><input id="link-host" readonly/><button class="btn btn-ghost btn-sm" onclick="copyLink('link-host',this)">Copy</button></div>
+      <div class="link-row" id="j1row"><label>👁 Judge 1</label><input id="link-judge1" readonly/><button class="btn btn-ghost btn-sm" onclick="copyLink('link-judge1',this)">Copy</button></div>
+      <div class="link-row" id="j2row"><label>👁 Judge 2</label><input id="link-judge2" readonly/><button class="btn btn-ghost btn-sm" onclick="copyLink('link-judge2',this)">Copy</button></div>
+      <div class="link-row" id="j3row"><label>👁 Judge 3</label><input id="link-judge3" readonly/><button class="btn btn-ghost btn-sm" onclick="copyLink('link-judge3',this)">Copy</button></div>
     </div>
-    <p style="font-size:.78rem;color:var(--muted);margin-top:12px;line-height:1.6;">
-      ⚡ A point scores when <strong style="color:var(--gold);">2 of 3 judges</strong> tap the same fighter within <strong style="color:var(--gold);">3 seconds</strong>.
-    </p>
+    <p id="linkNote" style="font-size:.78rem;color:var(--muted);margin-top:12px;line-height:1.6"></p>
   </div>
 </div>
 
-<!-- ═══ HOST PAGE ═══ -->
+<!-- ═══ HOST ═══ -->
 <div class="page" id="page-host">
   <h1 class="brand">⬡ Taekwondo Scoreboard</h1>
   <p class="brand-sub">Host View — Live</p>
+
   <div class="top-bar">
-    <div style="text-align:center;">
+    <div style="text-align:center">
       <div class="timer-display" id="h-timer">2:00</div>
-      <div class="timer-label">Match Time</div>
+      <div class="timer-label">Round Time</div>
       <div class="timer-controls">
         <button class="btn btn-gold" id="h-startStop">▶ Start</button>
         <button class="btn btn-ghost btn-sm" id="h-resetTimer">Reset</button>
-        <select class="btn btn-ghost btn-sm" id="h-timerPreset" style="cursor:pointer;background:#13131c;">
-          <option value="120">2:00</option><option value="90">1:30</option>
-          <option value="180">3:00</option><option value="150">2:30</option>
-        </select>
+      </div>
+      <div class="timer-controls" style="margin-top:6px">
+        <input type="number" id="h-timerMins" min="0" max="9" value="2" style="width:44px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:.9rem;padding:4px 6px;text-align:center">
+        <span style="color:var(--muted);font-size:.9rem">m</span>
+        <input type="number" id="h-timerSecs" min="0" max="59" value="0" style="width:44px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:.9rem;padding:4px 6px;text-align:center">
+        <span style="color:var(--muted);font-size:.9rem">s</span>
+        <button class="btn btn-ghost btn-sm" id="h-setTimer">Set</button>
       </div>
     </div>
     <div class="divider-v"></div>
-    <div style="text-align:center;">
+    <div style="text-align:center">
       <div class="round-number" id="h-round">1</div>
       <div class="round-label">Round</div>
       <div class="round-controls">
         <button class="btn btn-ghost btn-sm" id="h-roundDown">−</button>
         <button class="btn btn-ghost btn-sm" id="h-roundUp">+</button>
       </div>
+      <div class="round-wins" id="h-roundWins" style="margin-top:6px"></div>
     </div>
     <div class="divider-v"></div>
-    <div style="text-align:center;">
-      <div style="font-size:.7rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Rule</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);">2 of 3</div>
-      <div style="font-size:.7rem;color:var(--muted);">within 3s</div>
+    <div style="text-align:center">
+      <div style="font-size:.68rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Mode</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--gold)" id="h-modeDisplay">3 Judges</div>
+      <div style="font-size:.68rem;color:var(--muted)" id="h-modeRule">2 of 3 within 3s</div>
     </div>
   </div>
+
   <div class="scoreboard">
     <div class="fighter-panel red-panel">
       <span class="corner-tag">🔴 Red Corner</span>
-      <input class="name-input" id="h-redName" type="text" value="FIGHTER 1" />
+      <input class="name-input" id="h-redName" type="text" value="FIGHTER 1"/>
       <div class="score-display" id="h-redScore">0</div>
       <div class="vote-indicator" id="h-redVotes"></div>
-      <div style="font-size:.65rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;">Manual Override</div>
+      <div style="font-size:.62rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase">Manual Override</div>
       <div class="point-buttons" id="h-redManualBtns"></div>
       <button class="btn btn-danger btn-sm" id="h-redUndo">− Undo</button>
     </div>
     <div class="center-panel"><span class="vs-badge">VS</span></div>
     <div class="fighter-panel blue-panel">
       <span class="corner-tag">🔵 Blue Corner</span>
-      <input class="name-input" id="h-blueName" type="text" value="FIGHTER 2" />
+      <input class="name-input" id="h-blueName" type="text" value="FIGHTER 2"/>
       <div class="score-display" id="h-blueScore">0</div>
       <div class="vote-indicator" id="h-blueVotes"></div>
-      <div style="font-size:.65rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;">Manual Override</div>
+      <div style="font-size:.62rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase">Manual Override</div>
       <div class="point-buttons" id="h-blueManualBtns"></div>
       <button class="btn btn-danger btn-sm" id="h-blueUndo">− Undo</button>
     </div>
   </div>
-  <div class="deductions-row">
-    <div class="ded-block red-ded">
-      <div class="ded-title">Deductions — Red</div>
-      <div class="ded-name" id="h-redDedName">FIGHTER 1</div>
-      <div class="ded-dots" id="h-redDots"></div>
-      <div class="ded-count" id="h-redDed">0</div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-red btn-sm" id="h-redDedAdd">+ Deduct</button>
-        <button class="btn btn-ghost btn-sm" id="h-redDedRem">−</button>
+
+  <!-- PENALTIES -->
+  <div class="penalties-row">
+    <div class="pen-block red-pen">
+      <div class="pen-title">Red Penalties</div>
+      <div class="pen-name" id="h-redPenName">FIGHTER 1</div>
+      <div class="pen-counts">
+        <div class="pen-item">
+          <div class="pen-num" id="h-redGam">0</div>
+          <div class="pen-label">Gam-jeom</div>
+        </div>
+        <div class="pen-item">
+          <div class="pen-num" id="h-redKyong">0</div>
+          <div class="pen-label">Kyong-go</div>
+        </div>
+      </div>
+      <div class="pen-dots" id="h-redGamDots"></div>
+      <div class="pen-btns">
+        <button class="btn btn-danger btn-sm" id="h-redGamAdd">+ Gam-jeom</button>
+        <button class="btn btn-warn btn-sm" id="h-redKyongAdd">+ Kyong-go</button>
+        <button class="btn btn-ghost btn-sm" id="h-redPenUndo">Undo</button>
       </div>
     </div>
-    <div class="ded-block blue-ded">
-      <div class="ded-title">Deductions — Blue</div>
-      <div class="ded-name" id="h-blueDedName">FIGHTER 2</div>
-      <div class="ded-dots" id="h-blueDots"></div>
-      <div class="ded-count" id="h-blueDed">0</div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-blue btn-sm" id="h-blueDedAdd">+ Deduct</button>
-        <button class="btn btn-ghost btn-sm" id="h-blueDedRem">−</button>
+    <div class="pen-block blue-pen">
+      <div class="pen-title">Blue Penalties</div>
+      <div class="pen-name" id="h-bluePenName">FIGHTER 2</div>
+      <div class="pen-counts">
+        <div class="pen-item">
+          <div class="pen-num" id="h-blueGam">0</div>
+          <div class="pen-label">Gam-jeom</div>
+        </div>
+        <div class="pen-item">
+          <div class="pen-num" id="h-blueKyong">0</div>
+          <div class="pen-label">Kyong-go</div>
+        </div>
+      </div>
+      <div class="pen-dots" id="h-blueGamDots"></div>
+      <div class="pen-btns">
+        <button class="btn btn-danger btn-sm" id="h-blueGamAdd">+ Gam-jeom</button>
+        <button class="btn btn-warn btn-sm" id="h-blueKyongAdd">+ Kyong-go</button>
+        <button class="btn btn-ghost btn-sm" id="h-bluePenUndo">Undo</button>
       </div>
     </div>
   </div>
+
   <div class="reset-bar">
-    <button class="btn btn-ghost" id="h-resetScores">Reset Scores</button>
-    <button class="btn btn-ghost" id="h-resetAll">Full Reset</button>
-    <button class="btn btn-gold" id="h-declareWinner">Declare Winner</button>
+    <button class="btn btn-ghost btn-sm" id="h-resetRound">Reset Round Scores</button>
+    <button class="btn btn-ghost btn-sm" id="h-resetAll">Full Reset</button>
+    <button class="btn btn-gold btn-sm" id="h-endRound">End Round →</button>
+    <button class="btn btn-green btn-sm" id="h-declareWinner">🏆 Declare Winner</button>
   </div>
-  <div class="winner-overlay" id="h-winnerOverlay">
-    <div class="winner-text" id="h-winnerText">WINNER!</div>
-    <div class="winner-sub">by Points Decision</div>
-    <button class="btn btn-ghost" style="margin-top:10px;" id="h-closeWinner">✕ Close</button>
+
+  <!-- ROUND WIN OVERLAY -->
+  <div class="overlay" id="h-roundOverlay">
+    <div class="overlay-title">Round Complete</div>
+    <div class="overlay-winner" id="h-roundWinner" style="color:var(--gold)">RED WINS ROUND!</div>
+    <div class="overlay-score" id="h-roundScore"></div>
+    <div class="overlay-sub" id="h-roundSub"></div>
+    <button class="btn btn-gold" style="margin-top:12px" id="h-nextRound">▶ Next Round</button>
+  </div>
+
+  <!-- MATCH WINNER OVERLAY -->
+  <div class="overlay" id="h-winnerOverlay">
+    <div class="overlay-title">Match Winner</div>
+    <div class="overlay-winner" id="h-winnerText" style="color:var(--gold)">WINNER!</div>
+    <div class="overlay-sub">by Points Decision</div>
+    <button class="btn btn-ghost" style="margin-top:10px" id="h-closeWinner">✕ Close</button>
   </div>
 </div>
 
-<!-- ═══ JUDGE PAGE ═══ -->
+<!-- ═══ JUDGE ═══ -->
 <div class="page" id="page-judge">
-  <div style="text-align:center;">
+  <div style="text-align:center">
     <div class="judge-badge" id="j-badge">JUDGE 1</div>
     <div class="judge-info">
-      <span>Round <strong id="j-round" style="color:var(--text);">1</strong></span>
+      <span>Round <strong id="j-round" style="color:var(--text)">1</strong></span>
       <span>•</span>
       <span class="j-timer" id="j-timer">2:00</span>
     </div>
   </div>
+
   <div class="live-score-strip">
-    <div style="text-align:center;">
+    <div style="text-align:center">
       <div class="strip-score red" id="j-redScore">0</div>
       <div class="strip-label" id="j-redNameStrip">FIGHTER 1</div>
     </div>
     <div class="strip-vs">VS</div>
-    <div style="text-align:center;">
+    <div style="text-align:center">
       <div class="strip-score blue" id="j-blueScore">0</div>
       <div class="strip-label" id="j-blueNameStrip">FIGHTER 2</div>
     </div>
   </div>
-  <div class="judge-vote-area">
-    <button class="vote-card red-card" id="j-voteRed">
-      <div class="vote-corner">🔴 Red Corner</div>
-      <div class="vote-icon">🥋</div>
-      <div class="vote-name" id="j-redName">Fighter 1</div>
-      <div class="vote-btn-label">Tap to Score</div>
-      <div class="vote-count" id="j-redVoteCount"></div>
-    </button>
-    <button class="vote-card blue-card" id="j-voteBlue">
-      <div class="vote-corner">🔵 Blue Corner</div>
-      <div class="vote-icon">🥋</div>
-      <div class="vote-name" id="j-blueName">Fighter 2</div>
-      <div class="vote-btn-label">Tap to Score</div>
-      <div class="vote-count" id="j-blueVoteCount"></div>
-    </button>
+
+  <!-- Technique -->
+  <div style="width:100%;max-width:540px">
+    <div class="section-label">① Select Technique</div>
+    <div class="tech-grid cols-3" id="j-techGrid">
+      <div class="tech-btn" id="tech-punch" onclick="selectTech('punch',1)">
+        <div class="tech-icon">👊</div>
+        <div class="tech-name">Punch Body</div>
+        <div class="tech-pts">1 PT</div>
+      </div>
+      <div class="tech-btn" id="tech-body" onclick="selectTech('body',2)">
+        <div class="tech-icon">🦵</div>
+        <div class="tech-name">Kick Body</div>
+        <div class="tech-pts">2 PTS</div>
+      </div>
+      <div class="tech-btn" id="tech-head" onclick="selectTech('head',3)">
+        <div class="tech-icon">🥊</div>
+        <div class="tech-name">Kick Head</div>
+        <div class="tech-pts">3 PTS</div>
+      </div>
+      <div class="tech-btn" id="tech-spinbody" onclick="selectTech('spinbody',4)">
+        <div class="tech-icon">🌀</div>
+        <div class="tech-name">Spin Body</div>
+        <div class="tech-pts">4 PTS</div>
+      </div>
+      <div class="tech-btn" id="tech-spinhead" onclick="selectTech('spinhead',5)">
+        <div class="tech-icon">⭐</div>
+        <div class="tech-name">Spin Head</div>
+        <div class="tech-pts">5 PTS</div>
+      </div>
+      <!-- 1-judge only bonus -->
+      <div class="tech-btn" id="tech-bonus" onclick="selectTech('bonus',2)" style="display:none">
+        <div class="tech-icon">➕</div>
+        <div class="tech-name">Bonus Pts</div>
+        <div class="tech-pts">+2 PTS</div>
+      </div>
+    </div>
   </div>
-  <div class="judge-instructions">
-    Tap the fighter who scored.<br>
-    A point registers when <strong style="color:var(--gold);">2 of 3 judges</strong> tap the same fighter within <strong style="color:var(--gold);">3 seconds</strong>.
+
+  <div class="pending-display" id="j-pendingDisplay">Select a technique above, then tap the fighter who scored</div>
+
+  <!-- Fighter vote -->
+  <div style="width:100%;max-width:540px">
+    <div class="section-label">② Tap Fighter Who Scored</div>
+    <div class="vote-area">
+      <button class="vote-card red-card disabled" id="j-voteRed">
+        <div class="vote-corner">🔴 Red Corner</div>
+        <div class="vote-name" id="j-redName">Fighter 1</div>
+        <div class="vote-pts-badge" id="j-redPtsBadge">— pts</div>
+        <div class="vote-count" id="j-redVoteCount"></div>
+      </button>
+      <button class="vote-card blue-card disabled" id="j-voteBlue">
+        <div class="vote-corner">🔵 Blue Corner</div>
+        <div class="vote-name" id="j-blueName">Fighter 2</div>
+        <div class="vote-pts-badge" id="j-bluePtsBadge">— pts</div>
+        <div class="vote-count" id="j-blueVoteCount"></div>
+      </button>
+    </div>
+  </div>
+
+  <div class="judge-instructions" id="j-instructions">
+    Select technique → tap fighter.<br>
+    Point scores when <strong style="color:var(--gold)">2 of 3 judges</strong> agree within <strong style="color:var(--gold)">3 seconds</strong>.
   </div>
 </div>
 
 <script type="module">
-  import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getDatabase, ref, set, get, onValue }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-  // ── Parse URL params ───────────────────────────────────────────────────────
-  const p       = new URLSearchParams(location.search);
+  const p        = new URLSearchParams(location.search);
   const MODE     = p.get("mode")    || "setup";
   const JUDGE_ID = p.get("judge")   || "1";
   const SESSION  = p.get("session") || "main";
 
-  // Config comes from URL hash (so it doesn't appear in server logs)
-  // Format: #apiKey=xxx&authDomain=xxx&...
-  function getCfgFromHash() {
-    const hash = location.hash.replace(/^#/, "");
+  function getCfg() {
+    const hash = location.hash.replace(/^#/,"");
     if (!hash) return null;
     const h = new URLSearchParams(hash);
-    const cfg = {
-      apiKey:            h.get("apiKey")            || "",
-      authDomain:        h.get("authDomain")        || "",
-      databaseURL:       h.get("databaseURL")       || "",
-      projectId:         h.get("projectId")         || "",
-      storageBucket:     h.get("storageBucket")     || "",
-      messagingSenderId: h.get("messagingSenderId") || "",
-      appId:             h.get("appId")             || "",
-    };
-    return cfg.apiKey && cfg.databaseURL ? cfg : null;
+    const c = {apiKey:h.get("apiKey")||"",authDomain:h.get("authDomain")||"",databaseURL:h.get("databaseURL")||"",projectId:h.get("projectId")||"",storageBucket:h.get("storageBucket")||"",messagingSenderId:h.get("messagingSenderId")||"",appId:h.get("appId")||""};
+    return c.apiKey && c.databaseURL ? c : null;
   }
+  function makeHash(cfg){ return "#"+Object.entries(cfg).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join("&"); }
 
-  function makeCfgHash(cfg) {
-    return "#" + Object.entries(cfg).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join("&");
-  }
+  document.querySelectorAll(".page").forEach(e=>e.style.display="none");
+  const cfg = getCfg();
+  const judgeCount = parseInt(p.get("judges")||"3");
 
-  // ── Show page ──────────────────────────────────────────────────────────────
-  document.querySelectorAll(".page").forEach(el => el.style.display = "none");
+  if((MODE==="host"||MODE==="judge")&&cfg){
+    if(MODE==="host"){ el("page-host").style.display="flex"; startHost(cfg,SESSION,judgeCount); }
+    else { el("page-judge").style.display="flex"; T("j-badge",`JUDGE ${JUDGE_ID}`); startJudge(cfg,SESSION,JUDGE_ID,judgeCount); }
+  } else { el("page-setup").style.display="flex"; startSetup(); }
 
-  const cfg = getCfgFromHash();
-
-  if ((MODE === "host" || MODE === "judge") && cfg) {
-    if (MODE === "host") {
-      document.getElementById("page-host").style.display = "flex";
-      startHost(cfg, SESSION);
-    } else {
-      document.getElementById("page-judge").style.display = "flex";
-      document.getElementById("j-badge").textContent = `JUDGE ${JUDGE_ID}`;
-      startJudge(cfg, SESSION, JUDGE_ID);
-    }
-  } else {
-    document.getElementById("page-setup").style.display = "flex";
-    startSetup();
-  }
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // SETUP
-  // ══════════════════════════════════════════════════════════════════════════
-  function startSetup() {
-    document.getElementById("setupForm").onsubmit = (e) => {
+  // ══ SETUP ══════════════════════════════════════════════════════════════════
+  function startSetup(){
+    el("setupForm").onsubmit = e => {
       e.preventDefault();
-      const cfg = {
-        apiKey:            document.getElementById("f-apiKey").value.trim(),
-        authDomain:        document.getElementById("f-authDomain").value.trim(),
-        databaseURL:       document.getElementById("f-databaseURL").value.trim(),
-        projectId:         document.getElementById("f-projectId").value.trim(),
-        storageBucket:     document.getElementById("f-storageBucket").value.trim(),
-        messagingSenderId: document.getElementById("f-messagingSenderId").value.trim(),
-        appId:             document.getElementById("f-appId").value.trim(),
-      };
-      if (!cfg.apiKey || !cfg.databaseURL) {
-        alert("Please fill in at least API Key and Database URL!"); return;
-      }
-      const session = document.getElementById("f-session").value.trim() || "main";
-      const base    = location.origin + location.pathname;
-      const hash    = makeCfgHash(cfg);
-
-      document.getElementById("link-host").value    = `${base}?mode=host&session=${session}${hash}`;
-      document.getElementById("link-judge1").value  = `${base}?mode=judge&judge=1&session=${session}${hash}`;
-      document.getElementById("link-judge2").value  = `${base}?mode=judge&judge=2&session=${session}${hash}`;
-      document.getElementById("link-judge3").value  = `${base}?mode=judge&judge=3&session=${session}${hash}`;
-      document.getElementById("generatedLinks").style.display = "block";
+      const cfg={apiKey:v("f-apiKey"),authDomain:v("f-authDomain"),databaseURL:v("f-databaseURL"),projectId:v("f-projectId"),storageBucket:v("f-storageBucket"),messagingSenderId:v("f-messagingSenderId"),appId:v("f-appId")};
+      if(!cfg.apiKey||!cfg.databaseURL){alert("Please fill in at least API Key and Database URL!");return;}
+      const session = v("f-session")||"main";
+      const jc = parseInt(el("f-judgeCount").value)||3;
+      const base = location.origin+location.pathname;
+      const hash = makeHash(cfg);
+      const q = `?session=${session}&judges=${jc}`;
+      el("link-host").value    = `${base}${q}&mode=host${hash}`;
+      el("link-judge1").value  = `${base}${q}&mode=judge&judge=1${hash}`;
+      el("link-judge2").value  = `${base}${q}&mode=judge&judge=2${hash}`;
+      el("link-judge3").value  = `${base}${q}&mode=judge&judge=3${hash}`;
+      el("j1row").style.display="flex";
+      el("j2row").style.display = jc>=2?"flex":"none";
+      el("j3row").style.display = jc>=3?"flex":"none";
+      const note = jc===1?"1 judge has full control — can score all techniques including bonus points."
+        :jc===2?"Both judges must agree within 3 seconds for a point to register."
+        :"A point registers when 2 of 3 judges agree within 3 seconds.";
+      T("linkNote","⚡ "+note);
+      el("generatedLinks").style.display="block";
     };
   }
 
-  // ══════════════════════════════════════════════════════════════════════════
-  // HOST
-  // ══════════════════════════════════════════════════════════════════════════
-  function startHost(cfg, session) {
+  // ══ HOST ═══════════════════════════════════════════════════════════════════
+  function startHost(cfg,session,jc){
     const app = initializeApp(cfg);
     const db  = getDatabase(app);
-    const stateRef = ref(db, `sessions/${session}/state`);
-    const votesRef = ref(db, `sessions/${session}/votes`);
+    const stRef = ref(db,`sessions/${session}/state`);
+    const vRef  = ref(db,`sessions/${session}/votes`);
 
-    get(stateRef).then(snap => { if (!snap.exists()) initState(db, session); });
+    get(stRef).then(s=>{ if(!s.exists()) initState(db,session); });
+    onValue(stRef,s=>{ if(s.exists()) renderHost(s.val(),jc); });
+    onValue(vRef, s=>{ renderVoteInd(s.val()||{},jc); });
 
-    onValue(stateRef, snap => { if (snap.exists()) renderHost(snap.val()); });
-    onValue(votesRef, snap => { renderVoteIndicator(snap.val() || {}); });
+    // Mode display
+    T("h-modeDisplay", jc===1?"1 Judge":jc===2?"2 Judges":"3 Judges");
+    T("h-modeRule",    jc===1?"Full manual control":jc===2?"Both must agree in 3s":"2 of 3 within 3s");
 
     // Timer driver
-    let ts = null; let running = false; let tickInt = null; let lastTick = null;
-    onValue(stateRef, snap => {
-      if (!snap.exists()) return;
-      ts = snap.val();
-      if (ts.timerRunning && !running) {
-        running = true; lastTick = Date.now();
-        tickInt = setInterval(async () => {
-          if (!ts?.timerRunning) { clearInterval(tickInt); running = false; return; }
-          const e = Math.floor((Date.now()-lastTick)/1000);
-          if (e >= 1) {
-            lastTick = Date.now();
-            const s = Math.max(0, ts.timerSeconds - e);
-            await set(ref(db,`sessions/${session}/state/timerSeconds`), s);
-            if (s <= 0) { await set(ref(db,`sessions/${session}/state/timerRunning`), false); clearInterval(tickInt); running = false; }
-          }
-        }, 250);
-      } else if (!ts.timerRunning && running) { clearInterval(tickInt); running = false; }
+    let ts=null,running=false,tickInt=null,lastTick=null;
+    onValue(stRef,s=>{
+      if(!s.exists())return; ts=s.val();
+      if(ts.timerRunning&&!running){
+        running=true; lastTick=Date.now();
+        tickInt=setInterval(async()=>{
+          if(!ts?.timerRunning){clearInterval(tickInt);running=false;return;}
+          const e=Math.floor((Date.now()-lastTick)/1000);
+          if(e>=1){lastTick=Date.now();const ns=Math.max(0,ts.timerSeconds-e);await set(ref(db,`sessions/${session}/state/timerSeconds`),ns);if(ns<=0){await set(ref(db,`sessions/${session}/state/timerRunning`),false);clearInterval(tickInt);running=false;}}
+        },250);
+      } else if(!ts.timerRunning&&running){clearInterval(tickInt);running=false;}
     });
 
-    setInterval(() => processVotes(db, session), 500);
+    setInterval(()=>processVotes(db,session,jc),400);
 
-    // Wire controls
-    document.getElementById("h-startStop").onclick = async () => {
-      const r = ref(db,`sessions/${session}/state/timerRunning`);
-      await set(r, !(await get(r)).val());
+    // Controls
+    el("h-startStop").onclick = async()=>{ const r=ref(db,`sessions/${session}/state/timerRunning`); await set(r,!(await get(r)).val()); };
+    el("h-resetTimer").onclick = async()=>resetTimerFn(db,session);
+    el("h-setTimer").onclick = async()=>{
+      const m=parseInt(el("h-timerMins").value)||0, s2=parseInt(el("h-timerSecs").value)||0;
+      const total=m*60+s2;
+      await set(ref(db,`sessions/${session}/state/timerMax`),total);
+      await set(ref(db,`sessions/${session}/state/timerSeconds`),total);
+      await set(ref(db,`sessions/${session}/state/timerRunning`),false);
     };
-    document.getElementById("h-resetTimer").onclick = async () => {
-      const max = (await get(ref(db,`sessions/${session}/state/timerMax`))).val() || 120;
-      await set(ref(db,`sessions/${session}/state/timerSeconds`), max);
-      await set(ref(db,`sessions/${session}/state/timerRunning`), false);
-    };
-    document.getElementById("h-timerPreset").onchange = async (e) => {
-      const v = parseInt(e.target.value);
-      await set(ref(db,`sessions/${session}/state/timerMax`), v);
-      await set(ref(db,`sessions/${session}/state/timerSeconds`), v);
-      await set(ref(db,`sessions/${session}/state/timerRunning`), false);
-    };
-    document.getElementById("h-roundUp").onclick    = () => changeRound(db,session,1);
-    document.getElementById("h-roundDown").onclick  = () => changeRound(db,session,-1);
-    document.getElementById("h-redDedAdd").onclick  = () => changeDed(db,session,"red",1);
-    document.getElementById("h-redDedRem").onclick  = () => changeDed(db,session,"red",-1);
-    document.getElementById("h-blueDedAdd").onclick = () => changeDed(db,session,"blue",1);
-    document.getElementById("h-blueDedRem").onclick = () => changeDed(db,session,"blue",-1);
-    document.getElementById("h-redUndo").onclick    = () => changeScore(db,session,"red",-1);
-    document.getElementById("h-blueUndo").onclick   = () => changeScore(db,session,"blue",-1);
-    document.getElementById("h-resetScores").onclick = async () => {
-      await set(ref(db,`sessions/${session}/state/redScore`),0);
-      await set(ref(db,`sessions/${session}/state/blueScore`),0);
-      await set(ref(db,`sessions/${session}/votes`),null);
-    };
-    document.getElementById("h-resetAll").onclick = () => { if(confirm("Full reset?")) initState(db,session); };
-    document.getElementById("h-declareWinner").onclick = () => declareWinner(db,session);
-    document.getElementById("h-closeWinner").onclick   = () => set(ref(db,`sessions/${session}/state/winner`),"");
-    document.getElementById("h-redName").oninput  = e => set(ref(db,`sessions/${session}/state/redName`), e.target.value);
-    document.getElementById("h-blueName").oninput = e => set(ref(db,`sessions/${session}/state/blueName`),e.target.value);
+    el("h-roundUp").onclick   = ()=>changeRound(db,session,1);
+    el("h-roundDown").onclick = ()=>changeRound(db,session,-1);
+    el("h-redUndo").onclick   = ()=>changeScore(db,session,"red",-1);
+    el("h-blueUndo").onclick  = ()=>changeScore(db,session,"blue",-1);
 
-    ["red","blue"].forEach(side => {
-      const c = document.getElementById(`h-${side}ManualBtns`);
-      [1,2,3,4,5].forEach(pts => {
-        const btn = document.createElement("button");
-        btn.className = `btn btn-pt btn-${side}`;
-        btn.textContent = "+" + pts;
-        btn.onclick = () => changeScore(db,session,side,pts);
-        c.appendChild(btn);
+    // Penalties
+    el("h-redGamAdd").onclick   = ()=>addGamjeom(db,session,"red");
+    el("h-blueGamAdd").onclick  = ()=>addGamjeom(db,session,"blue");
+    el("h-redKyongAdd").onclick  = ()=>addKyonggo(db,session,"red");
+    el("h-blueKyongAdd").onclick = ()=>addKyonggo(db,session,"blue");
+    el("h-redPenUndo").onclick   = ()=>undoPenalty(db,session,"red");
+    el("h-bluePenUndo").onclick  = ()=>undoPenalty(db,session,"blue");
+
+    el("h-resetRound").onclick = ()=>{ if(confirm("Reset round scores?")) resetRoundScores(db,session); };
+    el("h-resetAll").onclick   = ()=>{ if(confirm("Full reset everything?")) initState(db,session); };
+    el("h-endRound").onclick   = ()=>endRound(db,session);
+    el("h-declareWinner").onclick = ()=>declareWinner(db,session);
+    el("h-nextRound").onclick  = ()=>{ el("h-roundOverlay").classList.remove("show"); };
+    el("h-closeWinner").onclick = ()=>{ set(ref(db,`sessions/${session}/state/winner`),""); el("h-winnerOverlay").classList.remove("show"); };
+    el("h-redName").oninput  = e=>set(ref(db,`sessions/${session}/state/redName`), e.target.value);
+    el("h-blueName").oninput = e=>set(ref(db,`sessions/${session}/state/blueName`),e.target.value);
+
+    // Manual buttons
+    ["red","blue"].forEach(side=>{
+      const c=el(`h-${side}ManualBtns`);
+      [1,2,3,4,5].forEach(pts=>{
+        const b=document.createElement("button");
+        b.className=`btn btn-pt btn-${side}`; b.textContent="+"+pts;
+        b.onclick=()=>changeScore(db,session,side,pts); c.appendChild(b);
       });
     });
   }
 
-  function initState(db,session) {
-    set(ref(db,`sessions/${session}/state`),{redScore:0,blueScore:0,redDed:0,blueDed:0,redName:"FIGHTER 1",blueName:"FIGHTER 2",round:1,timerSeconds:120,timerMax:120,timerRunning:false,winner:""});
+  function initState(db,session){
+    set(ref(db,`sessions/${session}/state`),{
+      redScore:0,blueScore:0,redGam:0,blueGam:0,redKyong:0,blueKyong:0,
+      redName:"FIGHTER 1",blueName:"FIGHTER 2",
+      round:1,timerSeconds:120,timerMax:120,timerRunning:false,winner:"",
+      redRoundWins:0,blueRoundWins:0
+    });
     set(ref(db,`sessions/${session}/votes`),null);
   }
 
-  function renderHost(s) {
-    T("h-redScore", s.redScore??0); T("h-blueScore",s.blueScore??0);
-    T("h-redDed",   s.redDed??0);   T("h-blueDed",  s.blueDed??0);
-    T("h-round",    s.round??1);    T("h-timer",     fmt(s.timerSeconds??120));
+  function renderHost(s,jc){
+    T("h-redScore",s.redScore??0); T("h-blueScore",s.blueScore??0);
+    T("h-redGam",  s.redGam??0);   T("h-blueGam",  s.blueGam??0);
+    T("h-redKyong",s.redKyong??0); T("h-blueKyong",s.blueKyong??0);
+    T("h-round",   s.round??1);    T("h-timer",fmt(s.timerSeconds??120));
     el("h-timer").classList.toggle("warning",(s.timerSeconds??120)<=30);
-    el("h-startStop").textContent = s.timerRunning ? "⏸ Pause" : "▶ Start";
+    el("h-startStop").textContent=s.timerRunning?"⏸ Pause":"▶ Start";
     I("h-redName", s.redName||"FIGHTER 1"); I("h-blueName",s.blueName||"FIGHTER 2");
-    T("h-redDedName",(s.redName||"FIGHTER 1").toUpperCase());
-    T("h-blueDedName",(s.blueName||"FIGHTER 2").toUpperCase());
-    dots("h-redDots",s.redDed??0,"red"); dots("h-blueDots",s.blueDed??0,"blue");
+    T("h-redPenName",(s.redName||"FIGHTER 1").toUpperCase());
+    T("h-bluePenName",(s.blueName||"FIGHTER 2").toUpperCase());
+    gamDots("h-redGamDots", s.redGam??0,"red");
+    gamDots("h-blueGamDots",s.blueGam??0,"blue");
+    renderRoundWins(s.redRoundWins??0,s.blueRoundWins??0);
     if(s.winner){T("h-winnerText",s.winner);el("h-winnerOverlay").classList.add("show");}
-    else el("h-winnerOverlay").classList.remove("show");
+    // 5 gamjeoms = round loss
+    if((s.redGam??0)>=5&&!(s.winner)){showRoundEnd(s,"blue","5 Gam-jeom — Red disqualified from round",db,null,null);}
+    if((s.blueGam??0)>=5&&!(s.winner)){showRoundEnd(s,"red","5 Gam-jeom — Blue disqualified from round",db,null,null);}
   }
 
-  function renderVoteIndicator(votes) {
-    const now=Date.now(); let rv=0,bv=0;
-    Object.values(votes).forEach(v=>{if(now-v.ts<3000){if(v.side==="red")rv++;else bv++;}});
-    T("h-redVotes", rv?`🟡 ${rv}/3 judges voted`:"");
-    T("h-blueVotes",bv?`🟡 ${bv}/3 judges voted`:"");
+  function renderRoundWins(r,b){
+    const c=el("h-roundWins"); if(!c)return; c.innerHTML="";
+    for(let i=0;i<2;i++){
+      const d=document.createElement("div");
+      d.className="win-dot"+(i<r?" won-red":i<b?" won-blue":"");
+      if(i<r)d.classList.add("won-red"); else if(i<b)d.classList.add("won-blue");
+      c.appendChild(d);
+    }
   }
 
-  async function processVotes(db,session) {
-    const vRef=ref(db,`sessions/${session}/votes`);
-    const snap=await get(vRef); if(!snap.exists())return;
+  function renderVoteInd(votes,jc){
+    const now=Date.now(); let rv=0,bv=0,rpts=0,bpts=0;
+    Object.values(votes).forEach(v=>{if(now-v.ts<3000){if(v.side==="red"){rv++;rpts=v.points||1;}else{bv++;bpts=v.points||1;}}});
+    T("h-redVotes",  rv?`🟡 ${rv}/${jc} judges — ${rpts}pt`:"");
+    T("h-blueVotes", bv?`🟡 ${bv}/${jc} judges — ${bpts}pt`:"");
+  }
+
+  async function processVotes(db,session,jc){
+    const vr=ref(db,`sessions/${session}/votes`);
+    const snap=await get(vr); if(!snap.exists())return;
     const votes=snap.val(); const now=Date.now();
     const byJudge={};
     Object.entries(votes).forEach(([k,v])=>{if(now-v.ts<3000){if(!byJudge[v.judgeId]||v.ts>byJudge[v.judgeId].ts)byJudge[v.judgeId]=v;}});
     const sides={red:[],blue:[]};
     Object.values(byJudge).forEach(v=>{if(sides[v.side])sides[v.side].push(v);});
+    const needed = jc===1?1:jc===2?2:2;
     for(const side of["red","blue"]){
-      if(sides[side].length>=2){
-        await changeScore(db,session,side,1);
-        await set(vRef,null);
-        const e=el("h-"+side+"Score"); e.classList.add("pop"); setTimeout(()=>e.classList.remove("pop"),300);
+      if(sides[side].length>=needed){
+        const pts=Math.round(sides[side].reduce((a,v)=>a+(v.points||1),0)/sides[side].length);
+        await changeScore(db,session,side,pts);
+        await set(vr,null);
+        const e=el("h-"+side+"Score"); if(e){e.classList.add("pop");setTimeout(()=>e.classList.remove("pop"),300);}
         return;
       }
     }
     const fresh={};
     Object.entries(votes).forEach(([k,v])=>{if(now-v.ts<3000)fresh[k]=v;});
     if(Object.keys(fresh).length!==Object.keys(votes).length)
-      await set(vRef,Object.keys(fresh).length?fresh:null);
+      await set(vr,Object.keys(fresh).length?fresh:null);
+  }
+
+  async function addGamjeom(db,session,side){
+    const opp=side==="red"?"blue":"red";
+    const gr=ref(db,`sessions/${session}/state/${side}Gam`);
+    const newG=((await get(gr)).val()||0)+1;
+    await set(gr,newG);
+    await changeScore(db,session,opp,1); // +1 to opponent
+  }
+  async function addKyonggo(db,session,side){
+    const opp=side==="red"?"blue":"red";
+    const kr=ref(db,`sessions/${session}/state/${side}Kyong`);
+    const newK=((await get(kr)).val()||0)+1;
+    await set(kr,newK);
+    if(newK%2===0) await changeScore(db,session,opp,1); // every 2nd = 1pt to opponent
+  }
+  async function undoPenalty(db,session,side){
+    const gr=ref(db,`sessions/${session}/state/${side}Gam`);
+    const kr=ref(db,`sessions/${session}/state/${side}Kyong`);
+    const gv=(await get(gr)).val()||0;
+    const kv=(await get(kr)).val()||0;
+    if(gv>0) await set(gr,gv-1);
+    else if(kv>0) await set(kr,kv-1);
   }
 
   async function changeScore(db,session,side,delta){const r=ref(db,`sessions/${session}/state/${side}Score`);await set(r,Math.max(0,((await get(r)).val()||0)+delta));}
   async function changeRound(db,session,delta){const r=ref(db,`sessions/${session}/state/round`);await set(r,Math.max(1,Math.min(9,((await get(r)).val()||1)+delta)));}
-  async function changeDed(db,session,side,delta){const r=ref(db,`sessions/${session}/state/${side}Ded`);await set(r,Math.max(0,((await get(r)).val()||0)+delta));}
+  async function resetTimerFn(db,session){const max=(await get(ref(db,`sessions/${session}/state/timerMax`))).val()||120;await set(ref(db,`sessions/${session}/state/timerSeconds`),max);await set(ref(db,`sessions/${session}/state/timerRunning`),false);}
+  async function resetRoundScores(db,session){
+    await set(ref(db,`sessions/${session}/state/redScore`),0);
+    await set(ref(db,`sessions/${session}/state/blueScore`),0);
+    await set(ref(db,`sessions/${session}/state/redGam`),0);
+    await set(ref(db,`sessions/${session}/state/blueGam`),0);
+    await set(ref(db,`sessions/${session}/state/redKyong`),0);
+    await set(ref(db,`sessions/${session}/state/blueKyong`),0);
+    await set(ref(db,`sessions/${session}/votes`),null);
+  }
+
+  async function endRound(db,session){
+    const s=(await get(ref(db,`sessions/${session}/state`))).val();
+    const rs=s.redScore??0, bs=s.blueScore??0;
+    let winner="draw";
+    if(rs>bs)winner="red"; else if(bs>rs)winner="blue";
+    const rw=(s.redRoundWins||0)+(winner==="red"?1:0);
+    const bw=(s.blueRoundWins||0)+(winner==="blue"?1:0);
+    // Show overlay
+    const wname=winner==="red"?(s.redName||"RED"):winner==="blue"?(s.blueName||"BLUE"):"DRAW";
+    const wcol=winner==="red"?"var(--red)":winner==="blue"?"var(--blue)":"var(--gold)";
+    el("h-roundWinner").textContent=winner==="draw"?"DRAW!":(wname.toUpperCase()+" WINS ROUND!");
+    el("h-roundWinner").style.color=wcol;
+    T("h-roundScore",`${rs} — ${bs}`);
+    T("h-roundSub",rw>=2||bw>=2?"":"Round "+(s.round||1)+" complete");
+    el("h-roundOverlay").classList.add("show");
+    // Update DB
+    await set(ref(db,`sessions/${session}/state/redRoundWins`),rw);
+    await set(ref(db,`sessions/${session}/state/blueRoundWins`),bw);
+    // Check match winner
+    if(rw>=2||bw>=2){
+      const matchWin=rw>=2?(s.redName||"RED"):(s.blueName||"BLUE");
+      await set(ref(db,`sessions/${session}/state/winner`),matchWin.toUpperCase()+" WINS THE MATCH!");
+    } else {
+      // Advance round & reset scores
+      await set(ref(db,`sessions/${session}/state/round`),(s.round||1)+1);
+      await resetRoundScores(db,session);
+      await resetTimerFn(db,session);
+    }
+  }
+
   async function declareWinner(db,session){
     const s=(await get(ref(db,`sessions/${session}/state`))).val();
-    const rn=(s.redScore||0)-(s.redDed||0),bn=(s.blueScore||0)-(s.blueDed||0);
+    const rn=(s.redScore||0),bn=(s.blueScore||0);
     const msg=rn>bn?(s.redName||"RED").toUpperCase()+" WINS!":bn>rn?(s.blueName||"BLUE").toUpperCase()+" WINS!":"IT'S A DRAW!";
     await set(ref(db,`sessions/${session}/state/winner`),msg);
   }
 
-  // ══════════════════════════════════════════════════════════════════════════
-  // JUDGE
-  // ══════════════════════════════════════════════════════════════════════════
-  function startJudge(cfg,session,judgeId) {
+  function showRoundEnd(s,winSide,reason,db,rw,bw){}
+
+  // ══ JUDGE ══════════════════════════════════════════════════════════════════
+  function startJudge(cfg,session,judgeId,jc){
     const app=initializeApp(cfg,"judge");
     const db=getDatabase(app);
+
+    // Show bonus button for single judge
+    if(jc===1) el("tech-bonus").style.display="flex";
+
+    // Update instructions
+    const inst=jc===1?"Select technique, then tap the fighter who scored. As single judge, your tap registers immediately."
+      :jc===2?"Select technique → tap fighter. Both judges must agree within 3 seconds."
+      :"Select technique → tap fighter. A point scores when 2 of 3 judges agree within 3 seconds.";
+    T("j-instructions",inst);
+
     onValue(ref(db,`sessions/${session}/state`),snap=>{
       if(!snap.exists())return; const s=snap.val();
       T("j-redScore",s.redScore??0); T("j-blueScore",s.blueScore??0);
@@ -540,25 +733,50 @@
     onValue(ref(db,`sessions/${session}/votes`),snap=>{
       const votes=snap.val()||{}; const now=Date.now(); let rv=0,bv=0;
       Object.values(votes).forEach(v=>{if(now-v.ts<3000){if(v.side==="red")rv++;else bv++;}});
-      T("j-redVoteCount",rv?`${rv}/3 judges`:""); T("j-blueVoteCount",bv?`${bv}/3 judges`:"");
+      T("j-redVoteCount",rv?`${rv}/${jc} judges`:"");
+      T("j-blueVoteCount",bv?`${bv}/${jc} judges`:"");
     });
+
     async function vote(side){
-      await set(ref(db,`sessions/${session}/votes/judge${judgeId}`),{judgeId,side,ts:Date.now()});
+      if(!window._selTech){alert("Please select a technique first!");return;}
+      await set(ref(db,`sessions/${session}/votes/judge${judgeId}`),{judgeId,side,points:window._selPts,ts:Date.now()});
       const btn=el(side==="red"?"j-voteRed":"j-voteBlue");
       btn.classList.add("voted"); setTimeout(()=>btn.classList.remove("voted"),400);
+      setTimeout(()=>clearTech(),600);
     }
-    el("j-voteRed").onclick=()=>vote("red");
-    el("j-voteBlue").onclick=()=>vote("blue");
+    el("j-voteRed").onclick  = ()=>vote("red");
+    el("j-voteBlue").onclick = ()=>vote("blue");
   }
 
-  // ── Helpers ────────────────────────────────────────────────────────────────
-  function fmt(s){s=Math.max(0,s||0);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0");}
-  function el(id){return document.getElementById(id);}
-  function T(id,v){const e=el(id);if(e)e.textContent=v;}
-  function I(id,v){const e=el(id);if(e&&document.activeElement!==e)e.value=v;}
-  function dots(cid,count,side){
+  // Technique selection
+  window._selTech=null; window._selPts=1;
+  window.selectTech=function(tech,pts){
+    window._selTech=tech; window._selPts=pts;
+    document.querySelectorAll(".tech-btn").forEach(b=>b.classList.remove("selected"));
+    el("tech-"+tech).classList.add("selected");
+    el("j-voteRed").classList.remove("disabled");
+    el("j-voteBlue").classList.remove("disabled");
+    const names={punch:"Punch to Body",body:"Kick to Body",head:"Kick to Head",spinbody:"Spinning Kick to Body",spinhead:"Spinning Kick to Head",bonus:"Bonus Points"};
+    T("j-pendingDisplay",`✅ ${names[tech]||tech} (+${pts}pt${pts>1?"s":""}) — tap the fighter who scored`);
+    T("j-redPtsBadge",`+${pts}pt${pts>1?"s":""}`); T("j-bluePtsBadge",`+${pts}pt${pts>1?"s":""}`);
+  };
+  function clearTech(){
+    window._selTech=null; window._selPts=1;
+    document.querySelectorAll(".tech-btn").forEach(b=>b.classList.remove("selected"));
+    el("j-voteRed").classList.add("disabled"); el("j-voteBlue").classList.add("disabled");
+    T("j-pendingDisplay","Select a technique above, then tap the fighter who scored");
+    T("j-redPtsBadge","— pts"); T("j-bluePtsBadge","— pts");
+  }
+
+  // ── Helpers ─────────────────────────────────────────────────────────────
+  function fmt(s){s=Math.max(0,s||0);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+  function el(id){return document.getElementById(id)}
+  function T(id,val){const e=el(id);if(e)e.textContent=val}
+  function I(id,val){const e=el(id);if(e&&document.activeElement!==e)e.value=val}
+  function v(id){const e=el(id);return e?e.value.trim():""}
+  function gamDots(cid,count,side){
     const c=el(cid);if(!c)return;c.innerHTML="";
-    for(let i=0;i<10;i++){const d=document.createElement("div");d.className="ded-dot"+(i<count?" active "+side:"");c.appendChild(d);}
+    for(let i=0;i<5;i++){const d=document.createElement("div");d.className="pen-dot"+(i<count?" active "+side:"");c.appendChild(d);}
   }
 </script>
 
