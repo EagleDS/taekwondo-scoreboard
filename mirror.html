@@ -4,640 +4,642 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Mirror — The Wedge</title>
-<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Josefin+Sans:wght@100;300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-:root {
-  --ink:    #0e0d09;
-  --gold:   #b8933a;
-  --red:    #7a1f1f;
-  --cream:  #e4dccb;
-  --muted:  #6e6655;
-  --dim:    #1e1c15;
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0c0b08;
+  --gold:#b8933a;
+  --red:#7a1f1f;
+  --cream:#e2dac8;
+  --muted:#6a6252;
+  --soft:#a09880;
 }
-html { scroll-behavior:smooth; }
-body {
-  background: var(--ink);
-  color: var(--cream);
-  font-family: 'IM Fell English', Georgia, serif;
-  overflow-x: hidden;
-}
-.label {
-  font-family:'Josefin Sans',sans-serif;
-  font-weight:100;
-  font-size:0.54rem;
-  letter-spacing:0.45em;
-  text-transform:uppercase;
-}
-
-/* ── PAGE HERO ── */
-#hero {
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:2rem 1rem 3rem;
-  position:relative;
-}
-.hero-title {
-  font-size:1.55rem;
-  letter-spacing:0.06em;
-  text-align:center;
-  color:var(--cream);
-  margin-bottom:0.3rem;
-}
-.hero-sub {
-  font-family:'Josefin Sans',sans-serif;
-  font-weight:100;
-  font-size:0.55rem;
-  letter-spacing:0.45em;
-  text-transform:uppercase;
-  color:var(--muted);
-  text-align:center;
-  margin-bottom:2.2rem;
-}
-
-/* ── MAIN SVG DIAGRAM ── */
-#diag-wrap {
-  width:min(680px,96vw);
-  position:relative;
-  touch-action:none;
-}
-#diag-svg {
-  width:100%;
-  height:auto;
-  display:block;
-  overflow:visible;
-}
-
-/* SVG element styles via CSS */
-.node-box {
-  transition: opacity 0.5s;
-}
-.flow-up   { transition: opacity 0.5s, stroke 0.5s; }
-.flow-down { transition: opacity 0.5s, stroke 0.5s; }
-
-/* ── WEDGE CLICK ZONE ── */
-#wedge-hit {
-  cursor:pointer;
-  fill:transparent;
-}
-
-/* ── STATE CAPTION ── */
-#caption {
-  width:min(680px,96vw);
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1px;
-  background:rgba(184,147,58,0.1);
-  border:1px solid rgba(184,147,58,0.1);
-  margin-top:0.8rem;
-}
-.cap-col {
+html{scroll-behavior:smooth}
+body{
   background:var(--ink);
-  padding:1rem 1.2rem;
+  color:var(--cream);
+  font-family:'IM Fell English',Georgia,serif;
+  overflow-x:hidden;
 }
-.cap-col-lbl {
-  font-family:'Josefin Sans',sans-serif;
-  font-weight:100;
-  font-size:0.5rem;
-  letter-spacing:0.4em;
-  text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:0.35rem;
-}
-.cap-col-val {
-  font-size:0.92rem;
-  line-height:1.55;
-  transition: color 0.45s;
-}
-.val-neutral { color: var(--cream); }
-.val-expand  { color: var(--gold); }
-.val-contract{ color: #c07070; font-style:italic; }
 
-/* ── TAP HINT ── */
-.tap-hint {
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  display:flex;
+  justify-content:center;
+  gap:2.5rem;
+  padding:1.1rem 1.5rem;
+  background:linear-gradient(to bottom,rgba(12,11,8,0.97) 60%,transparent);
+}
+nav a{
   font-family:'Josefin Sans',sans-serif;
   font-weight:100;
   font-size:0.52rem;
-  letter-spacing:0.4em;
+  letter-spacing:0.42em;
   text-transform:uppercase;
   color:var(--muted);
-  text-align:center;
-  margin-top:1.1rem;
-  animation: blink 2.6s ease-in-out infinite;
-}
-@keyframes blink { 0%,100%{opacity:.25} 55%{opacity:.85} }
-
-/* ── SCROLL CUE ── */
-.scroll-cue {
-  margin-top:2.4rem;
-  font-family:'Josefin Sans',sans-serif;
-  font-weight:100;
-  font-size:0.52rem;
-  letter-spacing:0.4em;
-  text-transform:uppercase;
-  color:rgba(184,147,58,0.35);
+  text-decoration:none;
   cursor:pointer;
   transition:color 0.3s;
 }
-.scroll-cue:hover { color:rgba(184,147,58,0.7); }
+nav a:hover,nav a.active{color:var(--gold)}
 
-/* ── PANELS ── */
-#panels {
-  max-width:620px;
-  margin:0 auto;
-  padding:0 1.2rem 6rem;
+/* ── SECTIONS ── */
+section{
+  min-height:100vh;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:5.5rem 1.2rem 3rem;
 }
-.panel {
-  border-top:1px solid rgba(184,147,58,0.12);
-  padding:3.2rem 0;
+section.active{display:flex}
+
+/* ── SECTION 1: THE ASSUMPTION ── */
+#s1 .frame{
+  width:min(580px,94vw);
 }
-.panel:last-child { border-bottom:1px solid rgba(184,147,58,0.12); }
-.panel-num {
+.eyebrow{
   font-family:'Josefin Sans',sans-serif;
   font-weight:100;
   font-size:0.52rem;
   letter-spacing:0.45em;
   text-transform:uppercase;
-  color:rgba(184,147,58,0.4);
-  margin-bottom:0.55rem;
+  color:var(--muted);
+  margin-bottom:0.7rem;
 }
-.panel-title {
-  font-size:1.75rem;
+.s-title{
+  font-size:clamp(1.6rem,4vw,2.2rem);
   line-height:1.2;
-  margin-bottom:1.6rem;
+  margin-bottom:2.5rem;
   color:var(--cream);
 }
-.panel-title em { color:var(--gold); font-style:italic; }
-p {
-  font-size:1.02rem;
-  line-height:1.92;
-  color:#afa89a;
-  margin-bottom:1.3rem;
+.s-title em{color:var(--gold);font-style:italic}
+
+/* The core diagram for section 1: YOU vs WHAT YOU WANT */
+.assumption-diagram{
+  position:relative;
+  width:100%;
+  margin:0 auto 2rem;
 }
-p.lead { color:var(--cream); }
-p strong { color:var(--cream); font-weight:normal; font-style:italic; }
-.pull {
+
+/* section prose */
+.prose{
+  width:min(580px,94vw);
+  margin-top:2rem;
+}
+.prose p{
+  font-size:1.02rem;
+  line-height:1.95;
+  color:var(--soft);
+  margin-bottom:1.2rem;
+}
+.prose p.lead{color:var(--cream)}
+.prose p strong{color:var(--cream);font-weight:normal;font-style:italic}
+.pull{
   border-left:1px solid var(--gold);
-  padding:0.3rem 0 0.3rem 1.6rem;
+  padding:0.3rem 0 0.3rem 1.5rem;
   margin:1.8rem 0;
-  font-size:1.2rem;
+  font-size:1.15rem;
   font-style:italic;
   color:var(--cream);
   line-height:1.65;
 }
 
-/* ── BACK ── */
-#back-btn {
-  position:fixed; bottom:1.6rem; right:1.6rem;
-  background:var(--ink);
-  border:1px solid rgba(184,147,58,0.22);
-  color:var(--muted);
-  font-family:'Josefin Sans',sans-serif;
-  font-weight:100; font-size:0.52rem;
-  letter-spacing:0.4em; text-transform:uppercase;
-  padding:0.65rem 1.1rem;
-  cursor:pointer; transition:all 0.3s;
-  display:none; z-index:200;
+/* ── SECTION 2: THE 4D IDENTITY STATE ── */
+.timeline{
+  width:min(580px,94vw);
+  position:relative;
+  margin:0 auto;
 }
-#back-btn:hover { color:var(--gold); border-color:rgba(184,147,58,0.5); }
-#back-btn.show  { display:block; }
 
-/* ── FADE ── */
-.fade-up { opacity:0; transform:translateY(14px); transition:opacity 0.7s ease,transform 0.7s ease; }
-.fade-up.visible { opacity:1; transform:none; }
+/* ── SECTION 3: THE WEDGE ── */
+/* interactive diagram — SVG based */
+#s3 .diag-wrap{
+  width:min(600px,95vw);
+  position:relative;
+  margin:0 auto;
+}
+#s3-svg{width:100%;height:auto;display:block;overflow:visible}
+
+#s3-caption{
+  width:min(600px,95vw);
+  margin:0.7rem auto 0;
+  border:1px solid rgba(184,147,58,0.12);
+  padding:1rem 1.4rem;
+  min-height:3.2rem;
+  display:flex;align-items:center;justify-content:center;
+}
+#s3-cap-text{
+  font-size:0.95rem;
+  font-style:italic;
+  text-align:center;
+  line-height:1.6;
+  color:var(--muted);
+  transition:color 0.5s;
+}
+#s3-cap-text.gold{color:var(--gold)}
+#s3-cap-text.red{color:#c07070}
+
+.tap-hint{
+  font-family:'Josefin Sans',sans-serif;
+  font-weight:100;
+  font-size:0.5rem;
+  letter-spacing:0.42em;
+  text-transform:uppercase;
+  color:var(--muted);
+  text-align:center;
+  margin-top:0.9rem;
+  animation:blink 2.8s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:.18}55%{opacity:.72}}
+
+/* ── SECTION 4: REALITY ── */
+/* two columns — reactive vs pure */
+.reality-cols{
+  width:min(600px,95vw);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background:rgba(184,147,58,0.1);
+  border:1px solid rgba(184,147,58,0.1);
+  margin:2rem 0;
+}
+.rc{
+  background:var(--ink);
+  padding:1.6rem 1.4rem;
+}
+.rc-head{
+  font-family:'Josefin Sans',sans-serif;
+  font-weight:100;
+  font-size:0.52rem;
+  letter-spacing:0.38em;
+  text-transform:uppercase;
+  margin-bottom:1.1rem;
+}
+.rc-head.red{color:#9a5050}
+.rc-head.gold{color:var(--gold)}
+.rc p{
+  font-size:0.93rem;
+  line-height:1.8;
+  color:var(--soft);
+  margin-bottom:0.8rem;
+}
+
+/* ── SHARED ── */
+.divider{
+  width:40px;height:1px;
+  background:rgba(184,147,58,0.3);
+  margin:2rem 0;
+}
+.next-btn{
+  font-family:'Josefin Sans',sans-serif;
+  font-weight:100;
+  font-size:0.52rem;
+  letter-spacing:0.42em;
+  text-transform:uppercase;
+  color:rgba(184,147,58,0.45);
+  background:none;border:none;
+  cursor:pointer;
+  margin-top:1.8rem;
+  transition:color 0.3s;
+}
+.next-btn:hover{color:var(--gold)}
+
+/* SVG transition helpers */
+.t{transition:opacity 0.55s ease,fill 0.55s ease,stroke 0.55s ease}
 
 @media(max-width:480px){
-  #caption { grid-template-columns:1fr; }
-  .panel-title { font-size:1.35rem; }
+  .reality-cols{grid-template-columns:1fr}
+  .s-title{font-size:1.45rem}
 }
 </style>
 </head>
 <body>
 
-<div id="hero">
-  <div class="hero-title">The Wedge</div>
-  <div class="hero-sub">Expansion vs Contraction — Intentions Manifested vs Managed</div>
+<nav>
+  <a onclick="show('s1')" id="nav-s1">The Assumption</a>
+  <a onclick="show('s2')" id="nav-s2">The 4D State</a>
+  <a onclick="show('s3')" id="nav-s3">The Wedge</a>
+  <a onclick="show('s4')" id="nav-s4">Reality</a>
+</nav>
 
-  <!-- ══════════════════════════════════════════
-       MAIN DIAGRAM SVG
-       Layout (all coords in a 680×560 viewBox):
+<!-- ══════════════════════════════════════════════
+     SECTION 1 — THE ASSUMPTION
+══════════════════════════════════════════════ -->
+<section id="s1">
+  <div class="frame" style="width:min(580px,94vw)">
+    <div class="eyebrow">The Mirror Framework · One</div>
+    <h1 class="s-title">The assumption that you are<br><em>smaller than your intentions</em></h1>
 
-       TOP:    Reality oval  ←→  Identity oval   (side by side, ~y=80)
-       UP ARROW: Identity → Reality (manifested, gold)
-       WEDGE:  triangle apex at Identity bottom (~y=170), base at ~y=320
-       DOWN ARROW: wedge tip → Intention box (contracted, red)
-       BOTTOM: Intention box (~y=350) — "Intention reduced / 3D Physical Reality seems real"
-       RIGHT:  "Locked 4D / curated history" label
-       LEFT:   "Reality content" feedback arrow on Reality oval
-  ══════════════════════════════════════════ -->
+    <!-- SVG: two circles — YOU (small) and WHAT YOU INTEND (larger, separate) -->
+    <!-- This is what the wedge produces as an experience -->
+    <svg id="s1-svg" viewBox="0 0 580 200" style="width:100%;height:auto;overflow:visible;margin-bottom:1.5rem">
+      <defs>
+        <radialGradient id="rg-you" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#b8933a" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#b8933a" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="rg-want" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#b8933a" stop-opacity="0.06"/>
+          <stop offset="100%" stop-color="#b8933a" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
 
-  <div id="diag-wrap">
-   <svg id="diag-svg" viewBox="0 0 680 560" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <!-- gold arrowhead -->
-      <marker id="arr-gold" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-        <path d="M0,0 L0,6 L8,3 z" fill="#b8933a" opacity="0.85"/>
-      </marker>
-      <!-- red arrowhead -->
-      <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-        <path d="M0,0 L0,6 L8,3 z" fill="#7a1f1f" opacity="0.9"/>
-      </marker>
-      <!-- muted arrowhead (feedback) -->
-      <marker id="arr-muted" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
-        <path d="M0,0 L0,6 L7,3 z" fill="#6e6655" opacity="0.7"/>
-      </marker>
-      <!-- glow filter -->
-      <filter id="glow-gold" x="-40%" y="-40%" width="180%" height="180%">
-        <feGaussianBlur stdDeviation="4" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="glow-red" x="-40%" y="-40%" width="180%" height="180%">
-        <feGaussianBlur stdDeviation="4" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
+      <!-- "You" — small circle, left -->
+      <circle cx="145" cy="100" r="52" fill="url(#rg-you)"/>
+      <circle cx="145" cy="100" r="52" fill="none" stroke="rgba(184,147,58,0.5)" stroke-width="1"/>
+      <text x="145" y="96" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="15" fill="#e2dac8">You</text>
+      <text x="145" y="114" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5"
+        letter-spacing="1.8" fill="rgba(110,100,82,0.8)">as you assume yourself</text>
 
-    <!-- ─── BACKGROUND GRID (subtle) ─── -->
-    <rect width="680" height="560" fill="none"/>
+      <!-- gap label -->
+      <text x="290" y="96" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="8"
+        letter-spacing="2" fill="rgba(122,31,31,0.55)">— distance —</text>
+      <text x="290" y="112" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="10.5" font-style="italic"
+        fill="rgba(122,31,31,0.4)">the wedge</text>
 
-    <!-- ══════════════════════
-         EXPANSION PATH (gold)
-         Identity → Reality → outward
-    ══════════════════════ -->
+      <!-- "What you intend" — larger circle, right -->
+      <circle cx="450" cy="100" r="75" fill="url(#rg-want)"/>
+      <circle cx="450" cy="100" r="75" fill="none" stroke="rgba(184,147,58,0.2)" stroke-width="1" stroke-dasharray="5,4"/>
+      <text x="450" y="94" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="15" fill="rgba(226,218,200,0.55)">What you intend</text>
+      <text x="450" y="112" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5"
+        letter-spacing="1.6" fill="rgba(110,100,82,0.45)">called "dream" — seems distant</text>
+    </svg>
 
-    <!-- Arrow: Identity UP-LEFT to Reality oval -->
-    <!-- from Identity oval center ~(420,95) curving to Reality oval ~(220,95) -->
-    <path id="arrow-expand"
-      d="M390,95 C340,70 280,70 250,95"
-      fill="none"
-      stroke="#b8933a" stroke-width="1.5" opacity="0.85"
-      marker-end="url(#arr-gold)"
-      class="flow-up"/>
-
-    <!-- "Intentions Manifested" label on expand arrow -->
-    <text id="lbl-manifested" x="318" y="62"
-      font-family="'Josefin Sans',sans-serif" font-size="9" font-weight="100"
-      letter-spacing="2.5" text-anchor="middle"
-      fill="#b8933a" opacity="0.85">INTENTIONS MANIFESTED</text>
-
-    <!-- Outward expand arc from Reality — shows reality growing -->
-    <path id="arc-expand"
-      d="M145,75 Q90,50 80,95 Q90,140 145,115"
-      fill="none"
-      stroke="#b8933a" stroke-width="1" stroke-dasharray="3,4" opacity="0.5"
-      class="flow-up"/>
-    <text id="lbl-expand-arc" x="60" y="98"
-      font-family="'Josefin Sans',sans-serif" font-size="8" font-weight="100"
-      letter-spacing="1.5" text-anchor="middle" fill="#b8933a" opacity="0.6">EXPANDS</text>
-
-    <!-- ══════════════════════
-         REALITY OVAL (top-left)
-    ══════════════════════ -->
-    <ellipse id="oval-reality" cx="200" cy="95" rx="72" ry="32"
-      fill="rgba(184,147,58,0.04)" stroke="rgba(184,147,58,0.35)" stroke-width="1"/>
-    <text x="200" y="91" text-anchor="middle"
-      font-family="'IM Fell English',Georgia,serif" font-size="15" fill="#e4dccb">Reality</text>
-    <text x="200" y="107" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-size="7.5" font-weight="100"
-      letter-spacing="1.8" fill="#6e6655">content</text>
-
-    <!-- ══════════════════════
-         IDENTITY OVAL (top-right)
-    ══════════════════════ -->
-    <ellipse id="oval-identity" cx="430" cy="95" rx="80" ry="32"
-      fill="rgba(184,147,58,0.04)" stroke="rgba(184,147,58,0.35)" stroke-width="1"/>
-    <text x="430" y="91" text-anchor="middle"
-      font-family="'IM Fell English',Georgia,serif" font-size="15" fill="#e4dccb">Identity</text>
-    <text x="430" y="107" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-size="7.5" font-weight="100"
-      letter-spacing="1.8" fill="#6e6655">5D assumed state</text>
-
-    <!-- Short shaft from Identity bottom down to wedge apex -->
-    <line x1="430" y1="127" x2="430" y2="162"
-      stroke="rgba(184,147,58,0.25)" stroke-width="1.5"/>
-
-    <!-- ══════════════════════
-         THE WEDGE TRIANGLE
-         apex: (430,162)  base: (560,330) (300,330)
-    ══════════════════════ -->
-
-    <!-- Shadow -->
-    <polygon points="430,167 564,335 304,335"
-      fill="rgba(0,0,0,0.35)" transform="translate(3,5)"/>
-
-    <!-- Wedge body -->
-    <polygon id="wedge-body" points="430,162 560,330 300,330"
-      fill="rgba(122,31,31,0.14)"
-      stroke="rgba(184,147,58,0.28)" stroke-width="1"
-      style="transition:fill 0.5s"/>
-
-    <!-- Wedge hatch lines (like whiteboard) -->
-    <g stroke="rgba(184,147,58,0.1)" stroke-width="0.8">
-      <line x1="430" y1="162" x2="330" y2="330"/>
-      <line x1="430" y1="162" x2="355" y2="330"/>
-      <line x1="430" y1="162" x2="380" y2="330"/>
-      <line x1="430" y1="162" x2="405" y2="330"/>
-      <line x1="430" y1="162" x2="430" y2="330"/>
-      <line x1="430" y1="162" x2="455" y2="330"/>
-      <line x1="430" y1="162" x2="480" y2="330"/>
-      <line x1="430" y1="162" x2="505" y2="330"/>
-      <line x1="430" y1="162" x2="530" y2="330"/>
-    </g>
-
-    <!-- Wedge label: Brainstem / Wedge -->
-    <text x="430" y="238" text-anchor="middle"
-      font-family="'IM Fell English',Georgia,serif" font-size="16" fill="#e4dccb" opacity="0.9">Brainstem</text>
-    <text x="430" y="257" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-size="8" font-weight="100"
-      letter-spacing="2.5" fill="rgba(184,147,58,0.65)">WEDGE</text>
-
-    <!-- UP arrow on left side of wedge (expansion direction) -->
-    <path id="wedge-arr-up"
-      d="M355,295 L320,220"
-      fill="none" stroke="#b8933a" stroke-width="1.4" opacity="0.7"
-      marker-end="url(#arr-gold)" class="flow-up"/>
-    <text id="lbl-wu" x="318" y="266"
-      font-family="'Josefin Sans',sans-serif" font-size="8" font-weight="100"
-      letter-spacing="1.8" text-anchor="middle"
-      fill="#b8933a" opacity="0.6" transform="rotate(-57,318,266)">expand</text>
-
-    <!-- DOWN arrow on right side of wedge (contraction direction) -->
-    <path id="wedge-arr-down"
-      d="M505,220 L540,295"
-      fill="none" stroke="#7a1f1f" stroke-width="1.4" opacity="0.65"
-      marker-end="url(#arr-red)" class="flow-down"/>
-    <text id="lbl-wd" x="545" y="262"
-      font-family="'Josefin Sans',sans-serif" font-size="8" font-weight="100"
-      letter-spacing="1.8" text-anchor="middle"
-      fill="#c07070" opacity="0.6" transform="rotate(57,545,262)">contract</text>
-
-    <!-- ══════════════════════
-         CONTRACTION PATH (red)
-         Wedge tip → down → Intention box
-    ══════════════════════ -->
-
-    <!-- Arrow from wedge base midpoint down to Intention box -->
-    <path id="arrow-contract"
-      d="M430,330 L430,368"
-      fill="none"
-      stroke="#7a1f1f" stroke-width="1.5" opacity="0.8"
-      marker-end="url(#arr-red)"
-      class="flow-down"/>
-
-    <!-- ══════════════════════
-         INTENTION BOX (bottom)
-    ══════════════════════ -->
-    <rect id="box-intention" x="305" y="370" width="250" height="76"
-      fill="rgba(122,31,31,0.08)" stroke="rgba(122,31,31,0.3)" stroke-width="1"
-      style="transition:stroke 0.5s, fill 0.5s"/>
-
-    <text x="430" y="396" text-anchor="middle"
-      font-family="'IM Fell English',Georgia,serif" font-size="15" fill="#e4dccb">Intention</text>
-    <text x="430" y="414" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-size="7.5" font-weight="100"
-      letter-spacing="1.6" fill="#7a5050">reduced · absence of will</text>
-    <text x="430" y="430" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-size="7" font-weight="100"
-      letter-spacing="1.4" fill="#6e5050">3D Physical Reality seems fixed</text>
-
-    <!-- "Intentions Managed" label below intention box -->
-    <text id="lbl-managed" x="430" y="464"
-      font-family="'Josefin Sans',sans-serif" font-size="9" font-weight="100"
-      letter-spacing="2.5" text-anchor="middle"
-      fill="#7a1f1f" opacity="0.8">INTENTIONS MANAGED</text>
-
-    <!-- ══════════════════════
-         LOCKED 4D label (right of wedge)
-    ══════════════════════ -->
-    <rect x="578" y="240" width="92" height="62"
-      fill="none" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
-    <text x="624" y="261" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-size="7.5" font-weight="100"
-      letter-spacing="1.4" fill="#7a5050">LOCKED 4D</text>
-    <text x="624" y="278" text-anchor="middle"
-      font-family="'IM Fell English',Georgia,serif" font-size="10" font-style="italic"
-      fill="#9a7070">curated</text>
-    <text x="624" y="292" text-anchor="middle"
-      font-family="'IM Fell English',Georgia,serif" font-size="10" font-style="italic"
-      fill="#9a7070">history</text>
-
-    <!-- dashed line from wedge right edge to Locked 4D box -->
-    <line x1="560" y1="280" x2="578" y2="275"
-      stroke="rgba(122,31,31,0.2)" stroke-width="0.8" stroke-dasharray="3,3"/>
-
-    <!-- ══════════════════════
-         FEEDBACK ARROW: Reality → Identity
-         (shows reality content loops back and locks identity)
-    ══════════════════════ -->
-    <path id="arrow-feedback"
-      d="M272,95 C320,75 370,75 398,90"
-      fill="none"
-      stroke="rgba(110,102,85,0.45)" stroke-width="1" stroke-dasharray="4,4"
-      marker-end="url(#arr-muted)"
-      class="flow-down"/>
-    <text x="335" y="74"
-      font-family="'Josefin Sans',sans-serif" font-size="7.5" font-weight="100"
-      letter-spacing="1.5" text-anchor="middle"
-      fill="rgba(110,102,85,0.55)">confirms loop</text>
-
-    <!-- ══════════════════════
-         DIMENSION LABELS (left margin)
-    ══════════════════════ -->
-    <text x="22" y="100" text-anchor="start"
-      font-family="'Josefin Sans',sans-serif" font-size="8" font-weight="100"
-      letter-spacing="1.8" fill="rgba(184,147,58,0.3)">5D</text>
-    <text x="22" y="248" text-anchor="start"
-      font-family="'Josefin Sans',sans-serif" font-size="8" font-weight="100"
-      letter-spacing="1.8" fill="rgba(122,31,31,0.4)">4D</text>
-    <text x="22" y="408" text-anchor="start"
-      font-family="'Josefin Sans',sans-serif" font-size="8" font-weight="100"
-      letter-spacing="1.8" fill="rgba(110,102,85,0.4)">3D</text>
-
-    <!-- dimension bracket lines -->
-    <line x1="35" y1="72" x2="35" y2="128" stroke="rgba(184,147,58,0.15)" stroke-width="0.8"/>
-    <line x1="35" y1="162" x2="35" y2="330" stroke="rgba(122,31,31,0.15)" stroke-width="0.8"/>
-    <line x1="35" y1="370" x2="35" y2="450" stroke="rgba(110,102,85,0.12)" stroke-width="0.8"/>
-
-    <!-- ══════════════════════
-         CLEAN PATH label (left side)
-         shows the unobstructed route when wedge dormant
-    ══════════════════════ -->
-    <text id="lbl-clean" x="78" y="200"
-      font-family="'Josefin Sans',sans-serif" font-size="8" font-weight="100"
-      letter-spacing="1.8" text-anchor="middle"
-      fill="rgba(184,147,58,0.0)">CLEAN</text>
-    <text id="lbl-clean2" x="78" y="213"
-      font-family="'Josefin Sans',sans-serif" font-size="8" font-weight="100"
-      letter-spacing="1.8" text-anchor="middle"
-      fill="rgba(184,147,58,0.0)">SIGNAL</text>
-
-    <!-- ══════════════════════
-         HIT ZONE for wedge click
-    ══════════════════════ -->
-    <polygon id="wedge-hit" points="430,162 560,330 300,330"
-      fill="transparent" cursor="pointer"/>
-
-   </svg>
-  </div><!-- end diag-wrap -->
-
-  <!-- STATE CAPTIONS -->
-  <div id="caption">
-    <div class="cap-col">
-      <div class="cap-col-lbl">Flow direction</div>
-      <div class="cap-col-val val-neutral" id="cap-flow">Tap the wedge to activate</div>
+    <div class="prose">
+      <p class="lead">This is the experience. You know what you intend. You can feel it, describe it, want it completely. And at the same time, it doesn't feel like <em>you</em>. It feels like something ahead of you, something you're moving toward — or not moving toward fast enough.</p>
+      <p>That gap — the felt distance between who you are and what you intend — is not a fact about reality. It is produced by a single assumption: that you are smaller than your intentions. That what you intend is bigger than what you currently are.</p>
+      <p>The word "dream" carries this assumption inside it. When something is called a dream, the word itself encodes distance. Dreams are things you don't have yet. Things that aren't real yet. Things you might reach if conditions allow. <strong>The language confirms the separation before you've even thought about it.</strong></p>
+      <div class="pull">The separation isn't a distance to close. It's an assumption to see through. You were never smaller than what you intend. That assumption is the only thing that ever made it appear that way.</div>
     </div>
-    <div class="cap-col" style="border-left:1px solid rgba(184,147,58,0.08)">
-      <div class="cap-col-lbl">Reality state</div>
-      <div class="cap-col-val val-neutral" id="cap-reality">Tap the wedge to see the split</div>
+    <button class="next-btn" onclick="show('s2')">The 4D Identity State →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 2 — THE 4D IDENTITY STATE
+══════════════════════════════════════════════ -->
+<section id="s2">
+  <div class="frame" style="width:min(580px,94vw)">
+    <div class="eyebrow">The Mirror Framework · Two</div>
+    <h1 class="s-title">The 4D identity state:<br><em>memory, imagination, trajectory</em></h1>
+
+    <!-- Timeline SVG: linear dimension, past left, future right, you at a point on it -->
+    <svg viewBox="0 0 580 160" style="width:100%;height:auto;overflow:visible;margin-bottom:1.5rem">
+      <defs>
+        <linearGradient id="tl-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#b8933a" stop-opacity="0.0"/>
+          <stop offset="30%" stop-color="#b8933a" stop-opacity="0.25"/>
+          <stop offset="50%" stop-color="#b8933a" stop-opacity="0.5"/>
+          <stop offset="70%" stop-color="#b8933a" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="#b8933a" stop-opacity="0.0"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Timeline axis -->
+      <line x1="30" y1="80" x2="550" y2="80"
+        stroke="rgba(184,147,58,0.2)" stroke-width="1"/>
+      <!-- arrow right -->
+      <polygon points="550,80 540,75 540,85" fill="rgba(184,147,58,0.3)"/>
+      <!-- arrow left -->
+      <polygon points="30,80 40,75 40,85" fill="rgba(184,147,58,0.15)"/>
+
+      <!-- Past fill -->
+      <rect x="30" y="70" width="230" height="20" fill="url(#tl-grad)" opacity="0.5"/>
+
+      <!-- Past label -->
+      <text x="145" y="58" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="8"
+        letter-spacing="2" fill="rgba(184,147,58,0.45)">MEMORY · PAST</text>
+      <text x="145" y="110" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="10" font-style="italic"
+        fill="rgba(160,152,128,0.5)">the installed record</text>
+
+      <!-- YOU — the assumed point on the timeline -->
+      <circle cx="290" cy="80" r="18"
+        fill="rgba(184,147,58,0.08)" stroke="rgba(184,147,58,0.6)" stroke-width="1.2"/>
+      <text x="290" y="76" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="11" fill="#e2dac8">You</text>
+      <text x="290" y="91" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="6.5"
+        letter-spacing="1.4" fill="rgba(184,147,58,0.6)">assumed</text>
+      <text x="290" y="132" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="8"
+        letter-spacing="1.8" fill="rgba(110,100,82,0.6)">THE 4D IDENTITY STATE</text>
+      <text x="290" y="148" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="9.5" font-style="italic"
+        fill="rgba(110,100,82,0.45)">a state · not a fixed self</text>
+
+      <!-- Future label -->
+      <text x="430" y="58" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="8"
+        letter-spacing="2" fill="rgba(184,147,58,0.3)">IMAGINATION · TRAJECTORY</text>
+      <text x="430" y="110" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="10" font-style="italic"
+        fill="rgba(160,152,128,0.35)">the projected continuation</text>
+
+      <!-- tick marks on timeline -->
+      <g stroke="rgba(184,147,58,0.15)" stroke-width="0.8">
+        <line x1="80" y1="74" x2="80" y2="86"/>
+        <line x1="145" y1="74" x2="145" y2="86"/>
+        <line x1="210" y1="74" x2="210" y2="86"/>
+        <line x1="370" y1="74" x2="370" y2="86"/>
+        <line x1="440" y1="74" x2="440" y2="86"/>
+        <line x1="510" y1="74" x2="510" y2="86"/>
+      </g>
+    </svg>
+
+    <div class="prose">
+      <p class="lead">The fourth dimension is the dimension of time. It is literal — not a metaphor. The 4D identity state is the state of self you currently assume, and it exists inside a linear structure of past and future: memory behind it, imagination and trajectory ahead of it.</p>
+      <p>This state is not you. It is a state you are <em>assuming</em>. The difference matters completely. A state can be changed — not through effort or therapy or positive thinking applied to the state, but by assuming a different one. The moment a different state is assumed, its past and its future change with it. Its trajectory changes. What feels possible changes.</p>
+      <p><strong>The assumed 4D identity state decides what the past means.</strong> Two people can share identical histories and assume different identity states from them — and those histories will point in entirely different directions. The history does not determine the state. The assumed state filters the history.</p>
+      <div class="pull">You are not your 4D identity state. You are whatever is doing the assuming. And what is doing the assuming has always been able to assume differently — the only thing that made it seem otherwise was the assumption itself.</div>
+      <p>This is what the wedge protects: the current assumed state. Not because the state is true, but because the brainstem reads any change to it as threat. The installed state survives by feeling like the only state available.</p>
     </div>
+    <button class="next-btn" onclick="show('s3')">The Wedge →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 3 — THE WEDGE (interactive diagram)
+══════════════════════════════════════════════ -->
+<section id="s3">
+  <div style="width:min(600px,95vw);margin:0 auto">
+    <div class="eyebrow" style="text-align:center">The Mirror Framework · Three</div>
+    <h1 class="s-title" style="text-align:center">The wedge:<br><em>assuming you are smaller than your intentions</em></h1>
+
+    <div class="diag-wrap">
+    <svg id="s3-svg" viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ag" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#b8933a"/>
+        </marker>
+        <marker id="ar" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#9a5050"/>
+        </marker>
+        <radialGradient id="rg-unified" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#b8933a" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="#b8933a" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="rg-split" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#7a1f1f" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#7a1f1f" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- ── STATE 0 (default): unified — one circle, identity IS intention ── -->
+      <!-- ── STATE 1 (wedge assumed): circle appears to split, wedge visible, curated reality below ── -->
+
+      <!-- GLOW -->
+      <circle id="glow-u" cx="300" cy="90" r="70" fill="url(#rg-unified)" opacity="0.8" class="t"/>
+      <circle id="glow-s" cx="300" cy="90" r="70" fill="url(#rg-split)" opacity="0" class="t"/>
+
+      <!-- THE UNIFIED CIRCLE — Identity = Intention -->
+      <circle id="uc-outer" cx="300" cy="90" r="62"
+        fill="none" stroke="rgba(184,147,58,0.15)" stroke-width="1" class="t"/>
+      <circle id="uc-inner" cx="300" cy="90" r="44"
+        fill="rgba(184,147,58,0.06)" stroke="rgba(184,147,58,0.5)" stroke-width="1.2" class="t"/>
+
+      <!-- Unified label -->
+      <text id="lbl-id" x="300" y="82" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="15" fill="#e2dac8" class="t">Identity</text>
+      <text id="lbl-eq" x="300" y="99" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="9"
+        letter-spacing="2" fill="rgba(184,147,58,0.75)" class="t">is Intention</text>
+      <text id="lbl-5d" x="300" y="116" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5"
+        letter-spacing="1.6" fill="rgba(110,100,82,0.6)" class="t">you are already here · always</text>
+
+      <!-- Reality expands (clean state) -->
+      <!-- outward arcs from circle -->
+      <path id="arc-l" d="M242,68 Q170,20 110,60 Q70,88 90,130 Q108,165 155,162"
+        fill="none" stroke="#b8933a" stroke-width="1.1" opacity="0.85"
+        marker-end="url(#ag)" class="t"/>
+      <path id="arc-r" d="M358,68 Q430,20 490,60 Q530,88 510,130 Q492,165 445,162"
+        fill="none" stroke="#b8933a" stroke-width="1.1" opacity="0.85"
+        marker-end="url(#ag)" class="t"/>
+
+      <text id="lbl-manifest" x="300" y="28" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="8.5"
+        letter-spacing="2.2" fill="#b8933a" opacity="0.85" class="t">REALITY EXPANDS · INTENTIONS MANIFEST</text>
+
+      <!-- ── WEDGE (appears when assumption fires) ── -->
+      <!-- Shadow -->
+      <polygon id="wedge-shadow" points="300,152 490,370 110,370"
+        fill="rgba(0,0,0,0.28)" transform="translate(3,6)" opacity="0" class="t"/>
+      <!-- Body -->
+      <polygon id="wedge-body" points="300,152 490,370 110,370"
+        fill="rgba(122,31,31,0.0)" stroke="rgba(122,31,31,0.0)" stroke-width="1" class="t"/>
+      <!-- Hatching -->
+      <g id="hatch" opacity="0" class="t">
+        <line x1="300" y1="152" x2="175" y2="370" stroke="rgba(184,147,58,0.1)" stroke-width="0.8"/>
+        <line x1="300" y1="152" x2="205" y2="370" stroke="rgba(184,147,58,0.1)" stroke-width="0.8"/>
+        <line x1="300" y1="152" x2="235" y2="370" stroke="rgba(184,147,58,0.1)" stroke-width="0.8"/>
+        <line x1="300" y1="152" x2="265" y2="370" stroke="rgba(184,147,58,0.1)" stroke-width="0.8"/>
+        <line x1="300" y1="152" x2="300" y2="370" stroke="rgba(184,147,58,0.1)" stroke-width="0.8"/>
+        <line x1="300" y1="152" x2="335" y2="370" stroke="rgba(184,147,58,0.1)" stroke-width="0.8"/>
+        <line x1="300" y1="152" x2="365" y2="370" stroke="rgba(184,147,58,0.1)" stroke-width="0.8"/>
+        <line x1="300" y1="152" x2="395" y2="370" stroke="rgba(184,147,58,0.1)" stroke-width="0.8"/>
+        <line x1="300" y1="152" x2="425" y2="370" stroke="rgba(184,147,58,0.1)" stroke-width="0.8"/>
+      </g>
+
+      <!-- Wedge label (appears in wedge state) -->
+      <text id="wedge-lbl1" x="300" y="244" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="13" fill="rgba(226,218,200,0)" class="t">the assumption</text>
+      <text id="wedge-lbl2" x="300" y="262" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="13" font-style="italic" fill="rgba(192,130,130,0)" class="t">I am smaller than</text>
+      <text id="wedge-lbl3" x="300" y="280" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="13" font-style="italic" fill="rgba(192,130,130,0)" class="t">what I intend</text>
+
+      <!-- The illusion line — appears to cut between identity and intention -->
+      <line id="illusion-line" x1="160" y1="90" x2="440" y2="90"
+        stroke="rgba(122,31,31,0)" stroke-width="1" stroke-dasharray="5,4" class="t"/>
+      <text id="illusion-lbl" x="300" y="73" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5"
+        letter-spacing="2" fill="rgba(192,112,112,0)" class="t">— ILLUSION OF SEPARATION —</text>
+
+      <!-- Contracted reality / curated universe (bottom box) -->
+      <rect id="box-cur" x="155" y="378" width="290" height="88"
+        fill="rgba(122,31,31,0)" stroke="rgba(122,31,31,0)" stroke-width="1" class="t"/>
+      <text id="cur1" x="300" y="403" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="13.5" fill="rgba(192,112,112,0)" class="t">Intentions managed</text>
+      <text id="cur2" x="300" y="422" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5"
+        letter-spacing="1.6" fill="rgba(122,31,31,0)" class="t">reality curated by the assumed smallness</text>
+      <text id="cur3" x="300" y="440" text-anchor="middle"
+        font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7"
+        letter-spacing="1.4" fill="rgba(122,31,31,0)" class="t">4D state locked · reactive to its own reflection</text>
+      <text id="cur4" x="300" y="458" text-anchor="middle"
+        font-family="'IM Fell English',serif" font-size="10" font-style="italic"
+        fill="rgba(155,90,90,0)" class="t">the life that confirms the assumption</text>
+
+      <!-- arc expands FADE OUT in wedge state handled in JS via opacity on arc-l, arc-r -->
+
+      <!-- expand down-arrow when wedge present -->
+      <line id="arr-down" x1="300" y1="370" x2="300" y2="376"
+        stroke="rgba(122,31,31,0)" stroke-width="1.5" marker-end="url(#ar)" class="t"/>
+
+      <!-- HIT ZONE: whole svg clickable -->
+      <rect id="hit" x="0" y="0" width="600" height="480" fill="transparent" cursor="pointer"/>
+    </svg>
+    </div>
+
+    <div id="s3-caption">
+      <div id="s3-cap-text">Identity is Intention — one thing — tap to see what the assumption does</div>
+    </div>
+    <div class="tap-hint" id="s3-hint">↑ tap anywhere in the diagram</div>
   </div>
 
-  <div class="tap-hint" id="tap-hint">↑ tap the wedge</div>
-
-  <div class="scroll-cue" onclick="document.getElementById('panels').scrollIntoView({behavior:'smooth'})">
-    scroll to understand ↓
+  <div class="prose" style="margin-top:2rem">
+    <p class="lead">The wedge is not an event. It is an assumption that is currently running. The assumption that who you are is smaller than what you intend — that your intentions exist somewhere ahead of you, beyond you, bigger than you currently are.</p>
+    <p>While that assumption is running, the 4D identity state locks around it. Memory is filtered to confirm it. Imagination runs along its trajectory. The future it projects is continuous with the smallness it assumes. And 3D reality renders from that — not because 3D is fixed, but because the assumed state is generating it.</p>
+    <p><strong>You were never smaller than your intentions.</strong> The intentions are yours. They come from you. They are you, expressing outward. The assumption of distance is the only thing that ever made them feel separate.</p>
   </div>
+  <button class="next-btn" onclick="show('s4')">Reality →</button>
+</section>
 
-</div><!-- end hero -->
+<!-- ══════════════════════════════════════════════
+     SECTION 4 — REALITY
+══════════════════════════════════════════════ -->
+<section id="s4">
+  <div style="width:min(600px,95vw)">
+    <div class="eyebrow" style="text-align:center">The Mirror Framework · Four</div>
+    <h1 class="s-title" style="text-align:center">Reality is always a manifestation<br><em>of the depth and clarity of thought</em></h1>
 
-<!-- ── PANELS ── -->
-<div id="panels">
+    <div class="reality-cols">
+      <div class="rc">
+        <div class="rc-head red">Reactive to the reflection</div>
+        <p>The assumed 4D state reads 3D reality and responds to what it sees. The reflection becomes the input. Thought is shaped by the current circumstance.</p>
+        <p>This feels like engaging with reality. It is engaging with the rendering. The identity state that generated the reflection is now being confirmed by it — and the confirmation deepens the assumption.</p>
+        <p>The curated universe tightens. The range of what seems possible contracts to fit the assumed smallness. Each loop makes the walls feel more like facts.</p>
+      </div>
+      <div class="rc" style="border-left:1px solid rgba(184,147,58,0.08)">
+        <div class="rc-head gold">Pure to the assumed intention</div>
+        <p>The assumed 4D state is the one that matches the intention. There is no gap between them — the intention is not ahead of you, it is what you are currently assuming yourself to be.</p>
+        <p>Thought runs from that state outward. It is not disciplined or forced — it is the natural movement of a self that is not smaller than what it intends.</p>
+        <p>Reality renders from that frequency. Not as reward. As manifestation — the accurate reflection of what is actually assumed at depth.</p>
+      </div>
+    </div>
 
-  <div class="panel fade-up">
-    <div class="panel-num">01 — Two Arrows, One Wedge</div>
-    <div class="panel-title">The diagram shows a <em>split</em>, not a sequence</div>
-    <p class="lead">Your whiteboard has two arrows on the wedge itself — one pointing up toward Identity and Reality, one pointing down toward the Intention box. That is the whole diagram. That is the whole framework.</p>
-    <p>The upward arrow is the clean path: Identity assumes a state from 5D, intention flows unobstructed, reality expands outward — <strong>intentions manifested.</strong> The downward arrow is what the wedge produces when it fires: intention is intercepted, reduced to absence of will, and 3D physical reality appears fixed — <strong>intentions managed.</strong></p>
-    <p>The wedge does not block everything. It redirects. The same energy that would have manifested the selected identity instead goes into managing the reflection — outcome attachment, proving, performing, reaching into the mirror. Different target. Identical energy expenditure. Which is why it feels like effort without movement.</p>
+    <div class="prose">
+      <div class="pull">Reality is not something that happens to you and then you respond. Reality is the current rendering of your assumed state. Responding to the rendering as though it were primary is the loop. Assuming the state from which a different rendering emerges is the return.</div>
+      <p class="lead">The return is not a move. You are already at the point from which any state can be assumed. You were never anywhere else. The only question is which 4D state is currently assumed — and whether the assumption of smallness has been seen for what it is.</p>
+      <p>When the assumption is seen — not argued with, not overcome, just <em>seen</em> — it loses its hold. Not because you defeated it. Because you were never inside it. The illusion of separation between identity and intention was always the assumption generating the experience of distance. The moment it is seen as an assumption, the distance is not there.</p>
+      <p><strong>You are not moving toward what you intend. You are assuming the state from which it is already the case.</strong> Reality then renders from that. This is not optimism. It is the literal mechanism by which the 3D experience is always being produced — now as before, except now from a different assumed state.</p>
+    </div>
+    <button class="next-btn" onclick="show('s1')">↑ Begin again</button>
   </div>
-
-  <div class="panel fade-up">
-    <div class="panel-num">02 — Expansion vs Contraction</div>
-    <div class="panel-title">Reality <em>expands</em> or contracts — it does not stay still</div>
-    <p class="lead">The arc on the left of the diagram — the outward curve from the Reality oval — is not decoration. It shows that when the upward path is active, reality is not static. It expands. The assumed identity state radiates outward and the reflection grows to match it.</p>
-    <p>Contraction is the same mechanism in reverse. The wedge fires, intention is reduced, the 4D locks around the installed state — and the range of what seems possible contracts to fit the locked state. The feedback arrow from Reality back to Identity shows why this feels permanent: the contracted 3D confirms the contracted identity, which confirms the contracted 3D. A self-sealing loop.</p>
-    <div class="pull">The wedge does not produce a different reality. It produces a smaller one — and then uses that smaller reality as evidence that the larger one was never available.</div>
-    <p>This is why 3D reality <em>seems</em> fixed. Not because it is. Because the contracted loop generates evidence of its own correctness faster than the unexpanded identity can generate counter-evidence.</p>
-  </div>
-
-  <div class="panel fade-up">
-    <div class="panel-num">03 — The Brainstem Clue</div>
-    <div class="panel-title">Below the level of <em>any 4D intervention</em></div>
-    <p class="lead">You wrote "(brainstem)" beside the wedge label. That is not a neurological detail — it is the reason every conventional solution fails. The brainstem operates below language, below reasoning, below any capacity to evaluate what it is responding to.</p>
-    <p>When the identity state encounters its boundary — the edge of what the currently assumed self believes it can handle — the brainstem reads that gap as threat. Not consciously. Automatically. Pre-language. The wedge fires before any thought has formed about whether the threat is real.</p>
-    <p><strong>This is why therapy, willpower, and positive thinking produce no lasting change.</strong> They are all 4D interventions. They operate through language, reasoning, and evaluation — exactly the faculties the brainstem bypasses. You can think your way to complete clarity about why the loop is irrational and still feel the wedge fire at the boundary. The two systems are not in conversation.</p>
-    <p>The 5D move — going to the place before the installed identity state has any presence — is the only intervention that operates above the brainstem's trigger point. At 5D, there is no boundary to read as threat. The survival response has nothing to detect. The wedge does not fire.</p>
-  </div>
-
-  <div class="panel fade-up">
-    <div class="panel-num">04 — Locked 4D</div>
-    <div class="panel-title">Curated history. <em>External narrative.</em> The same loop.</div>
-    <p class="lead">When the wedge fires and intention is reduced, the 4D does not go blank — it locks. It runs the installed programme: the history that confirms the threat, the futures that confirm the limit, the external narrative that explains why the reflection is the reality.</p>
-    <p>The locked 4D is not passive. It actively selects which evidence it processes. Every outcome that confirms the installed identity is registered and filed. Every outcome that would challenge it is rationalised, discounted, or simply not perceived. The same data, filtered through the locked state, produces the same conclusions.</p>
-    <div class="pull">The installed state cannot perceive the selection that would end it. That is not a flaw in the person. It is the design of the mechanism.</div>
-    <p>Curated history is the locked 4D's primary tool: a continuous, unconscious editing of the past to confirm the present state. External narrative is its enforcement mechanism: the voices, institutions, and systems that confirm the contracted version of what is real and possible. Neither is conscious. Both are automatic. Both feed directly back into the wedge.</p>
-  </div>
-
-  <div class="panel fade-up">
-    <div class="panel-num">05 — The Selection</div>
-    <div class="panel-title">Above the wedge. <em>Before the boundary.</em></div>
-    <p class="lead">The diagram shows the clean path as going upward and outward — through Identity, past the wedge apex, into expanding Reality. That direction is not metaphorical. The selection is made above the wedge. Literally: at 5D, before the 4D identity state that the brainstem is protecting has any presence.</p>
-    <p>At 5D, there is no installed state to protect. There is no boundary to encounter. The brainstem trigger does not exist at the level prior to thought. This is the only place from which a genuinely different identity state can be assumed — not aspired to, not worked toward, not layered over the existing one. <strong>Assumed. Present tense. From the place before the installed state is running.</strong></p>
-    <p>The moment the assumption is made, the emotion runs from the new state. The 4D operates from it. The signal reaches Intention uncorrupted. The 3D renders from that frequency. The reflection shows the image. The wedge has been bypassed — not dismantled, not defeated, simply made irrelevant by the level from which the move was made.</p>
-    <div class="pull">The upward arrow on the wedge is not hope. It is the return path. Always available. Always the same distance from where you are.</div>
-  </div>
-
-</div>
-
-<button id="back-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Diagram</button>
+</section>
 
 <script>
-// ── WEDGE STATE ──
-let state = 0; // 0=neutral, 1=contract, 2=expand
+// ── SECTION NAV ──
+function show(id){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('nav-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+show('s1');
 
-const wedgeHit  = document.getElementById('wedge-hit');
-const wedgeBody = document.getElementById('wedge-body');
-const capFlow   = document.getElementById('cap-flow');
-const capReality= document.getElementById('cap-reality');
-const tapHint   = document.getElementById('tap-hint');
+// ── SECTION 3 DIAGRAM ──
+let wedgeOn = false;
 
-// Elements to dim/brighten
-const flowUpEls   = document.querySelectorAll('.flow-up');
-const flowDownEls = document.querySelectorAll('.flow-down');
+function ids(...args){return args.map(i=>document.getElementById(i))}
 
-function applyState(s) {
-  state = s;
+function setWedge(on){
+  wedgeOn = on;
+  const [
+    glowU, glowS,
+    ucInner,
+    arcL, arcR, lblManifest,
+    wedgeShadow, wedgeBody, hatch,
+    wLbl1, wLbl2, wLbl3,
+    illLine, illLbl,
+    boxCur, cur1, cur2, cur3, cur4,
+    arrDown,
+    cap, hint
+  ] = ids(
+    'glow-u','glow-s',
+    'uc-inner',
+    'arc-l','arc-r','lbl-manifest',
+    'wedge-shadow','wedge-body','hatch',
+    'wedge-lbl1','wedge-lbl2','wedge-lbl3',
+    'illusion-line','illusion-lbl',
+    'box-cur','cur1','cur2','cur3','cur4',
+    'arr-down',
+    's3-cap-text','s3-hint'
+  );
 
-  if (s === 0) {
-    // neutral
-    flowUpEls.forEach(el   => { el.style.opacity='0.85'; });
-    flowDownEls.forEach(el => { el.style.opacity='0.65'; });
-    wedgeBody.style.fill = 'rgba(122,31,31,0.14)';
-    document.getElementById('box-intention').style.stroke='rgba(122,31,31,0.3)';
-    document.getElementById('box-intention').style.fill='rgba(122,31,31,0.08)';
-    capFlow.textContent = 'Tap the wedge to activate';
-    capFlow.className   = 'cap-col-val val-neutral';
-    capReality.textContent = 'Tap the wedge to see the split';
-    capReality.className   = 'cap-col-val val-neutral';
-    tapHint.textContent = '↑ tap the wedge';
-    document.getElementById('lbl-clean').style.fill  = 'rgba(184,147,58,0.0)';
-    document.getElementById('lbl-clean2').style.fill = 'rgba(184,147,58,0.0)';
-
-  } else if (s === 1) {
-    // CONTRACTION — wedge fires, down path lit
-    flowUpEls.forEach(el   => { el.style.opacity='0.12'; });
-    flowDownEls.forEach(el => { el.style.opacity='1'; });
-    wedgeBody.style.fill = 'rgba(122,31,31,0.38)';
-    document.getElementById('box-intention').style.stroke='rgba(122,31,31,0.7)';
-    document.getElementById('box-intention').style.fill='rgba(122,31,31,0.18)';
-    capFlow.textContent = '↓ Wedge fires — signal intercepted — contraction';
-    capFlow.className   = 'cap-col-val val-contract';
-    capReality.textContent = 'Intentions managed. 3D reality appears fixed. Loop confirmed.';
-    capReality.className   = 'cap-col-val val-contract';
-    tapHint.textContent = '↑ tap again — make the selection from 5D';
-    document.getElementById('lbl-clean').style.fill  = 'rgba(184,147,58,0.0)';
-    document.getElementById('lbl-clean2').style.fill = 'rgba(184,147,58,0.0)';
-
-  } else if (s === 2) {
-    // EXPANSION — wedge bypassed, up path lit
-    flowUpEls.forEach(el   => { el.style.opacity='1'; });
-    flowDownEls.forEach(el => { el.style.opacity='0.08'; });
-    wedgeBody.style.fill = 'rgba(122,31,31,0.06)';
-    document.getElementById('box-intention').style.stroke='rgba(122,31,31,0.1)';
-    document.getElementById('box-intention').style.fill='rgba(122,31,31,0.03)';
-    capFlow.textContent = '↑ Selection made from 5D — signal flows clean — expansion';
-    capFlow.className   = 'cap-col-val val-expand';
-    capReality.textContent = 'Intentions manifested. Reality expands to match the assumed state.';
-    capReality.className   = 'cap-col-val val-expand';
-    tapHint.textContent = '↑ tap to see the wedge fire';
-    document.getElementById('lbl-clean').style.fill  = 'rgba(184,147,58,0.55)';
-    document.getElementById('lbl-clean2').style.fill = 'rgba(184,147,58,0.55)';
+  if(on){
+    // wedge assumed — illusion of separation visible, curated reality below
+    glowU.style.opacity='0';
+    glowS.style.opacity='1';
+    ucInner.style.stroke='rgba(122,31,31,0.45)';
+    ucInner.style.fill='rgba(122,31,31,0.06)';
+    arcL.style.opacity='0.06';
+    arcR.style.opacity='0.06';
+    lblManifest.style.opacity='0.05';
+    wedgeShadow.style.opacity='1';
+    wedgeBody.style.fill='rgba(122,31,31,0.22)';
+    wedgeBody.style.stroke='rgba(122,31,31,0.4)';
+    hatch.style.opacity='1';
+    wLbl1.style.fill='rgba(226,218,200,0.75)';
+    wLbl2.style.fill='rgba(192,130,130,0.85)';
+    wLbl3.style.fill='rgba(192,130,130,0.85)';
+    illLine.style.stroke='rgba(192,112,112,0.5)';
+    illLbl.style.fill='rgba(192,112,112,0.6)';
+    boxCur.style.fill='rgba(122,31,31,0.12)';
+    boxCur.style.stroke='rgba(122,31,31,0.4)';
+    cur1.style.fill='rgba(192,112,112,0.85)';
+    cur2.style.fill='rgba(122,31,31,0.75)';
+    cur3.style.fill='rgba(122,31,31,0.6)';
+    cur4.style.fill='rgba(155,90,90,0.6)';
+    arrDown.style.stroke='rgba(122,31,31,0.65)';
+    cap.textContent='The assumption is running — identity appears smaller than intention — 3D reality renders from that gap';
+    cap.className='red';
+    hint.textContent='↑ tap to see the assumption for what it is';
+  } else {
+    // clean — unified, no separation
+    glowU.style.opacity='0.8';
+    glowS.style.opacity='0';
+    ucInner.style.stroke='rgba(184,147,58,0.5)';
+    ucInner.style.fill='rgba(184,147,58,0.06)';
+    arcL.style.opacity='0.85';
+    arcR.style.opacity='0.85';
+    lblManifest.style.opacity='0.85';
+    wedgeShadow.style.opacity='0';
+    wedgeBody.style.fill='rgba(122,31,31,0.0)';
+    wedgeBody.style.stroke='rgba(122,31,31,0.0)';
+    hatch.style.opacity='0';
+    wLbl1.style.fill='rgba(226,218,200,0)';
+    wLbl2.style.fill='rgba(192,130,130,0)';
+    wLbl3.style.fill='rgba(192,130,130,0)';
+    illLine.style.stroke='rgba(122,31,31,0)';
+    illLbl.style.fill='rgba(192,112,112,0)';
+    boxCur.style.fill='rgba(122,31,31,0)';
+    boxCur.style.stroke='rgba(122,31,31,0)';
+    cur1.style.fill='rgba(192,112,112,0)';
+    cur2.style.fill='rgba(122,31,31,0)';
+    cur3.style.fill='rgba(122,31,31,0)';
+    cur4.style.fill='rgba(155,90,90,0)';
+    arrDown.style.stroke='rgba(122,31,31,0)';
+    cap.textContent='Identity is Intention — one thing — the assumption of smallness is seen and gone';
+    cap.className='gold';
+    hint.textContent='↑ tap to bring the assumption back';
   }
 }
 
-wedgeHit.addEventListener('click', () => {
-  // cycle: neutral → contract → expand → contract → expand ...
-  if (state === 0) applyState(1);
-  else if (state === 1) applyState(2);
-  else applyState(1);
-});
-
-// ── SCROLL FADE ──
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-// ── BACK BUTTON ──
-window.addEventListener('scroll', () => {
-  document.getElementById('back-btn').classList.toggle('show', window.scrollY > window.innerHeight * 0.5);
-});
+document.getElementById('hit').addEventListener('click',()=>setWedge(!wedgeOn));
 </script>
 </body>
 </html>
-
