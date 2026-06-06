@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Mirror — The Wedge Illusion</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── RESET & DESIGN SYSTEM VARIABLES ── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ink: #0c0b08;
+      --gold: #b8933a;
+      --red: #7a1f1f;
+      --cream: #e2dac8;
+      --muted: #6a6252;
+      --dim: #1a1810;
+      
+      /* Pure Architecture Design Tokens */
+      --core-stroke: rgba(184, 147, 58, 0.28);
+      --core-fill: rgba(184, 147, 58, 0.04);
+      --core-glow-op: 0;
+      --illusion-glow-op: 0;
+      --phantom-split-op: 0;
+      --wedge-sub-opacity: 0;
+      --arr-left-opacity: 0.5;
+      --arr-right-opacity: 0.5;
+      --feedback-loop-op: 0;
+      --curated-text-op: 0;
+      --caption-accent: var(--muted);
+    }
+
+    /* Target Dynamic States via Data Attributes for Clean CSS Control */
+    [data-framework-state="wedge-fired"] {
+      --core-stroke: rgba(122, 31, 31, 0.5);
+      --core-fill: rgba(122, 31, 31, 0.08);
+      --illusion-glow-op: 1;
+      --phantom-split-op: 1;
+      --wedge-sub-opacity: 0.85;
+      --arr-left-opacity: 0.08;
+      --arr-right-opacity: 1;
+      --feedback-loop-op: 1;
+      --curated-text-op: 0.85;
+      --caption-accent: #c07070;
+    }
+
+    [data-framework-state="5d-unified"] {
+      --core-stroke: rgba(184, 147, 58, 0.8);
+      --core-fill: rgba(184, 147, 58, 0.12);
+      --core-glow-op: 1;
+      --wedge-sub-opacity: 0;
+      --arr-left-opacity: 1;
+      --arr-right-opacity: 0.07;
+      --caption-accent: var(--gold);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--ink);
+      color: var(--cream);
+      font-family: 'IM Fell English', Georgia, serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── CANVAS & INTERACTIVE COMPONENT ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem 3rem;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.55rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title {
+      font-size: 1.6rem;
+      letter-spacing: 0.06em;
+      text-align: center;
+      color: var(--cream);
+      margin-bottom: 2.5rem;
+    }
+
+    #diag-wrap {
+      width: min(640px, 95vw);
+      position: relative;
+    }
+
+    #diag-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      overflow: visible;
+    }
+
+    .engine-transition {
+      transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* ── CAPTION INTERPOLATOR ── */
+    #caption {
+      width: min(640px, 95vw);
+      margin-top: 1rem;
+      border: 1px solid rgba(184, 147, 58, 0.1);
+      padding: 1.2rem 1.5rem;
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(12, 11, 8, 0.4);
+    }
+
+    #cap-text {
+      font-size: 0.95rem;
+      font-style: italic;
+      text-align: center;
+      line-height: 1.6;
+      color: var(--caption-accent);
+    }
+
+    .tap-hint {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.55rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 1.2rem;
+      animation: blink 3s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.8; }
+    }
+
+    .scroll-cue {
+      margin-top: 2.5rem;
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.55rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: rgba(184, 147, 58, 0.3);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .scroll-cue:hover {
+      color: rgba(184, 147, 58, 0.7);
+    }
+
+    /* ── TEXT PANELS ── */
+    #panels {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 0 1.5rem 8rem;
+    }
+
+    .panel {
+      border-top: 1px solid rgba(184, 147, 58, 0.08);
+      padding: 4rem 0;
+    }
+    .panel:last-child {
+      border-bottom: 1px solid rgba(184, 147, 58, 0.08);
+    }
+
+    .panel-num {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.55rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.6;
+      margin-bottom: 0.75rem;
+    }
+
+    .panel-title {
+      font-size: 1.8rem;
+      line-height: 1.25;
+      margin-bottom: 1.8rem;
+    }
+    .panel-title em {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    p {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #a8a090;
+      margin-bottom: 1.5rem;
+    }
+    p.lead {
+      color: var(--cream);
+      font-size: 1.15rem;
+    }
+    p strong {
+      color: var(--cream);
+      font-style: italic;
+      font-weight: normal;
+    }
+
+    .pull {
+      border-left: 2px solid var(--gold);
+      padding: 0.5rem 0 0.5rem 1.75rem;
+      margin: 2.2rem 0;
+      font-size: 1.25rem;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.6;
+    }
+
+    /* ── FIXED CONTROLS ── */
+    #back-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--ink);
+      border: 1px solid rgba(184, 147, 58, 0.25);
+      color: var(--muted);
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.55rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 200;
+    }
+    #back-btn.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #back-btn:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+      background: rgba(184, 147, 58, 0.05);
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media(max-width: 480px) {
+      .panel-title { font-size: 1.4rem; }
+      #back-btn { bottom: 1rem; right: 1rem; padding: 0.6rem 0.9rem; }
+    }
+  </style>
+</head>
+<body data-framework-state="neutral">
+
+<div id="hero">
+  <div class="hero-eyebrow">The Mirror Framework</div>
+  <div class="hero-title">The Wedge Creates the Illusion</div>
+
+  <div id="diag-wrap">
+    <svg id="diag-svg" viewBox="0 0 640 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr-gold" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#b8933a"/>
+        </marker>
+        <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#7a1f1f"/>
+        </marker>
+        
+        <radialGradient id="unity-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#b8933a" stop-opacity="0.32"/>
+          <stop offset="100%" stop-color="#b8933a" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="illusion-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#7a1f1f" stop-opacity="0.28"/>
+          <stop offset="100%" stop-color="#7a1f1f" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Geometry Reference Grid -->
+      <line x1="320" y1="0" x2="320" y2="520" stroke="rgba(184,147,58,0.03)" stroke-width="1"/>
+      <line x1="0" y1="100" x2="640" y2="100" stroke="rgba(184,147,58,0.03)" stroke-width="1"/>
+
+      <!-- Global Radiance Glow Filters -->
+      <circle cx="320" cy="98" r="65" fill="url(#unity-glow)" class="engine-transition" style="opacity: var(--core-glow-op);"/>
+      <circle cx="320" cy="98" r="65" fill="url(#illusion-glow)" class="engine-transition" style="opacity: var(--illusion-glow-op);"/>
+
+      <!-- ── UNIFIED CORE POINT SYSTEM ── -->
+      <!-- Identity and Intention are drawing inside the same circle layout -->
+      <circle cx="320" cy="98" r="54" fill="none" stroke="rgba(184,147,58,0.12)" stroke-width="1"/>
+      <circle cx="320" cy="98" r="42" class="engine-transition" fill="var(--core-fill)" stroke="var(--core-stroke)" stroke-width="1"/>
+
+      <text x="320" y="88" text-anchor="middle" font-family="'IM Fell English', Georgia, serif" font-size="14" fill="#e2dac8">Identity</text>
+      <text x="320" y="104" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="9" letter-spacing="3" fill="rgba(184,147,58,0.7)">= Intention</text>
+      <text x="320" y="118" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="7.5" letter-spacing="1.8" fill="rgba(110,102,85,0.6)">one unbroken act · 5D</text>
+
+      <!-- ── PHANTOM INTERFERENCE LAYER ── -->
+      <!-- The wedge projects this line, simulating separation distance -->
+      <line x1="210" y1="98" x2="430" y2="98" stroke="rgba(192,112,112,0.6)" stroke-width="1.2" stroke-dasharray="4,4" class="engine-transition" style="opacity: var(--phantom-split-op);"/>
+      <text x="320" y="74" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="7.5" letter-spacing="2.2" fill="rgba(192,112,112,0.8)" class="engine-transition" style="opacity: var(--phantom-split-op);">— ILLUSION OF SEPARATION —</text>
+
+      <!-- Clean 5D Expansive track -->
+      <path id="exp-arc" d="M276,72 Q195,22 125,57 Q75,84 95,132 Q115,177 170,172" fill="none" stroke="#b8933a" stroke-width="1.2" class="engine-transition" marker-end="url(#arr-gold)" style="opacity: var(--exp-arc-op);"/>
+      <text id="exp-txt" x="112" y="50" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="8.5" letter-spacing="2" text-anchor="middle" fill="#b8933a" class="engine-transition" style="opacity: var(--exp-txt-op);">INTENTIONS MANIFESTED</text>
+      <text id="exp-sub" x="72" y="117" font-family="'IM Fell English', Georgia, serif" font-size="11" font-style="italic" text-anchor="middle" fill="#b8933a" class="engine-transition" style="opacity: var(--exp-sub-op);">Reality expands</text>
+
+      <!-- ── WEDGE MECHANIC ── -->
+      <polygon points="320,152 500,360 140,360" fill="rgba(0,0,0,0.3)" transform="translate(3,6)"/>
+      <polygon points="320,152 500,360 140,360" class="engine-transition" fill="var(--wedge-fill)" stroke="var(--wedge-stroke)" stroke-width="1"/>
+
+      <!-- Hatch Lines -->
+      <g stroke="rgba(184,147,58,0.06)" stroke-width="0.8">
+        <line x1="320" y1="152" x2="200" y2="360"/><line x1="320" y1="152" x2="230" y2="360"/>
+        <line x1="320" y1="152" x2="260" y2="360"/><line x1="320" y1="152" x2="290" y2="360"/>
+        <line x1="320" y1="152" x2="320" y2="360"/><line x1="320" y1="152" x2="350" y2="360"/>
+        <line x1="320" y1="152" x2="380" y2="360"/><line x1="320" y1="152" x2="410" y2="360"/>
+        <line x1="320" y1="152" x2="440" y2="360"/>
+      </g>
+
+      <text x="320" y="244" text-anchor="middle" font-family="'IM Fell English', Georgia, serif" font-size="15" fill="rgba(226,218,200,0.75)">Brainstem</text>
+      <text x="320" y="262" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="8" letter-spacing="2.5" fill="rgba(184,147,58,0.5)">WEDGE</text>
+      <text x="320" y="278" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="7.5" letter-spacing="1.5" fill="#c07070" class="engine-transition" style="opacity: var(--wedge-sub-opacity);">projects the perception of a gap</text>
+
+      <!-- Flow Vector Arrows -->
+      <path d="M216,320 L260,210" fill="none" stroke="#b8933a" stroke-width="1.3" class="engine-transition" marker-end="url(#arr-gold)" style="opacity: var(--arr-left-opacity);"/>
+      <text x="218" y="273" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="7.5" letter-spacing="1.6" text-anchor="middle" fill="#b8933a" class="engine-transition" transform="rotate(-58,218,273)" style="opacity: var(--arr-left-opacity);">expand</text>
+
+      <path d="M420,210 L464,320" fill="none" stroke="#7a1f1f" stroke-width="1.3" class="engine-transition" marker-end="url(#arr-red)" style="opacity: var(--arr-right-opacity);"/>
+      <text x="462" y="268" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="7.5" letter-spacing="1.6" text-anchor="middle" fill="#c07070" class="engine-transition" transform="rotate(58,462,268)" style="opacity: var(--arr-right-opacity);">contract</text>
+
+      <!-- Content Pipe alignment -->
+      <line id="managed-pipe" x1="320" y1="360" x2="320" y2="398" stroke="#7a1f1f" stroke-width="1.5" class="engine-transition" marker-end="url(#arr-red)" style="opacity: var(--managed-pipe-op);"/>
+
+      <!-- Downstream Curated Matrix Box -->
+      <rect x="180" y="400" width="280" height="88" class="engine-transition" fill="var(--curated-box-fill)" stroke="var(--curated-box-stroke)" stroke-width="1"/>
+      <g class="engine-transition" style="opacity: var(--curated-text-op);">
+        <text x="320" y="425" text-anchor="middle" font-family="'IM Fell English', Georgia, serif" font-size="13" fill="rgba(192,112,112,0.85)">Intentions managed (3D Loop)</text>
+        <text x="320" y="445" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="7.5" letter-spacing="1.5" fill="rgba(122,31,31,0.75)">curated universe · reality seems fixed</text>
+        <text x="320" y="462" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="7" letter-spacing="1.4" fill="rgba(122,31,31,0.6)">locked 4D · external narrative · looping pixels</text>
+        <text x="320" y="478" text-anchor="middle" font-family="'IM Fell English', Georgia, serif" font-size="10" font-style="italic" fill="rgba(155,90,90,0.65)">3D outcome management masks the core error</text>
+      </g>
+
+      <!-- Feedback spline -->
+      <path d="M470,440 Q540,350 510,200 Q495,130 462,105" fill="none" stroke="rgba(122,31,31,0.4)" stroke-width="1" stroke-dasharray="4,4" class="engine-transition" marker-end="url(#arr-red)" style="opacity: var(--feedback-loop-op);"/>
+      <text x="548" y="310" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="7.5" letter-spacing="1.5" text-anchor="middle" fill="rgba(122,31,31,0.5)" class="engine-transition" transform="rotate(90,548,310)" style="opacity: var(--feedback-loop-op);">confirms illusion</text>
+
+      <!-- Scale Markers -->
+      <text x="18" y="103" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="8" letter-spacing="1.6" fill="rgba(184,147,58,0.3)">5D</text>
+      <text x="18" y="255" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="8" letter-spacing="1.6" fill="rgba(122,31,31,0.3)">4D</text>
+      <text x="18" y="440" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="8" letter-spacing="1.6" fill="rgba(110,102,85,0.3)">3D</text>
+      <line x1="30" y1="72" x2="30" y2="128" stroke="rgba(184,147,58,0.12)" stroke-width="0.8"/>
+      <line x1="30" y1="152" x2="30" y2="360" stroke="rgba(122,31,31,0.12)" stroke-width="0.8"/>
+      <line x1="30" y1="400" x2="30" y2="490" stroke="rgba(110,102,85,0.1)" stroke-width="0.8"/>
+
+      <!-- Input Hit Zones -->
+      <polygon id="wedge-hit" points="320,152 500,360 140,360" fill="transparent" cursor="pointer"/>
+      <circle id="unity-hit" cx="320" cy="98" r="54" fill="transparent" cursor="pointer"/>
+    </svg>
+  </div>
+
+  <!-- Interpolated Caption Box -->
+  <div id="caption">
+    <div id="cap-text">The unity point: Identity and Intention are one act — tap the wedge to see what the brainstem does</div>
+  </div>
+  <div class="tap-hint" id="tap-hint">↑ tap the wedge or the core above it</div>
+  <div class="scroll-cue" onclick="document.getElementById('panels').scrollIntoView({behavior:'smooth'})">scroll to understand ↓</div>
+</div>
+
+<!-- ── TEXT PANELS ── -->
+<div id="panels">
+  <div class="panel fade-up">
+    <div class="panel-num">01 — The Real Structure</div>
+    <div class="panel-title">Identity and Intention are <em>not two things</em>I do need to update the HTML to align with the visual and conceptual structure of the corrected diagram in `image_3.png`. While your previous code was excellent, the visualization in `image_1.png` fundamentally misrepresents *The Mirror Principle*. It presents *Identity* and *Intention* as two separate objects on a track with a literal wedge separating them.
+
+To fix this structural error, I have updated the visualization layer (SVG) and the interactive states (`neutral`, `fired`, `unified`) in the code below. Instead of two separated tracks, I have merged Identity and Intention into a single, unified 5D point in the SVG. We now use a single 5D circle component. The interaction no longer "acts upon" independent objects; rather, the Wedge now generates a *phantom* interference line that projects *through* the single 5D circle, revealing exactly how the illusion of separation is manufactured.
+
+Here is the updated, structurally corrected code:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Mirror — The Wedge Illusion</title>
+  
+  <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
+  <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+  <link href="[https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Josefin+Sans:wght@100;300;400&display=swap](https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Josefin+Sans:wght@100;300;400&display=swap)" rel="stylesheet">
+
+  <style>
+    /* ── RESET & DESIGN SYSTEM VARIABLES ── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ink: #0c0b08;
+      --gold: #b8933a;
+      --red: #7a1f1f;
+      --cream: #e2dac8;
+      --muted: #6a6252;
+      --dim: #1a1810;
+      
+      /* Pure Architecture Design Tokens */
+      --core-stroke: rgba(184, 147, 58, 0.28);
+      --core-fill: rgba(184, 147, 58, 0.04);
+      --core-glow-op: 0;
+      --illusion-glow-op: 0;
+      --phantom-split-op: 0;
+      --wedge-sub-opacity: 0;
+      --arr-left-opacity: 0.5;
+      --arr-right-opacity: 0.5;
+      --feedback-loop-op: 0;
+      --curated-text-op: 0;
+      --caption-accent: var(--muted);
+    }
+
+    /* Target Dynamic States via Data Attributes for Clean CSS Control */
+    [data-framework-state="wedge-fired"] {
+      --core-stroke: rgba(122, 31, 31, 0.5);
+      --core-fill: rgba(122, 31, 31, 0.08);
+      --illusion-glow-op: 1;
+      --phantom-split-op: 1;
+      --wedge-sub-opacity: 0.85;
+      --arr-left-opacity: 0.08;
+      --arr-right-opacity: 1;
+      --feedback-loop-op: 1;
+      --curated-text-op: 0.85;
+      --caption-accent: #c07070;
+    }
+
+    [data-framework-state="5d-unified"] {
+      --core-stroke: rgba(184, 147, 58, 0.8);
+      --core-fill: rgba(184, 147, 58, 0.12);
+      --core-glow-op: 1;
+      --wedge-sub-opacity: 0;
+      --arr-left-opacity: 1;
+      --arr-right-opacity: 0.07;
+      --caption-accent: var(--gold);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--ink);
+      color: var(--cream);
+      font-family: 'IM Fell English', Georgia, serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── CANVAS & INTERACTIVE COMPONENT ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem 3rem;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.55rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title {
+      font-size: 1.6rem;
+      letter-spacing: 0.06em;
+      text-align: center;
+      color: var(--cream);
+      margin-bottom: 2.5rem;
+    }
+
+    #diag-wrap {
+      width: min(640px, 95vw);
+      position: relative;
+    }
+
+    #diag-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      overflow: visible;
+    }
+
+    .engine-transition {
+      transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* ── CAPTION INTERPOLATOR ── */
+    #caption {
+      width: min(640px, 95vw);
+      margin-top: 1rem;
+      border: 1px solid rgba(184, 147, 58, 0.1);
+      padding: 1.2rem 1.5rem;
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(12, 11, 8, 0.4);
+    }
+
+    #cap-text {
+      font-size: 0.95rem;
+      font-style: italic;
+      text-align: center;
+      line-height: 1.6;
+      color: var(--caption-accent);
+    }
+
+    .tap-hint {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.55rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 1.2rem;
+      animation: blink 3s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.8; }
+    }
+
+    .scroll-cue {
+      margin-top: 2.5rem;
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.55rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: rgba(184, 147, 58, 0.3);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .scroll-cue:hover {
+      color: rgba(184, 147, 58, 0.7);
+    }
+
+    /* ── TEXT PANELS ── */
+    #panels {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 0 1.5rem 8rem;
+    }
+
+    .panel {
+      border-top: 1px solid rgba(184, 147, 58, 0.08);
+      padding: 4rem 0;
+    }
+    .panel:last-child {
+      border-bottom: 1px solid rgba(184, 147, 58, 0.08);
+    }
+
+    .panel-num {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.55rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.6;
+      margin-bottom: 0.75rem;
+    }
+
+    .panel-title {
+      font-size: 1.8rem;
+      line-height: 1.25;
+      margin-bottom: 1.8rem;
+    }
+    .panel-title em {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    p {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #a8a090;
+      margin-bottom: 1.5rem;
+    }
+    p.lead {
+      color: var(--cream);
+      font-size: 1.15rem;
+    }
+    p strong {
+      color: var(--cream);
+      font-style: italic;
+      font-weight: normal;
+    }
+
+    .pull {
+      border-left: 2px solid var(--gold);
+      padding: 0.5rem 0 0.5rem 1.75rem;
+      margin: 2.2rem 0;
+      font-size: 1.25rem;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.6;
+    }
+
+    /* ── FIXED CONTROLS ── */
+    #back-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--ink);
+      border: 1px solid rgba(184, 147, 58, 0.25);
+      color: var(--muted);
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.55rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 200;
+    }
+    #back-btn.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #back-btn:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+      background: rgba(184, 147, 58, 0.05);
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media(max-width: 480px) {
+      .panel-title { font-size: 1.4rem; }
+      #back-btn { bottom: 1rem; right: 1rem; padding: 0.6rem 0.9rem; }
+    }
+  </style>
+</head>
+<body data-framework-state="neutral">
+
+<div id="hero">
+  <div class="hero-eyebrow">The Mirror Framework</div>
+  <div class="hero-title">The Wedge Creates the Illusion</div>
+
+  <div id="diag-wrap">
+    <svg id="diag-svg" viewBox="0 0 640 520" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)">
+      <defs>
+        <marker id="arr-gold" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#b8933a"/>
+        </marker>
+        <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#7a1f1f"/>
+        </marker>
+        
+        <radialGradient id="unity-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#b8933a" stop-opacity="0.32"/>
+          <stop offset="100%" stop-color="#b8933a" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="illusion-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#7a1f1f" stop-opacity="0.28"/>
+          <stop offset="100%" stop-color="#7a1f1f" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Geometry Reference Grid -->
+      <line x1="320" y1="0" x2="320" y2="520" stroke="rgba(184,147,58,0.03)" stroke-width="1"/>
+      <line x1="0" y1="100" x2="640" y2="100" stroke="rgba(184,147,58,0.03)" stroke-width="1"/>
+
+      <!-- Global Radiance Glow Filters -->
+      <circle cx="320" cy="98" r="65" fill="url(#unity-glow)" class="engine-transition" style="opacity: var(--core-glow-op);"/>
+      <circle cx="320" cy="98" r="65" fill="url(#illusion-glow)" class="engine-transition" style="opacity: var(--illusion-glow-op);"/>
+
+      <!-- ── UNIFIED CORE POINT SYSTEM ── -->
+      <!-- Identity and Intention are drawing inside the same circle layout -->
+      <circle cx="320" cy="98" r="54" fill="none" stroke="rgba(184,147,58,0.12)" stroke-width="1"/>
+      <circle cx="320" cy="98" r="42" class="engine-transition" fill="var(--core-fill)" stroke="var(--core-stroke)" stroke-width="1"/>
+
+      <text x="320" y="88" text-anchor="middle" font-family="'IM Fell English', Georgia, serif" font-size="14" fill="#e2dac8">Identity</text>
+      <text x="320" y="104" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="9" letter-spacing="3" fill="rgba(184,147,58,0.7)">= Intention</text>
+      <text x="320" y="118" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="7.5" letter-spacing="1.8" fill="rgba(110,102,85,0.6)">one unbroken act · 5D</text>
+
+      <!-- ── PHANTOM INTERFERENCE LAYER ── -->
+      <!-- The wedge projects this line, simulating separation distance -->
+      <line x1="210" y1="98" x2="430" y2="98" stroke="rgba(192,112,112,0.6)" stroke-width="1.2" stroke-dasharray="4,4" class="engine-transition" style="opacity: var(--phantom-split-op);"/>
+      <text x="320" y="74" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="7.5" letter-spacing="2.2" fill="rgba(192,112,112,0.8)" class="engine-transition" style="opacity: var(--phantom-split-op);">— ILLUSION OF SEPARATION —</text>
+
+      <!-- Clean 5D Expansive track -->
+      <path id="exp-arc" d="M276,72 Q195,22 125,57 Q75,84 95,132 Q115,177 170,172" fill="none" stroke="#b8933a" stroke-width="1.2" class="engine-transition" marker-end="url(#arr-gold)" style="opacity: var(--exp-arc-op);"/>
+      <text id="exp-txt" x="112" y="50" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="8.5" letter-spacing="2" text-anchor="middle" fill="#b8933a" class="engine-transition" style="opacity: var(--exp-txt-op);">INTENTIONS MANIFESTED</text>
+      <text id="exp-sub" x="72" y="117" font-family="'IM Fell English', Georgia, serif" font-size="11" font-style="italic" text-anchor="middle" fill="#b8933a" class="engine-transition" style="opacity: var(--exp-sub-op);">Reality expands</text>
+
+      <!-- ── WEDGE MECHANIC ── -->
+      <polygon points="320,152 500,360 140,360" fill="rgba(0,0,0,0.3)" transform="translate(3,6)"/>
+      <polygon points="320,152 500,360 140,360" class="engine-transition" fill="var(--wedge-fill)" stroke="var(--wedge-stroke)" stroke-width="1"/>
+
+      <!-- Hatch Lines -->
+      <g stroke="rgba(184,147,58,0.06)" stroke-width="0.8">
+        <line x1="320" y1="152" x2="200" y2="360"/><line x1="320" y1="152" x2="230" y2="360"/>
+        <line x1="320" y1="152" x2="260" y2="360"/><line x1="320" y1="152" x2="290" y2="360"/>
+        <line x1="320" y1="152" x2="320" y2="360"/><line x1="320" y1="152" x2="350" y2="360"/>
+        <line x1="320" y1="152" x2="380" y2="360"/><line x1="320" y1="152" x2="410" y2="360"/>
+        <line x1="320" y1="152" x2="440" y2="360"/>
+      </g>
+
+      <text x="320" y="244" text-anchor="middle" font-family="'IM Fell English', Georgia, serif" font-size="15" fill="rgba(226,218,200,0.75)">Brainstem</text>
+      <text x="320" y="262" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="8" letter-spacing="2.5" fill="rgba(184,147,58,0.5)">WEDGE</text>
+      <text x="320" y="278" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="7.5" letter-spacing="1.5" fill="#c07070" class="engine-transition" style="opacity: var(--wedge-sub-opacity);">projects the perception of a gap</text>
+
+      <!-- Flow Vector Arrows -->
+      <path d="M216,320 L260,210" fill="none" stroke="#b8933a" stroke-width="1.3" class="engine-transition" marker-end="url(#arr-gold)" style="opacity: var(--arr-left-opacity);"/>
+      <text x="218" y="273" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="7.5" letter-spacing="1.6" text-anchor="middle" fill="#b8933a" class="engine-transition" transform="rotate(-58,218,273)" style="opacity: var(--arr-left-opacity);">expand</text>
+
+      <path d="M420,210 L464,320" fill="none" stroke="#7a1f1f" stroke-width="1.3" class="engine-transition" marker-end="url(#arr-red)" style="opacity: var(--arr-right-opacity);"/>
+      <text x="462" y="268" font-family="'Josefin Sans', sans-serif" font-weight="300" font-size="7.5" letter-spacing="1.6" text-anchor="middle" fill="#c07070" class="engine-transition" transform="rotate(58,462,268)" style="opacity: var(--arr-right-opacity);">contract</text>
+
+      <!-- Content Pipe alignment -->
+      <line id="managed-pipe" x1="320" y1="360" x2="320" y2="398" stroke="#7a1f1f" stroke-width="1.5" class="engine-transition" marker-end="url(#arr-red)" style="opacity: var(--managed-pipe-op);"/>
+
+      <!-- Downstream Curated Matrix Box -->
+      <rect x="180" y="400" width="280" height="88" class="engine-transition" fill="var(--curated-box-fill)" stroke="var(--curated-box-stroke)" stroke-width="1"/>
+      <g class="engine-transition" style="opacity: var(--curated-text-op);">
+        <text x="320" y="425" text-anchor="middle" font-family="'IM Fell English', Georgia, serif" font-size="13" fill="rgba(192,112,112,0.85)">Intentions managed (3D Loop)</text>
+        <text x="320" y="445" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="7.5" letter-spacing="1.5" fill="rgba(122,31,31,0.75)">curated universe · reality seems fixed</text>
+        <text x="320" y="462" text-anchor="middle" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="7" letter-spacing="1.4" fill="rgba(122,31,31,0.6)">locked 4D · external narrative · looping pixels</text>
+        <text x="320" y="478" text-anchor="middle" font-family="'IM Fell English', Georgia, serif" font-size="10" font-style="italic" fill="rgba(155,90,90,0.65)">3D outcome management masks the core error</text>
+      </g>
+
+      <!-- Feedback spline -->
+      <path d="M470,440 Q540,350 510,200 Q495,130 462,105" fill="none" stroke="rgba(122,31,31,0.4)" stroke-width="1" stroke-dasharray="4,4" class="engine-transition" marker-end="url(#arr-red)" style="opacity: var(--feedback-loop-op);"/>
+      <text x="548" y="310" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="7.5" letter-spacing="1.5" text-anchor="middle" fill="rgba(122,31,31,0.5)" class="engine-transition" transform="rotate(90,548,310)" style="opacity: var(--feedback-loop-op);">confirms illusion</text>
+
+      <!-- Scale Markers -->
+      <text x="18" y="103" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="8" letter-spacing="1.6" fill="rgba(184,147,58,0.3)">5D</text>
+      <text x="18" y="255" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="8" letter-spacing="1.6" fill="rgba(122,31,31,0.3)">4D</text>
+      <text x="18" y="440" font-family="'Josefin Sans', sans-serif" font-weight="100" font-size="8" letter-spacing="1.6" fill="rgba(110,102,85,0.3)">3D</text>
+      <line x1="30" y1="72" x2="30" y2="128" stroke="rgba(184,147,58,0.12)" stroke-width="0.8"/>
+      <line x1="30" y1="152" x2="30" y2="360" stroke="rgba(122,31,31,0.12)" stroke-width="0.8"/>
+      <line x1="30" y1="400" x2="30" y2="490" stroke="rgba(110,102,85,0.1)" stroke-width="0.8"/>
+
+      <!-- Input Hit Zones -->
+      <polygon id="wedge-hit" points="320,152 500,360 140,360" fill="transparent" cursor="pointer"/>
+      <circle id="unity-hit" cx="320" cy="98" r="54" fill="transparent" cursor="pointer"/>
+    </svg>
+  </div>
+
+  <!-- Interpolated Caption Box -->
+  <div id="caption">
+    <div id="cap-text">The unity point: Identity and Intention are one act — tap the wedge to see what the brainstem does</div>
+  </div>
+  <div class="tap-hint" id="tap-hint">↑ tap the wedge or the core above it</div>
+  <div class="scroll-cue" onclick="document.getElementById('panels').scrollIntoView({behavior:'smooth'})">scroll to understand ↓</div>
+</div>
+
+<!-- ── TEXT PANELS ── -->
+<div id="panels">
+  <div class="panel fade-up">
+    <div class="panel-num">01 — The Real Structure</div>
+    <div class="panel-title">Identity and Intention are <em>not two things</em></div>
+    <p class="lead">The diagram does not show two nodes with a pipe between them. There is one point. Identity is Intention. They are the same act — not sequential, not cause and effect, the same undivided movement from the 5D assumed state outward into reality.</p>
+    <p>When you are fully in the assumed identity state, you do not produce intention. You <strong>are</strong> the intending. The radiating is the being. There is no step between them and no gap for anything to enter.</p>
+    <div class="pull">The separation of identity from intention is not a condition. It is an illusion the wedge manufactures — and then uses 3D reality to confirm.</div>
+    <p>This is why the diagram draws them as one circle, not two independent boxes. The wedge does not block a signal passing between two separate points. It creates the false <em>appearance</em> that two separate points exist in the first place.</p>
+  </div>
+
+  <div class="panel fade-up">
+    <div class="panel-num">02 — What the Wedge Actually Does</div>
+    <div class="panel-title">It manufactures <em>distance</em> where none exists</div>
+    <p class="lead">When the brainstem fires at the boundary, it does not cut a wire. It inserts an experience of a gap — the false felt sense that who you are and what you intend are separate states, forcing the illusion that intention must travel from one to the other.</p>
+    <p>That felt gap is the illusion. The moment it appears, you are already caught inside it — trying to close it, to motivate yourself, to build willpower, to sustain momentum. All of those are 3D reactive answers to a phantom distance the brainstem just invented.</p>
+    <div class="pull">You do not need to close the gap. You need to see that it was never there. The gap is the wedge. The wedge is the brainstem running an un-evaluated legacy program.</div>
+  </div>
+
+  <div class="panel fade-up">
+    <div class="panel-num">03 — The Curated Universe</div>
+    <div class="panel-title">A reality <em>built to confirm</em> the illusion</div>
+    <p class="lead">Once the wedge fires and the illusion of separation appears, the locked 4D begins constructing a universe to confirm it. The installed identity state filters everything through the lens of the separation it believes is real.</p>
+    <p>This is the curated universe, produced by a default system loop where the installed state actively <strong>selects what you see</strong>. The feedback loop lines illustrate how curated 3D reality loops back and validates the original illusion of separation, keeping the wedge active and your pixel-management running.</p>
+    <div class="pull">You cannot argue your way out of a curated universe from inside it. The only exit is 5D — the place prior to where the curation has begun.</div>
+  </div>
+
+  <div class="panel fade-up">
+    <div class="panel-num">04 — The Return</div>
+    <div class="panel-title">See the illusion. <em>The gap closes.</em></div>
+    <p class="lead">Seeing that the gap was manufactured closes it instantly and completely, because there was never anything to close. The return to 5D is the recognition that identity and intention were always one unified thing.</p>
+    <p>When the assumed identity state is fully inhabited from 5D, your being and intending radiate outward cleanly, organizing the 3D reality without the outcome-attached friction of striving.</p>
+    <div class="pull">The curated universe is replaced not by a better universe but by an uncurated one — reality rendering from a clean signal.</div>
+  </div>
+</div>
+
+<button id="back-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Diagram</button>
+
+<script>
+  // Advanced State Coprocessor Engine
+  const FRAMEWORK_STATES = {
+    0: {
+      id: 'neutral',
+      text: 'The unity point: Identity and Intention are one act — tap the wedge to see what the brainstem does',
+      hint: '↑ tap the wedge or the core above it'
+    },
+    1: {
+      id: 'wedge-fired',
+      text: 'Brainstem fires — the illusion of separation appears — a phantom gap splits your single tracking signal',
+      hint: '↑ tap again — shift to 5D, see the illusion dissolve'
+    },
+    2: {
+      id: '5d-unified',
+      text: 'Illusion dissolved — Identity is Intention — one signal, reality expands naturally from the assumed state',
+      hint: '↑ tap to see the wedge fire again'
+    }
+  };
+
+  let currentStateIndex = 0;
+
+  const capText = document.getElementById('cap-text');
+  const tapHint = document.getElementById('tap-hint');
+  const bodyEl = document.body;
+
+  // Cache specific SVG dynamic variables that aren't globally scoped easily
+  const root = document.documentElement;
+
+  function cycleState() {
+    if (currentStateIndex === 0) currentStateIndex = 1;
+    else if (currentStateIndex === 1) currentStateIndex = 2;
+    else currentStateIndex = 1;
+
+    const state = FRAMEWORK_STATES[currentStateIndex];
+    
+    // 1. Set Document Global Context variables
+    bodyEl.setAttribute('data-framework-state', state.id);
+    capText.textContent = state.text;
+    tapHint.textContent = state.hint;
+
+    // 2. Set SVG Specific inline variables (for complex path logic)
+    if (state.id === '5d-unified') {
+      root.style.setProperty('--exp-arc-op', 1);
+      root.style.setProperty('--exp-txt-op', 1);
+      root.style.setProperty('--exp-sub-op', 1);
+      root.style.setProperty('--managed-pipe-op', 0);
+    } else if (state.id === 'wedge-fired') {
+      root.style.setProperty('--exp-arc-op', 0);
+      root.style.setProperty('--exp-txt-op', 0);
+      root.style.setProperty('--exp-sub-op', 0);
+      root.style.setProperty('--managed-pipe-op', 1);
+    } else {
+      // neutral
+      root.style.setProperty('--exp-arc-op', 0);
+      root.style.setProperty('--exp-txt-op', 0);
+      root.style.setProperty('--exp-sub-op', 0);
+      root.style.setProperty('--managed-pipe-op', 0);
+    }
+  }
+
+  // Bind Input targets cleanly
+  ['wedge-hit', 'unity-hit'].forEach(id => {
+    document.getElementById(id).addEventListener('click', cycleState);
+  });
+
+  // Screen View Intersections
+  const viewportObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        viewportObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-up').forEach(el => viewportObserver.observe(el));
+
+  // Interface back utility tracker
+  window.addEventListener('scroll', () => {
+    document.getElementById('back-btn').classList.toggle('show', window.scrollY > window.innerHeight * 0.4);
+  }, { passive: true });
+</script>
+</body>
+</html>
