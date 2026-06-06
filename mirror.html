@@ -3,1041 +3,620 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Mirror — Framework</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet">
+<title>The Mirror — The Wedge</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Josefin+Sans:wght@100;300&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #f5f0e8;
-    --ink: #1a1510;
-    --gold: #c9a84c;
-    --muted: #8a7e6a;
-    --dim: #3a3228;
-    --red: #8b2020;
-    --paper: #ede8dc;
-  }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --ink: #111009;
+  --paper: #f0ead8;
+  --gold: #b8933a;
+  --gold-dim: rgba(184,147,58,0.18);
+  --red: #7a1f1f;
+  --cream: #e8e0cc;
+  --muted: #7a7060;
+  --dim: #2a2418;
+}
 
-  body {
-    background: var(--ink);
-    color: var(--cream);
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+html { scroll-behavior: smooth; }
 
-  /* ── HERO ── */
-  #hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-  }
+body {
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'IM Fell English', Georgia, serif;
+  overflow-x: hidden;
+}
 
-  #hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 40%, #2a2018 0%, var(--ink) 70%);
-  }
+/* ─── TYPOGRAPHY ─── */
+.label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 100;
+  font-size: 0.58rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.gold { color: var(--gold); }
+em { font-style: italic; }
 
-  .hero-mirror {
-    position: relative;
-    width: 280px;
-    height: 360px;
-    border: 1px solid rgba(201,168,76,0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 3rem;
-    animation: breathe 4s ease-in-out infinite;
-  }
-  .hero-mirror::before {
-    content: '';
-    position: absolute;
-    inset: 8px;
-    border: 1px solid rgba(201,168,76,0.15);
-  }
-  .hero-mirror::after {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    background: linear-gradient(135deg, rgba(201,168,76,0.2) 0%, transparent 40%, transparent 60%, rgba(201,168,76,0.1) 100%);
-  }
+/* ─── HERO / DIAGRAM PAGE ─── */
+#page-diagram {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 3rem 1rem;
+}
 
-  @keyframes breathe {
-    0%, 100% { box-shadow: 0 0 20px rgba(201,168,76,0.05), 0 0 60px rgba(201,168,76,0.02); }
-    50% { box-shadow: 0 0 40px rgba(201,168,76,0.15), 0 0 100px rgba(201,168,76,0.06); }
-  }
+.page-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 100;
+  font-size: 0.58rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
 
-  .hero-text { position: relative; z-index: 1; text-align: center; padding: 2rem; }
-  .hero-subtitle {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: 0.65rem;
-    letter-spacing: 0.4em;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
-    text-transform: uppercase;
-  }
-  .hero-title {
-    font-size: 3.5rem;
-    font-weight: 300;
-    letter-spacing: 0.1em;
-    line-height: 1;
-    color: var(--cream);
-  }
-  .hero-tagline {
-    font-style: italic;
-    font-size: 1rem;
-    color: var(--muted);
-    margin-top: 1rem;
-    font-weight: 300;
-  }
+/* ─── THE CENTRAL DIAGRAM ─── */
+#diagram {
+  position: relative;
+  width: min(560px, 94vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin: 1.5rem 0 2rem;
+  user-select: none;
+}
 
-  .hero-enter {
-    position: relative;
-    z-index: 1;
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: 0.65rem;
-    letter-spacing: 0.5em;
-    color: var(--muted);
-    text-transform: uppercase;
-    animation: pulse-text 2s ease-in-out infinite;
-    margin-top: 1rem;
-  }
-  @keyframes pulse-text {
-    0%, 100% { opacity: 0.4; } 50% { opacity: 1; }
-  }
+/* ── IDENTITY NODE ── */
+.node-identity {
+  width: 200px;
+  height: 72px;
+  border: 1px solid rgba(184,147,58,0.35);
+  background: rgba(184,147,58,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
+  color: var(--cream);
+  position: relative;
+  z-index: 2;
+  transition: border-color 0.4s, background 0.4s;
+}
+.node-identity.lit {
+  border-color: var(--gold);
+  background: rgba(184,147,58,0.1);
+  box-shadow: 0 0 30px rgba(184,147,58,0.15);
+}
+.node-identity-sub {
+  position: absolute;
+  bottom: -1.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 100;
+  font-size: 0.52rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 
-  /* ── MAIN LAYOUT ── */
-  #app { display: none; }
+/* ── SHAFT AREA ── */
+.shaft {
+  width: 2px;
+  height: 36px;
+  background: linear-gradient(to bottom, rgba(184,147,58,0.3), rgba(184,147,58,0.05));
+  position: relative;
+}
 
-  /* ── NAVIGATION ── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.2rem 2rem;
-    background: linear-gradient(to bottom, rgba(26,21,16,0.95) 0%, transparent 100%);
-    backdrop-filter: blur(4px);
-  }
-  .nav-logo {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: 0.7rem;
-    letter-spacing: 0.4em;
-    color: var(--gold);
-    text-transform: uppercase;
-  }
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-  }
-  .nav-links a {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    color: var(--muted);
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: color 0.3s;
-    cursor: pointer;
-  }
-  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+/* ── WEDGE SVG ── */
+.wedge-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(560px, 94vw);
+  height: 160px;
+  cursor: pointer;
+}
 
-  /* ── SECTIONS ── */
-  section {
-    min-height: 100vh;
-    padding: 8rem 2rem 4rem;
-    max-width: 900px;
-    margin: 0 auto;
-    display: none;
-  }
-  section.active { display: block; }
+#wedge-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
 
-  .section-label {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: 0.6rem;
-    letter-spacing: 0.5em;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-  .section-title {
-    font-size: 3rem;
-    font-weight: 300;
-    line-height: 1.1;
-    margin-bottom: 0.5rem;
-  }
-  .section-italic {
-    font-style: italic;
-    color: var(--muted);
-    font-size: 1.1rem;
-    margin-bottom: 3rem;
-  }
-  .divider {
-    width: 60px;
-    height: 1px;
-    background: var(--gold);
-    opacity: 0.4;
-    margin: 2.5rem 0;
-  }
-  p {
-    font-size: 1.1rem;
-    line-height: 1.85;
-    color: #d4cec4;
-    font-weight: 300;
-    margin-bottom: 1.5rem;
-  }
-  strong {
-    color: var(--cream);
-    font-weight: 600;
-  }
+/* wedge triangle fill */
+.wedge-fill {
+  transition: fill 0.5s, opacity 0.5s;
+}
 
-  /* ── DIMENSION STACK ── */
-  .dim-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin: 3rem 0;
-  }
-  .dim-card {
-    border: 1px solid rgba(201,168,76,0.15);
-    padding: 2rem 2.5rem;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  .dim-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 0;
-    background: rgba(201,168,76,0.06);
-    transition: width 0.4s ease;
-  }
-  .dim-card:hover::before, .dim-card.open::before { width: 100%; }
-  .dim-card + .dim-card { border-top: none; }
+/* wedge label */
+.wedge-label-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+.wedge-name {
+  font-size: 1.05rem;
+  color: var(--cream);
+  letter-spacing: 0.05em;
+}
+.wedge-sub {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 100;
+  font-size: 0.55rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(184,147,58,0.7);
+  margin-top: 0.25rem;
+}
 
-  .dim-header {
-    display: flex;
-    align-items: baseline;
-    gap: 1.5rem;
-  }
-  .dim-num {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: 0.6rem;
-    letter-spacing: 0.4em;
-    color: var(--gold);
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .dim-title {
-    font-size: 1.5rem;
-    font-weight: 300;
-    flex: 1;
-  }
-  .dim-arrow {
-    font-size: 0.8rem;
-    color: var(--gold);
-    transition: transform 0.3s;
-  }
-  .dim-card.open .dim-arrow { transform: rotate(90deg); }
+/* wedge hover state */
+.wedge-wrap:hover .wedge-fill,
+.wedge-wrap.active .wedge-fill {
+  fill: rgba(122,31,31,0.35);
+}
+.wedge-wrap.active .wedge-name { color: #e8a0a0; }
 
-  .dim-body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease;
-  }
-  .dim-card.open .dim-body { max-height: 500px; }
-  .dim-body p { margin-top: 1.5rem; }
+/* ── SHAFT BOTTOM ── */
+.shaft-bottom {
+  width: 2px;
+  height: 24px;
+  background: linear-gradient(to bottom, rgba(184,147,58,0.08), rgba(184,147,58,0.25));
+}
 
-  .flow-arrow {
-    text-align: center;
-    color: var(--gold);
-    font-size: 1.5rem;
-    opacity: 0.4;
-    padding: 0.5rem;
-  }
+/* ── INTENTION NODE ── */
+.node-intention {
+  width: 200px;
+  height: 72px;
+  border: 1px solid rgba(184,147,58,0.2);
+  background: rgba(184,147,58,0.02);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
+  color: rgba(232,224,204,0.45);
+  position: relative;
+  z-index: 2;
+  transition: border-color 0.5s, background 0.5s, color 0.5s, box-shadow 0.5s;
+}
+.node-intention.blocked {
+  border-color: rgba(122,31,31,0.3);
+  color: rgba(232,224,204,0.2);
+}
+.node-intention.free {
+  border-color: var(--gold);
+  background: rgba(184,147,58,0.1);
+  color: var(--cream);
+  box-shadow: 0 0 30px rgba(184,147,58,0.15);
+}
 
-  /* ── MOTIVATION LEVELS ── */
-  .level-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin: 2rem 0;
-  }
-  .level-card {
-    border: 1px solid rgba(201,168,76,0.15);
-    padding: 2rem;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.4s;
-  }
-  .level-card:hover { border-color: rgba(201,168,76,0.4); }
-  .level-card.l1 { border-left: 3px solid rgba(139,32,32,0.5); }
-  .level-card.l2 { border-left: 3px solid rgba(201,168,76,0.35); }
-  .level-card.l3 { border-left: 3px solid rgba(201,168,76,0.9); }
+/* ─── LABELS BESIDE DIAGRAM ─── */
+.diagram-annotations {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+}
 
-  .level-tag {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: 0.6rem;
-    letter-spacing: 0.4em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-  .level-name { font-size: 1.4rem; font-weight: 300; margin-bottom: 1rem; }
-  .level-status {
-    display: inline-block;
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 300;
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.8rem;
-    border: 1px solid;
-    margin-top: 0.5rem;
-  }
-  .l1 .level-status { color: var(--red); border-color: rgba(139,32,32,0.4); }
-  .l2 .level-status { color: var(--muted); border-color: rgba(138,126,106,0.4); }
-  .l3 .level-status { color: var(--gold); border-color: rgba(201,168,76,0.4); }
+/* ─── STATE BAR ─── */
+#state-bar {
+  width: min(560px, 94vw);
+  border: 1px solid rgba(184,147,58,0.15);
+  padding: 1.2rem 1.8rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(184,147,58,0.08);
+}
+.state-col {
+  background: var(--ink);
+  padding: 0.8rem 1rem;
+}
+.state-col-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 100;
+  font-size: 0.5rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+.state-col-value {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--cream);
+  min-height: 2.5rem;
+  transition: color 0.4s;
+}
+.state-col-value.red { color: #c07070; font-style: italic; }
+.state-col-value.gold { color: var(--gold); }
 
-  /* ── SELF CHECK / PROCESS ── */
-  .steps {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin: 2rem 0;
-    counter-reset: step;
-  }
-  .step {
-    display: flex;
-    gap: 2rem;
-    padding: 2rem 0;
-    border-bottom: 1px solid rgba(201,168,76,0.08);
-    align-items: flex-start;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  .step:hover { padding-left: 0.5rem; }
-  .step-num {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: 2rem;
-    color: rgba(201,168,76,0.2);
-    line-height: 1;
-    min-width: 2rem;
-    transition: color 0.3s;
-  }
-  .step:hover .step-num, .step.active .step-num { color: var(--gold); }
-  .step-content { flex: 1; }
-  .step-title { font-size: 1.2rem; font-weight: 400; margin-bottom: 0.5rem; }
-  .step-desc { font-size: 1rem; color: var(--muted); line-height: 1.7; }
+/* ─── CLICK HINT ─── */
+.click-hint {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 100;
+  font-size: 0.55rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 1.2rem;
+  animation: blink 2.5s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:.3} 50%{opacity:.9} }
 
-  /* ── I AM BUILDER ── */
-  .iam-builder {
-    background: rgba(201,168,76,0.04);
-    border: 1px solid rgba(201,168,76,0.15);
-    padding: 2.5rem;
-    margin: 2rem 0;
-  }
-  .iam-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-  }
-  .iam-prefix {
-    font-size: 1.2rem;
-    font-style: italic;
-    color: var(--muted);
-    white-space: nowrap;
-  }
-  .iam-words {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    flex: 1;
-  }
-  .iam-word {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    border: 1px solid rgba(201,168,76,0.2);
-    background: transparent;
-    color: var(--cream);
-    padding: 0.4rem 0.8rem;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  .iam-word:hover, .iam-word.selected { background: rgba(201,168,76,0.15); border-color: var(--gold); color: var(--gold); }
+/* ─── EXPLANATION PANELS ─── */
+#panels {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 0 1.2rem 6rem;
+}
 
-  .iam-noun-input {
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid rgba(201,168,76,0.3);
-    color: var(--cream);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    padding: 0.3rem 0;
-    width: 200px;
-    outline: none;
-    font-weight: 300;
-  }
-  .iam-noun-input::placeholder { color: rgba(138,126,106,0.5); font-style: italic; }
-  .iam-noun-input:focus { border-bottom-color: var(--gold); }
+.panel {
+  border-top: 1px solid rgba(184,147,58,0.12);
+  padding: 3.5rem 0;
+}
+.panel:last-child { border-bottom: 1px solid rgba(184,147,58,0.12); }
 
-  .iam-result {
-    font-style: italic;
-    font-size: 1.4rem;
-    color: var(--gold);
-    border-top: 1px solid rgba(201,168,76,0.15);
-    padding-top: 1.5rem;
-    margin-top: 1.5rem;
-    min-height: 2.5rem;
-    line-height: 1.6;
-  }
+.panel-num {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 100;
+  font-size: 0.55rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: rgba(184,147,58,0.45);
+  margin-bottom: 0.6rem;
+}
+.panel-title {
+  font-size: 1.9rem;
+  font-weight: normal;
+  line-height: 1.2;
+  margin-bottom: 1.8rem;
+  color: var(--cream);
+}
+.panel-title em { color: var(--gold); }
 
-  /* ── MIRROR PRINCIPLE ── */
-  .principle-card {
-    border: 1px solid rgba(201,168,76,0.2);
-    padding: 3rem;
-    text-align: center;
-    margin: 2rem 0;
-    position: relative;
-  }
-  .principle-card::before {
-    content: '';
-    position: absolute;
-    top: -1px; left: 20%; right: 20%;
-    height: 2px;
-    background: linear-gradient(to right, transparent, var(--gold), transparent);
-  }
-  .principle-big {
-    font-size: 1.5rem;
-    font-weight: 300;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    color: var(--cream);
-  }
-  .principle-em {
-    font-style: italic;
-    color: var(--gold);
-    font-size: 1.8rem;
-  }
+p {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: #b8b0a0;
+  margin-bottom: 1.4rem;
+}
+p strong { color: var(--cream); font-weight: normal; font-style: italic; }
+p.lead { color: var(--cream); font-size: 1.1rem; }
 
-  /* ── ANCHOR ── */
-  .anchor-btn {
-    display: block;
-    width: 100%;
-    max-width: 300px;
-    margin: 2rem auto;
-    background: transparent;
-    border: 1px solid rgba(201,168,76,0.3);
-    color: var(--gold);
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: 0.65rem;
-    letter-spacing: 0.5em;
-    text-transform: uppercase;
-    padding: 1.2rem;
-    cursor: pointer;
-    transition: all 0.4s;
-    position: relative;
-    overflow: hidden;
-  }
-  .anchor-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(201,168,76,0.08);
-    transform: scaleX(0);
-    transition: transform 0.4s;
-    transform-origin: left;
-  }
-  .anchor-btn:hover::before { transform: scaleX(1); }
-  .anchor-btn:hover { border-color: var(--gold); }
+/* ─── PULL QUOTE ─── */
+.pull {
+  border-left: 1px solid var(--gold);
+  padding: 0.4rem 0 0.4rem 1.8rem;
+  margin: 2rem 0;
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--cream);
+  line-height: 1.6;
+}
 
-  .anchor-ring {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 1px solid rgba(201,168,76,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 2rem auto;
-    cursor: pointer;
-    transition: all 0.5s;
-    position: relative;
-  }
-  .anchor-ring::before {
-    content: '';
-    position: absolute;
-    inset: 8px;
-    border-radius: 50%;
-    border: 1px solid rgba(201,168,76,0.1);
-    transition: all 0.5s;
-  }
-  .anchor-ring:active, .anchor-ring.firing {
-    border-color: var(--gold);
-    box-shadow: 0 0 40px rgba(201,168,76,0.3);
-  }
-  .anchor-ring:active::before, .anchor-ring.firing::before {
-    inset: 4px;
-    border-color: rgba(201,168,76,0.4);
-  }
-  .anchor-inner {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid rgba(201,168,76,0.3);
-    background: rgba(201,168,76,0.05);
-    transition: all 0.3s;
-  }
-  .anchor-ring.firing .anchor-inner {
-    background: rgba(201,168,76,0.2);
-    transform: scale(1.2);
-  }
-  .anchor-label {
-    text-align: center;
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: 0.6rem;
-    letter-spacing: 0.4em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-  .anchor-message {
-    text-align: center;
-    font-style: italic;
-    font-size: 1rem;
-    color: var(--gold);
-    opacity: 0;
-    transition: opacity 0.5s;
-    margin-top: 1rem;
-    min-height: 1.5rem;
-  }
-  .anchor-message.show { opacity: 1; }
+/* ─── TWO-STATE COMPARE ─── */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(184,147,58,0.1);
+  border: 1px solid rgba(184,147,58,0.1);
+  margin: 2rem 0;
+}
+.compare-col {
+  background: var(--ink);
+  padding: 1.4rem;
+}
+.compare-col-head {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 100;
+  font-size: 0.52rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.compare-col-head.red-head { color: var(--red); }
+.compare-col-head.gold-head { color: var(--gold); }
+.compare-col p { font-size: 0.92rem; margin-bottom: 0.6rem; line-height: 1.7; }
 
-  /* ── QUOTE BLOCKS ── */
-  blockquote {
-    border-left: 1px solid rgba(201,168,76,0.3);
-    padding: 0.5rem 0 0.5rem 2rem;
-    margin: 2rem 0;
-    font-style: italic;
-    font-size: 1.2rem;
-    color: var(--muted);
-    line-height: 1.7;
-  }
+/* ─── BACK BUTTON ─── */
+#back-btn {
+  position: fixed;
+  bottom: 1.8rem;
+  right: 1.8rem;
+  background: var(--ink);
+  border: 1px solid rgba(184,147,58,0.25);
+  color: var(--muted);
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 100;
+  font-size: 0.55rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: none;
+  z-index: 200;
+}
+#back-btn:hover { color: var(--gold); border-color: rgba(184,147,58,0.5); }
+#back-btn.show { display: block; }
 
-  /* ── HANDWRITTEN NOTE ── */
-  .handwritten {
-    background: var(--paper);
-    color: var(--ink);
-    padding: 2rem;
-    margin: 2rem 0;
-    position: relative;
-    font-family: 'Cormorant Garamond', serif;
-    box-shadow: 4px 4px 20px rgba(0,0,0,0.4);
-    transform: rotate(-0.5deg);
-  }
-  .handwritten::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(transparent, transparent 27px, rgba(26,21,16,0.07) 28px);
-    pointer-events: none;
-  }
-  .hw-title {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.55rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 1rem;
-  }
-  .hw-line {
-    font-size: 1.1rem;
-    line-height: 1.85;
-    color: var(--dim);
-    position: relative;
-    z-index: 1;
-  }
-  .hw-line strong { color: var(--red); }
+/* ─── SCROLL FADE ─── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible { opacity: 1; transform: none; }
 
-  /* ── VISION AREAS ── */
-  .vision-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: rgba(201,168,76,0.1);
-    margin: 2rem 0;
-    border: 1px solid rgba(201,168,76,0.1);
-  }
-  .vision-cell {
-    background: var(--ink);
-    padding: 1.5rem;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  .vision-cell:hover { background: rgba(201,168,76,0.05); }
-  .vision-cell-label {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: 0.55rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.5rem;
-  }
-  .vision-cell-title { font-size: 1rem; font-weight: 300; color: var(--cream); }
-
-  /* ── TRANSITIONS ── */
-  .fade-in { animation: fadeIn 0.8s ease forwards; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-  @media (max-width: 600px) {
-    .section-title { font-size: 2rem; }
-    .hero-title { font-size: 2.5rem; }
-    nav { padding: 1rem; }
-    .nav-links { gap: 1rem; }
-    section { padding: 7rem 1.2rem 3rem; }
-    .vision-grid { grid-template-columns: 1fr; }
-    .iam-row { flex-direction: column; align-items: flex-start; }
-  }
+@media (max-width: 500px) {
+  .compare { grid-template-columns: 1fr; }
+  #state-bar { grid-template-columns: 1fr; }
+  .panel-title { font-size: 1.5rem; }
+}
 </style>
 </head>
 <body>
 
-<!-- HERO -->
-<div id="hero" onclick="enterApp()">
-  <div class="hero-mirror">
-    <div class="hero-text">
-      <div class="hero-subtitle">The Framework</div>
-      <div class="hero-title">THE<br>MIRROR</div>
-      <div class="hero-tagline">You cannot change the reflection.</div>
+<!-- ─── DIAGRAM PAGE ─── -->
+<div id="page-diagram">
+  <div class="page-label">The Mirror Framework</div>
+  <div style="font-size:1.6rem; text-align:center; letter-spacing:0.06em; margin-bottom:0.3rem; color:var(--cream);">The Wedge</div>
+  <div style="font-family:'Josefin Sans',sans-serif; font-weight:100; font-size:0.58rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--muted); text-align:center; margin-bottom:2rem;">Why 3D reality appears fixed</div>
+
+  <div id="diagram">
+
+    <!-- IDENTITY -->
+    <div class="node-identity" id="node-id">
+      Identity
+      <div class="node-identity-sub">5D assumed state</div>
+    </div>
+
+    <div class="shaft"></div>
+
+    <!-- WEDGE -->
+    <div class="wedge-wrap" id="wedge-wrap" onclick="toggleWedge()">
+      <svg id="wedge-svg" viewBox="0 0 560 160" preserveAspectRatio="xMidYMid meet">
+        <!-- wedge shadow -->
+        <polygon points="280,20 460,148 100,148"
+          fill="rgba(0,0,0,0.4)" transform="translate(3,5)"/>
+        <!-- wedge body -->
+        <polygon class="wedge-fill" points="280,20 460,148 100,148"
+          fill="rgba(122,31,31,0.18)"
+          stroke="rgba(184,147,58,0.3)" stroke-width="1"/>
+        <!-- hatching lines (like your whiteboard) -->
+        <g stroke="rgba(184,147,58,0.12)" stroke-width="0.8">
+          <line x1="280" y1="20" x2="180" y2="148"/>
+          <line x1="280" y1="20" x2="210" y2="148"/>
+          <line x1="280" y1="20" x2="240" y2="148"/>
+          <line x1="280" y1="20" x2="270" y2="148"/>
+          <line x1="280" y1="20" x2="300" y2="148"/>
+          <line x1="280" y1="20" x2="330" y2="148"/>
+          <line x1="280" y1="20" x2="360" y2="148"/>
+          <line x1="280" y1="20" x2="390" y2="148"/>
+        </g>
+        <!-- downward arrow at tip -->
+        <line x1="280" y1="148" x2="280" y2="168"
+          stroke="rgba(184,147,58,0.25)" stroke-width="1.5"/>
+        <polygon points="280,175 275,165 285,165"
+          fill="rgba(184,147,58,0.25)"/>
+      </svg>
+      <div class="wedge-label-wrap">
+        <div class="wedge-name">Brainstem</div>
+        <div class="wedge-sub">Wedge — tap to activate</div>
+      </div>
+    </div>
+
+    <!-- INTENTION -->
+    <div class="shaft-bottom"></div>
+    <div class="node-intention" id="node-int">
+      Intention
+      <div style="position:absolute; bottom:-1.4rem; left:50%; transform:translateX(-50%); white-space:nowrap; font-family:'Josefin Sans',sans-serif; font-weight:100; font-size:0.52rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted);">signal to 3D</div>
+    </div>
+
+  </div><!-- end #diagram -->
+
+  <!-- STATE BAR -->
+  <div id="state-bar">
+    <div class="state-col">
+      <div class="state-col-label">Wedge state</div>
+      <div class="state-col-value" id="sb-wedge">Dormant — tap the wedge</div>
+    </div>
+    <div class="state-col" style="border-left:1px solid rgba(184,147,58,0.08)">
+      <div class="state-col-label">Signal reaching 3D</div>
+      <div class="state-col-value" id="sb-signal">Intention flows to 3D as rendered reality</div>
     </div>
   </div>
-  <div class="hero-enter">Touch to enter</div>
-</div>
 
-<!-- APP -->
-<div id="app">
-  <nav>
-    <div class="nav-logo">The Mirror</div>
-    <ul class="nav-links">
-      <li><a onclick="showSection('framework')" id="nav-framework">Framework</a></li>
-      <li><a onclick="showSection('dimensions')" id="nav-dimensions">Dimensions</a></li>
-      <li><a onclick="showSection('motivation')" id="nav-motivation">Motivation</a></li>
-      <li><a onclick="showSection('practice')" id="nav-practice">Practice</a></li>
-      <li><a onclick="showSection('iam')" id="nav-iam">I Am</a></li>
-    </ul>
-  </nav>
+  <div class="click-hint" id="click-hint">↑ tap the wedge to see what it does</div>
 
-  <!-- FRAMEWORK -->
-  <section id="framework">
-    <div class="section-label">Part One</div>
-    <h1 class="section-title">The Core Error</h1>
-    <div class="section-italic">Every issue you have ever faced is the same structural error.</div>
+  <div style="margin-top:2.5rem; font-family:'Josefin Sans',sans-serif; font-weight:100; font-size:0.55rem; letter-spacing:0.4em; text-transform:uppercase; color:rgba(184,147,58,0.4); cursor:pointer;" onclick="document.getElementById('panels').scrollIntoView({behavior:'smooth'})">
+    scroll to understand ↓
+  </div>
 
-    <div class="handwritten">
-      <div class="hw-title">From the whiteboard</div>
-      <div class="hw-line">The illusion of separation is the separation of identity from intention.</div>
-      <br>
-      <div class="hw-line"><strong>Whatever you assume, you become → create → manifest.</strong></div>
-      <br>
-      <div class="hw-line">Core beliefs: what you think about yourself/self</div>
-      <div class="hw-line">Manifested Reality: Identity → Intention</div>
-      <div class="hw-line">Reality is a manifestation of thought, your intention and self work run your thoughts.</div>
-    </div>
+</div><!-- end page-diagram -->
 
-    <p>The framework begins at a radical claim: <strong>you are not inside reality — you produce it.</strong> Every circumstance, relationship, financial pattern, and physical condition is downstream of one thing: which identity state is currently assumed, and how purely it is intending.</p>
+<!-- ─── EXPLANATION PANELS ─── -->
+<div id="panels">
 
-    <div class="principle-card">
-      <div class="principle-em">The wrong identity state is running.</div>
-      <div class="principle-big" style="margin-top:1.5rem;">And you have been trying to fix the reflection<br>it generates instead of changing the code.</div>
-    </div>
+  <div class="panel fade-up">
+    <div class="panel-num">01 — The Core Diagram</div>
+    <div class="panel-title">Identity → <em>Wedge</em> → Intention → 3D</div>
+    <p class="lead">Your whiteboard shows one sequence and one interruption. The sequence is how reality is supposed to work. The interruption is why it mostly doesn't.</p>
+    <p>From the left side of the diagram: <strong>Manifested Reality = Identity → Intention.</strong> When identity and intention are unified — one unbroken signal — 3D reality renders from that signal. The reflection shows the image. This is the clean state.</p>
+    <p>But between identity and intention sits the wedge. Drawn as a triangle driving downward into the shaft. It is not a concept or a metaphor. It is a mechanism — specifically, the brainstem survival system — and it intercepts the signal before intention can form cleanly.</p>
+    <div class="pull">"Whatever you assume, you become → create → manifest."<br><span style="font-size:0.85rem; color:var(--muted); font-style:normal;">— only true when the wedge is not firing</span></div>
+    <p>The wedge is why 3D appears fixed. Not because it is — the reflection has no nature of its own — but because the wedge is generating the signal that renders it, and the wedge has been running the same programme since installation.</p>
+  </div>
 
-    <div class="divider"></div>
-
-    <p>This is not a mindset problem. Not a motivation problem. Not a discipline or willpower problem. <strong>Those are all descriptions of the reflection.</strong> The actual problem is one level up — the assumed identity state generating that reflection.</p>
-
-    <blockquote>Stand in front of a mirror. Your reflection does exactly what you do. You cannot reach into it and rearrange what you see. You cannot negotiate with it. If the reflection is wrong, there is precisely one thing to address: the image.</blockquote>
-
-    <p>Your reality works exactly the same way. The entire error of conventional thinking is to treat the reflection as the reality and attempt to change it from inside it — to work on circumstances, manage outcomes, force and strategise at the level of the downstream. <strong>This book goes to the source.</strong></p>
-
-    <div class="divider"></div>
-
-    <p style="text-align:center; font-style:italic; font-size:1.2rem; color: var(--gold);">The being and the intending are the same act.<br>Not sequential. Not cause and effect. The same act.</p>
-  </section>
-
-  <!-- DIMENSIONS -->
-  <section id="dimensions">
-    <div class="section-label">Part Two</div>
-    <h1 class="section-title">The Three Dimensions</h1>
-    <div class="section-italic">Mind precedes matter. Always. Without exception.</div>
-
-    <p>The conventional model places human beings inside a three-dimensional physical universe. This is not just incomplete — <strong>it is the precise inversion of the truth.</strong></p>
-
-    <div class="dim-stack">
-      <div class="dim-card" id="dim5" onclick="toggleDim('dim5')">
-        <div class="dim-header">
-          <div class="dim-num">5D — Origin</div>
-          <div class="dim-title">The Place Before Thought</div>
-          <div class="dim-arrow">›</div>
-        </div>
-        <div class="dim-body">
-          <p>The fifth dimension is the place before thought. Before belief, before identity, before history. All possibilities present simultaneously. None of them yet selected. No ceiling on what is possible here — this is the dimension prior to all limitations that exist at lower levels.</p>
-          <p>This is not altered consciousness. It is the most natural state available — what you are before any identity state generates its commentary. You are there now, behind whatever identity state is currently running its programme.</p>
-          <p style="color: var(--gold); font-style: italic;">The selection is made here. The assumption is made here. This is the source.</p>
-        </div>
+  <div class="panel fade-up">
+    <div class="panel-num">02 — What the Wedge Is</div>
+    <div class="panel-title">The <em>Brainstem</em> as the Installation Point</div>
+    <p class="lead">The brainstem does not think. It detects threat and routes accordingly. It is the oldest part of the brain — prior to language, prior to reasoning, prior to any capacity to evaluate what it is responding to.</p>
+    <p>This is the clue you noted on the whiteboard. The wedge is not psychological. It is physiological — operating below the level at which any 4D intervention (therapy, willpower, positive thinking) can reach it. This is why 3D and 4D solutions for what is fundamentally a 5D problem produce no lasting change.</p>
+    <p><strong>The brainstem fires at the boundary.</strong> When the identity state encounters the edge of its own capacity — when the task ahead exceeds what the currently assumed self believes it can handle — the survival system reads that gap as threat. Not consciously. Automatically. The wedge drives in.</p>
+    <div class="compare">
+      <div class="compare-col">
+        <div class="compare-col-head red-head">Wedge Active</div>
+        <p>Brainstem fires. Survival routing engages.</p>
+        <p>Signal from identity is intercepted before it becomes intention.</p>
+        <p>Intention is replaced by: <em>outcome management, proving, hiding, performing.</em></p>
+        <p>3D renders the frequency of threat, not the frequency of the selected identity.</p>
       </div>
-
-      <div class="flow-arrow">↓</div>
-
-      <div class="dim-card" id="dim4" onclick="toggleDim('dim4')">
-        <div class="dim-header">
-          <div class="dim-num">4D — Mind</div>
-          <div class="dim-title">The Assumed Identity State</div>
-          <div class="dim-arrow">›</div>
-        </div>
-        <div class="dim-body">
-          <p>The fourth dimension is the dimension of mind. It contains all of history and all possible futures simultaneously — as the full temporal field of the identity state assumed there.</p>
-          <p>The assumed 4D identity state decides what history means. It frames the entire past through its own lens and collapses the infinite range of possible futures down to the narrow set that confirms it. The same loop. The same outcomes. The same reflection — until a different identity state is assumed from 5D.</p>
-          <p><strong>Emotion is the rendering mechanism between 4D and 3D.</strong> The emotional frequency of the assumed identity state materialises as 3D circumstance. Not thoughts. Not surface intentions. The emotion running from the depth of the assumed identity state.</p>
-        </div>
-      </div>
-
-      <div class="flow-arrow">↓</div>
-
-      <div class="dim-card" id="dim3" onclick="toggleDim('dim3')">
-        <div class="dim-header">
-          <div class="dim-num">3D — Output</div>
-          <div class="dim-title">The Reflection</div>
-          <div class="dim-arrow">›</div>
-        </div>
-        <div class="dim-body">
-          <p>The third dimension is everything you can see, touch and measure. Circumstances, results, relationships, finances, the body. All of it downstream. All of it the current readout of which identity state is assumed at 4D and with what purity of intention.</p>
-          <p>3D cannot be changed from within 3D. Not permanently. Assume a different identity state from 5D and the reflection changes — because the image has changed, and the mirror shows the image. Always.</p>
-          <p style="color: var(--red); font-style: italic;">When the reflection is not showing the selected life, it is not a problem to solve at 3D. It is a pointer — directly back to the identity state and the purity of intention at the source.</p>
-        </div>
+      <div class="compare-col" style="border-left:1px solid rgba(184,147,58,0.08)">
+        <div class="compare-col-head gold-head">Wedge Dormant</div>
+        <p>Signal flows uninterrupted from identity to intention.</p>
+        <p>Intention is pure — not outcome-attached, not contaminated by the survival loop.</p>
+        <p>The being and the intending are one unbroken signal.</p>
+        <p>3D renders the frequency of the assumed identity state. The reflection follows.</p>
       </div>
     </div>
+  </div>
 
-    <div class="divider"></div>
+  <div class="panel fade-up">
+    <div class="panel-num">03 — What the Wedge Generates</div>
+    <div class="panel-title">Locked 4D: <em>Curated History, External Narrative</em></div>
+    <p class="lead">Once the wedge fires, it does not create chaos. It creates something far more effective: a perfectly consistent, internally coherent story about what is real, what is possible, and what you are.</p>
+    <p>This is what your diagram labels as the <strong>Locked 4D</strong> state — identity locked, intention reduced. The 4D mind, which contains all of history and all possible futures simultaneously, is now filtered through the brainstem's threat model. Only the history that confirms the threat is visible. Only the futures that confirm the limitation are available.</p>
+    <p>The label <strong>"led by curated history, external narrative"</strong> is the mechanism: the installed identity state — the one the system built, not the one you selected — uses its own past to confirm its own limits. The loop is not a bug. It is the design. A self-sealing data filter that cannot perceive information that would threaten its own existence.</p>
+    <div class="pull">The installed state cannot see the selection that would end it. That is not a flaw. That is the architecture of the cage.</div>
+    <p>And because 3D renders from whatever frequency the locked 4D is running, the reflection keeps confirming the installed state. The evidence mounts. The reality "proves" the limit. The wedge does not need to keep firing — the 3D does the work for it.</p>
+  </div>
 
-    <div class="handwritten" style="transform:rotate(0.3deg)">
-      <div class="hw-title">Whiteboard — Dimension Stack</div>
-      <div class="hw-line">5D extends → 5D selects (only self, boundary to include all)</div>
-      <div class="hw-line">Intention reduced to 4D Physical Reality</div>
-      <div class="hw-line">Locked 4D identity state → led by curated history, external narrative</div>
-      <div class="hw-line"><strong>Identity is assumed, not earned. Reality is not discovered — it is rendered.</strong></div>
-    </div>
-  </section>
-
-  <!-- MOTIVATION -->
-  <section id="motivation">
-    <div class="section-label">Part Four</div>
-    <h1 class="section-title">Three Levels of Motivation</h1>
-    <div class="section-italic">Understanding why the loop holds — and where it breaks.</div>
-
-    <p>Two of the three levels guarantee the intention will never be pure, regardless of how much effort is applied. The third is not moral high ground — it is an <strong>engineering prerequisite.</strong></p>
-
-    <div class="level-grid">
-      <div class="level-card l1">
-        <div class="level-tag">Level 1</div>
-        <div class="level-name">Recognition From Others</div>
-        <p>Rooted in the survival equation of birth — recognition equals survival — this drive operates before any capacity to evaluate it exists. Most adult behaviour that appears to be about achievement is actually about this.</p>
-        <p>From Level 1, the outcome is everything. The being and the intending are permanently separated by the outcome that must land before worth is confirmed. <strong>The intention is never pure. The loop holds.</strong></p>
-        <div class="level-status">Loop Active</div>
+  <div class="panel fade-up">
+    <div class="panel-num">04 — Why 3D Solutions Fail</div>
+    <div class="panel-title">You Cannot Fix a 5D Problem <em>from 3D</em></div>
+    <p class="lead">This is the exact error the entire self-improvement industry is built on. Not maliciously — most of it is genuinely trying to help. But it is trying to help at the wrong level.</p>
+    <p>Therapy examines the assumed identity state from within it. Willpower applies force at 3D. Positive thinking layers new thoughts over a still-running installed state. All of these are interventions <strong>downstream of the wedge.</strong> They do not touch the brainstem mechanism that is generating the locked 4D. They rearrange the reflection without changing the image.</p>
+    <p><strong>Managing dopamine is a 3D solution to a 3D problem</strong> — while the wedge that is producing the loop continues running untouched. The system that produced the problem also produces the solutions it sells, and every solution points you at the reflection.</p>
+    <div class="compare">
+      <div class="compare-col">
+        <div class="compare-col-head red-head">3D / 4D Interventions</div>
+        <p>Therapy — examines the installed state from inside it</p>
+        <p>Willpower — force applied at 3D to a signal problem at 5D</p>
+        <p>Positive thinking — new thoughts over a still-running identity</p>
+        <p>Medication — manages the frequency, doesn't change the signal</p>
+        <p>Strategy — outcome management at the level of the reflection</p>
       </div>
-
-      <div class="level-card l2">
-        <div class="level-tag">Level 2</div>
-        <div class="level-name">Proving It to Yourself</div>
-        <p>At some point the need for external recognition becomes conscious enough to be uncomfortable. The motivation relocates internally. This feels like progress.</p>
-        <p>The intention is still outcome-attached. The worthiness problem has moved inward. The being and the intending are still separated by the outcome that must confirm the worth. <strong>The loop continues at a more sophisticated level.</strong></p>
-        <div class="level-status">Loop Continues</div>
-      </div>
-
-      <div class="level-card l3">
-        <div class="level-tag">Level 3</div>
-        <div class="level-name">Honouring a Higher Purpose</div>
-        <p>When motivation is organised around something larger than the needs of the individual identity state — family, future generations, a contribution that will exist beyond the self — the outcome is no longer the point.</p>
-        <p>Worth is no longer in question because the frame has expanded beyond the comparison that made it a question. <strong>The being and the intending unify — because there is nothing left standing between them.</strong></p>
-        <div class="level-status">Signal Runs Clean</div>
+      <div class="compare-col" style="border-left:1px solid rgba(184,147,58,0.08)">
+        <div class="compare-col-head gold-head">The 5D Move</div>
+        <p>Go to 5D — the place before the installed state has any presence</p>
+        <p>Assume the selected identity state from there — not aspire to it</p>
+        <p>The being and the intending become one signal</p>
+        <p>The wedge has nothing to fire at — the threat reading is not available at 5D</p>
+        <p>3D renders the new frequency. The reflection follows.</p>
       </div>
     </div>
+    <p>The brainstem fires at the boundary of the currently assumed identity state. At 5D — before the assumed identity state has any presence — the boundary does not exist. There is no edge to trigger the survival response. This is why the selection must be made from 5D, not from within the installed 4D.</p>
+  </div>
 
-    <div class="divider"></div>
+  <div class="panel fade-up">
+    <div class="panel-num">05 — The Boundary</div>
+    <div class="panel-title">Fear is the Wedge <em>at the Edge</em></div>
+    <p class="lead">Fear is not a warning. It is a location. The sensation of the boundary being encountered is the precise signal that the wedge is about to fire — which means it is also the precise moment the selection is available.</p>
+    <p>Chemically and neurologically, anxiety and excitement are identical processes running in different directions. One moving toward the expanded identity state. One pulling back from the edge. The brainstem does not distinguish between physical threat and the perceived threat of expansion. It reads the gap between the assumed self and the required self as danger.</p>
+    <p><strong>Every loop is the identity state meeting its boundary and the wedge firing instead of the selection being made.</strong> Every act of genuine expansion is the identity state meeting its boundary and the selection being made from above it — from 5D, where the boundary does not exist.</p>
+    <div class="pull">The tension at the boundary is not the obstacle. It is the signal. The wedge fires there. The selection is made there. Both are available at the same location.</div>
+    <p>The distinction between those two outcomes — wedge firing versus selection made — is not effort, not discipline, not willpower. It is the dimension from which you respond. 3D response: manage the fear, pull back, loop. 5D response: go above the installed state entirely, assume the expanded identity, let the boundary move.</p>
+  </div>
 
-    <div class="handwritten" style="transform:rotate(-0.2deg)">
-      <div class="hw-title">Whiteboard — Motivation Levels</div>
-      <div class="hw-line">Lv1 • Outcome management / need to be recognised by others</div>
-      <div class="hw-line">Lv2 • Need to prove to self / Disclosing, its usefulness of us</div>
-      <div class="hw-line">Lv3 • Honouring — a higher purpose</div>
-      <br>
-      <div class="hw-line"><strong>Assumed identity: Intentional</strong></div>
-      <div class="hw-line">Identity / Intention → <strong>Really Expressed</strong></div>
-    </div>
-  </section>
+  <div class="panel fade-up">
+    <div class="panel-num">06 — The Clean Signal</div>
+    <div class="panel-title">Identity → Intention: <em>One Unbroken Act</em></div>
+    <p class="lead">When the wedge is not firing, the diagram on the right of your whiteboard is what operates. Manifested Reality = Identity → Intention. No gap. No interception. One signal from source to 3D.</p>
+    <p>You have lived this. At least once — possibly more times than you have acknowledged. A day when the doing flowed from the being without any gap. No monitoring the reflection. No managing outcomes. No calculating what needed to be proved. Just the natural movement of someone operating from complete certainty about who they were.</p>
+    <p>That was not a good day. That was the default. The brainstem was quiet. The identity and the intention were the same thing. The 3D rendered from that frequency and the reflection showed the image without delay.</p>
+    <p><strong>The intending is the being. The being is the intending.</strong> Not sequential. The same act. When the wedge is dormant and the identity is fully assumed from 5D, intention is not something the identity produces — it is what the identity <em>is</em>, radiating outward continuously without effort.</p>
+    <div class="pull">Whatever you assume, you become → create → manifest.<br>The wedge is the only reason this is not already your permanent experience.</div>
+  </div>
 
-  <!-- PRACTICE -->
-  <section id="practice">
-    <div class="section-label">Part Eight — The Process</div>
-    <h1 class="section-title">The Self Check</h1>
-    <div class="section-italic">Build the I Am and vision first. Then fire the anchor in any moment.</div>
+</div><!-- end panels -->
 
-    <div class="steps">
-      <div class="step" onclick="activateStep(this)">
-        <div class="step-num">01</div>
-        <div class="step-content">
-          <div class="step-title">Get to Your Level</div>
-          <div class="step-desc">Slow breaths. Let the surface settle. Move beneath the currently running identity state to the place before thought. 5D. All possibilities present. No ceiling. The installed state has no presence here.</div>
-        </div>
-      </div>
-      <div class="step" onclick="activateStep(this)">
-        <div class="step-num">02</div>
-        <div class="step-content">
-          <div class="step-title">Read the I Am</div>
-          <div class="step-desc">From 5D. As assumption — not aspiration, not goal. Feel the power words land. The identity state is assumed. The being and the intending are already one signal.</div>
-        </div>
-      </div>
-      <div class="step" onclick="activateStep(this)">
-        <div class="step-num">03</div>
-        <div class="step-content">
-          <div class="step-title">Inhabit the Vision</div>
-          <div class="step-desc">From the assumed identity state. Specific scenes. Specific feelings. Already there. Already lived. Hold until the pure emotion runs — the natural frequency of someone already living from that position, no attachment to the outcome.</div>
-        </div>
-      </div>
-      <div class="step" onclick="activateStep(this)">
-        <div class="step-num">04</div>
-        <div class="step-content">
-          <div class="step-title">Anchor It</div>
-          <div class="step-desc">Press finger and thumb together. Hold while the pure emotion is at its clearest. The anchor is loaded. Fire it in any moment to return immediately to the pure frequency of the selected identity state.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <p style="text-align:center; font-family:'Josefin Sans',sans-serif; font-weight:100; font-size:0.65rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem;">Fire Your Anchor</p>
-
-    <div class="anchor-ring" id="anchorRing" onclick="fireAnchor()">
-      <div class="anchor-inner"></div>
-    </div>
-    <div class="anchor-label">Press &amp; hold</div>
-    <div class="anchor-message" id="anchorMessage">The being and the intending are one signal.</div>
-
-    <div class="divider"></div>
-
-    <h2 style="font-size:1.5rem; font-weight:300; margin-bottom:1.5rem;">Cold Reset — When the Loop Runs</h2>
-    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.1);">
-      <div style="background:var(--ink); padding:1.5rem;">
-        <div style="font-family:'Josefin Sans',sans-serif; font-weight:100; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:0.5rem;">Isolate</div>
-        <p style="font-size:0.95rem; margin:0;">The 3D circumstance is dead data showing the active code. Not the problem — the readout.</p>
-      </div>
-      <div style="background:var(--ink); padding:1.5rem; border-left:1px solid rgba(201,168,76,0.1);">
-        <div style="font-family:'Josefin Sans',sans-serif; font-weight:100; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:0.5rem;">Bypass</div>
-        <p style="font-size:0.95rem; margin:0;">Drop straight to 5D via the anchor. Not through the installed state. Through it.</p>
-      </div>
-      <div style="background:var(--ink); padding:1.5rem; border-left:1px solid rgba(201,168,76,0.1);">
-        <div style="font-family:'Josefin Sans',sans-serif; font-weight:100; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:0.5rem;">Overwrite</div>
-        <p style="font-size:0.95rem; margin:0;">Re-assume the selected identity state. The being and the intending unify. The pure frequency runs.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- I AM -->
-  <section id="iam">
-    <div class="section-label">Appendix — Tool One</div>
-    <h1 class="section-title">The I Am</h1>
-    <div class="section-italic">Write from 5D. Write from Level 3. Present tense. The driver speaking.</div>
-
-    <p>The I Am statement is the declaration of the selected identity state. Four power words. One noun. Written from the place before thought — assumed, not aspired to. Not who you are working to become. <strong>Who you are being now.</strong></p>
-
-    <div class="iam-builder">
-      <div style="font-family:'Josefin Sans',sans-serif; font-weight:100; font-size:0.6rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--muted); margin-bottom:1.5rem;">Select your power words — then name your identity</div>
-
-      <div class="iam-row">
-        <div class="iam-prefix">I am a</div>
-        <div class="iam-words" id="wordRow1">
-          <button class="iam-word" onclick="selectWord(this, 0)">deliberate</button>
-          <button class="iam-word" onclick="selectWord(this, 0)">sovereign</button>
-          <button class="iam-word" onclick="selectWord(this, 0)">clear</button>
-          <button class="iam-word" onclick="selectWord(this, 0)">grounded</button>
-          <button class="iam-word" onclick="selectWord(this, 0)">expansive</button>
-          <button class="iam-word" onclick="selectWord(this, 0)">present</button>
-          <button class="iam-word" onclick="selectWord(this, 0)">focused</button>
-          <button class="iam-word" onclick="selectWord(this, 0)">bold</button>
-          <button class="iam-word" onclick="selectWord(this, 0)">certain</button>
-          <button class="iam-word" onclick="selectWord(this, 0)">purposeful</button>
-        </div>
-      </div>
-
-      <div class="iam-row" style="margin-bottom:0.5rem;">
-        <div class="iam-prefix" style="opacity:0">I am a</div>
-        <div class="iam-words" id="wordRow2">
-          <button class="iam-word" onclick="selectWord(this, 1)">generous</button>
-          <button class="iam-word" onclick="selectWord(this, 1)">discerning</button>
-          <button class="iam-word" onclick="selectWord(this, 1)">creative</button>
-          <button class="iam-word" onclick="selectWord(this, 1)">fierce</button>
-          <button class="iam-word" onclick="selectWord(this, 1)">patient</button>
-          <button class="iam-word" onclick="selectWord(this, 1)">relentless</button>
-          <button class="iam-word" onclick="selectWord(this, 1)">loving</button>
-          <button class="iam-word" onclick="selectWord(this, 1)">precise</button>
-          <button class="iam-word" onclick="selectWord(this, 1)">free</button>
-          <button class="iam-word" onclick="selectWord(this, 1)">complete</button>
-        </div>
-      </div>
-
-      <div class="iam-row" style="margin-top:1.5rem;">
-        <div class="iam-prefix" style="font-style:normal; opacity:0.5;">identity noun →</div>
-        <input class="iam-noun-input" id="iamNoun" placeholder="e.g. leader, builder, creator…" oninput="buildIam()" />
-      </div>
-
-      <div class="iam-result" id="iamResult">
-        <span style="color:var(--muted); font-size:1rem;">Your I Am will appear here…</span>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <h2 style="font-size:1.5rem; font-weight:300; margin-bottom:1.5rem;">The Vision — Eight Areas</h2>
-    <p>Write in present tense. From the assumed identity state. Already lived. The pinnacle is the operating state — inhabit it completely and allow that frequency to dictate present-moment execution.</p>
-
-    <div class="vision-grid">
-      <div class="vision-cell"><div class="vision-cell-label">Area 1</div><div class="vision-cell-title">Health &amp; Wellbeing</div></div>
-      <div class="vision-cell"><div class="vision-cell-label">Area 2</div><div class="vision-cell-title">Family &amp; Relationships</div></div>
-      <div class="vision-cell"><div class="vision-cell-label">Area 3</div><div class="vision-cell-title">Personal Interests</div></div>
-      <div class="vision-cell"><div class="vision-cell-label">Area 4</div><div class="vision-cell-title">Personal Development</div></div>
-      <div class="vision-cell"><div class="vision-cell-label">Area 5</div><div class="vision-cell-title">Home &amp; Assets</div></div>
-      <div class="vision-cell"><div class="vision-cell-label">Area 6</div><div class="vision-cell-title">Contribution &amp; Community</div></div>
-      <div class="vision-cell"><div class="vision-cell-label">Area 7</div><div class="vision-cell-title">Business &amp; Career</div></div>
-      <div class="vision-cell"><div class="vision-cell-label">Area 8</div><div class="vision-cell-title">Finance &amp; Wealth</div></div>
-    </div>
-
-    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.1); margin-top:1px;">
-      <div style="background:var(--ink); padding:1rem; text-align:center;">
-        <div style="font-family:'Josefin Sans',sans-serif; font-weight:100; font-size:0.55rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted);">Horizon</div>
-        <div style="color:var(--cream); font-size:0.9rem; margin-top:0.3rem;">3 months</div>
-      </div>
-      <div style="background:var(--ink); padding:1rem; text-align:center; border-left:1px solid rgba(201,168,76,0.1);">
-        <div style="font-family:'Josefin Sans',sans-serif; font-weight:100; font-size:0.55rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted);">Horizon</div>
-        <div style="color:var(--cream); font-size:0.9rem; margin-top:0.3rem;">1 year</div>
-      </div>
-      <div style="background:var(--ink); padding:1rem; text-align:center; border-left:1px solid rgba(201,168,76,0.1);">
-        <div style="font-family:'Josefin Sans',sans-serif; font-weight:100; font-size:0.55rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted);">Horizon</div>
-        <div style="color:var(--cream); font-size:0.9rem; margin-top:0.3rem;">5 years</div>
-      </div>
-      <div style="background:var(--ink); padding:1rem; text-align:center; border-left:1px solid rgba(201,168,76,0.1);">
-        <div style="font-family:'Josefin Sans',sans-serif; font-weight:100; font-size:0.55rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted);">Operating State</div>
-        <div style="color:var(--gold); font-size:0.9rem; margin-top:0.3rem;">Pinnacle</div>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="principle-card">
-      <div class="principle-em">5D is the starting point.</div>
-      <div class="principle-big" style="margin-top:1rem;">Always. For everything.<br>Always the return.<br>Always where the signal runs clean.</div>
-    </div>
-  </section>
-
-</div><!-- end #app -->
+<button id="back-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Diagram</button>
 
 <script>
-  // I Am builder state
-  const selectedWords = [null, null];
+// ─── WEDGE TOGGLE ───
+let wedgeActive = false;
 
-  function enterApp() {
-    document.getElementById('hero').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    showSection('framework');
+const messages = {
+  wedge: {
+    off: 'Dormant — tap the wedge',
+    on:  'Firing — brainstem survival routing active'
+  },
+  signal: {
+    off: 'Intention flows to 3D as rendered reality',
+    on:  'Signal intercepted — 3D renders installed state, not selected identity'
   }
+};
 
-  function showSection(id) {
-    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-    const sec = document.getElementById(id);
-    if (sec) { sec.classList.add('active'); sec.classList.add('fade-in'); }
-    const nav = document.getElementById('nav-' + id);
-    if (nav) nav.classList.add('active');
-    window.scrollTo(0, 0);
+function toggleWedge() {
+  wedgeActive = !wedgeActive;
+  const wrap = document.getElementById('wedge-wrap');
+  const nodeId = document.getElementById('node-id');
+  const nodeInt = document.getElementById('node-int');
+  const sbWedge = document.getElementById('sb-wedge');
+  const sbSignal = document.getElementById('sb-signal');
+  const hint = document.getElementById('click-hint');
+
+  if (wedgeActive) {
+    wrap.classList.add('active');
+    nodeId.classList.add('lit');
+    nodeInt.classList.remove('free');
+    nodeInt.classList.add('blocked');
+    sbWedge.textContent = messages.wedge.on;
+    sbWedge.className = 'state-col-value red';
+    sbSignal.textContent = messages.signal.on;
+    sbSignal.className = 'state-col-value red';
+    hint.textContent = '↑ tap again — make the selection from 5D';
+  } else {
+    wrap.classList.remove('active');
+    nodeId.classList.remove('lit');
+    nodeInt.classList.remove('blocked');
+    nodeInt.classList.add('free');
+    sbWedge.textContent = messages.wedge.off;
+    sbWedge.className = 'state-col-value gold';
+    sbSignal.textContent = messages.signal.off;
+    sbSignal.className = 'state-col-value gold';
+    hint.textContent = '↑ signal clear — identity and intention unified';
   }
+}
 
-  function toggleDim(id) {
-    const card = document.getElementById(id);
-    card.classList.toggle('open');
-  }
-
-  function activateStep(el) {
-    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-    el.classList.add('active');
-  }
-
-  function fireAnchor() {
-    const ring = document.getElementById('anchorRing');
-    const msg = document.getElementById('anchorMessage');
-    const phrases = [
-      "The being and the intending are one signal.",
-      "5D is the starting point. Always.",
-      "You are the driver. The seat is yours.",
-      "Assume the identity state. The rest follows.",
-      "The selection is made from 5D. Now.",
-      "The reflection follows. It always does."
-    ];
-    ring.classList.add('firing');
-    const phrase = phrases[Math.floor(Math.random() * phrases.length)];
-    msg.textContent = phrase;
-    msg.classList.add('show');
-    setTimeout(() => { ring.classList.remove('firing'); }, 600);
-    setTimeout(() => { msg.classList.remove('show'); }, 3500);
-  }
-
-  function selectWord(btn, slot) {
-    // deselect others in same row
-    const rowId = slot === 0 ? 'wordRow1' : 'wordRow2';
-    document.querySelectorAll('#' + rowId + ' .iam-word').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    selectedWords[slot] = btn.textContent;
-    buildIam();
-  }
-
-  function buildIam() {
-    const noun = document.getElementById('iamNoun').value.trim();
-    const w1 = selectedWords[0];
-    const w2 = selectedWords[1];
-    const result = document.getElementById('iamResult');
-
-    if (!w1 && !w2 && !noun) {
-      result.innerHTML = '<span style="color:var(--muted); font-size:1rem;">Your I Am will appear here…</span>';
-      return;
+// ─── SCROLL FADE ───
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
     }
-    let words = [w1, w2].filter(Boolean);
-    let stmt = 'I am a ' + words.join(', ') + (noun ? ' ' + noun : '') + '.';
-    result.textContent = stmt;
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// ─── BACK BUTTON SHOW ───
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('back-btn');
+  if (window.scrollY > window.innerHeight * 0.6) {
+    btn.classList.add('show');
+  } else {
+    btn.classList.remove('show');
   }
+});
 </script>
 </body>
 </html>
