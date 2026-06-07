@@ -29,24 +29,38 @@ nav{
   z-index:100;
   display:flex;
   justify-content:center;
-  gap:1.8rem;
-  padding:1rem 1.5rem;
-  background:linear-gradient(to bottom,rgba(12,11,8,0.98) 65%,transparent);
+  gap:0;
+  padding:0;
+  background:#0c0b08;
+  border-bottom:1px solid rgba(184,147,58,0.2);
   flex-wrap:wrap;
 }
 nav a{
   font-family:'Josefin Sans',sans-serif;
-  font-weight:100;
-  font-size:0.48rem;
-  letter-spacing:0.42em;
+  font-weight:300;
+  font-size:0.68rem;
+  letter-spacing:0.18em;
   text-transform:uppercase;
-  color:var(--muted);
+  color:#7a7060;
   text-decoration:none;
   cursor:pointer;
-  transition:color 0.3s;
+  transition:color 0.25s, background 0.25s;
   white-space:nowrap;
+  padding:0.85rem 0.9rem;
+  border-right:1px solid rgba(184,147,58,0.1);
+  display:flex;
+  align-items:center;
+  gap:0.45rem;
 }
-nav a:hover,nav a.active{color:var(--gold)}
+nav a:first-child{border-left:1px solid rgba(184,147,58,0.1)}
+nav a:hover{color:var(--cream);background:rgba(184,147,58,0.05)}
+nav a.active{color:var(--gold);background:rgba(184,147,58,0.07);border-bottom:2px solid var(--gold);margin-bottom:-1px}
+.nav-num{
+  font-size:0.5rem;
+  opacity:0.45;
+  font-weight:100;
+  letter-spacing:0.05em;
+}
 
 /* ── SECTIONS ── */
 section{
@@ -55,7 +69,7 @@ section{
   flex-direction:column;
   align-items:center;
   justify-content:flex-start;
-  padding:5.5rem 1.2rem 4rem;
+  padding:6.5rem 1.2rem 4rem;
 }
 section.active{display:flex}
 
@@ -247,15 +261,15 @@ section.active{display:flex}
 <body>
 
 <nav>
-  <a onclick="show('s1')" id="nav-s1">Reality</a>
-  <a onclick="show('s2')" id="nav-s2">4D State</a>
-  <a onclick="show('s3')" id="nav-s3">One Thing</a>
-  <a onclick="show('s4')" id="nav-s4">The Wedge</a>
-  <a onclick="show('s5')" id="nav-s5">Daily Life</a>
-  <a onclick="show('s6')" id="nav-s6">The Trap</a>
-  <a onclick="show('s7')" id="nav-s7">Three Levels</a>
-  <a onclick="show('s8')" id="nav-s8">Moving Over</a>
-  <a onclick="show('s9')" id="nav-s9">Intention</a>
+  <a onclick="show('s1')" id="nav-s1"><span class="nav-num">01</span>Reality</a>
+  <a onclick="show('s2')" id="nav-s2"><span class="nav-num">02</span>4D State</a>
+  <a onclick="show('s3')" id="nav-s3"><span class="nav-num">03</span>One Thing</a>
+  <a onclick="show('s4')" id="nav-s4"><span class="nav-num">04</span>The Wedge</a>
+  <a onclick="show('s5')" id="nav-s5"><span class="nav-num">05</span>Daily Life</a>
+  <a onclick="show('s6')" id="nav-s6"><span class="nav-num">06</span>Two Patterns</a>
+  <a onclick="show('s7')" id="nav-s7"><span class="nav-num">07</span>Three Levels</a>
+  <a onclick="show('s8')" id="nav-s8"><span class="nav-num">08</span>Moving Over</a>
+  <a onclick="show('s9')" id="nav-s9"><span class="nav-num">09</span>Intention</a>
 </nav>
 
 <!-- ══════════════════════════════
