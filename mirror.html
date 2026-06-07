@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Mirror — The Wedge</title>
+<title>The Mirror</title>
 <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Josefin+Sans:wght@100;300&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -23,170 +23,327 @@ body{
   overflow-x:hidden;
 }
 
+/* ── NAV ── */
 nav{
   position:fixed;top:0;left:0;right:0;
   z-index:100;
   display:flex;
   justify-content:center;
-  gap:2rem;
-  padding:1.1rem 1.5rem;
-  background:linear-gradient(to bottom,rgba(12,11,8,0.97) 60%,transparent);
+  gap:1.8rem;
+  padding:1rem 1.5rem;
+  background:linear-gradient(to bottom,rgba(12,11,8,0.98) 65%,transparent);
   flex-wrap:wrap;
 }
 nav a{
   font-family:'Josefin Sans',sans-serif;
   font-weight:100;
-  font-size:0.5rem;
+  font-size:0.48rem;
   letter-spacing:0.42em;
   text-transform:uppercase;
   color:var(--muted);
   text-decoration:none;
   cursor:pointer;
   transition:color 0.3s;
+  white-space:nowrap;
 }
 nav a:hover,nav a.active{color:var(--gold)}
 
+/* ── SECTIONS ── */
 section{
   min-height:100vh;
   display:none;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
-  padding:5.5rem 1.2rem 3rem;
+  justify-content:flex-start;
+  padding:5.5rem 1.2rem 4rem;
 }
 section.active{display:flex}
 
+/* ── TYPE ── */
 .eyebrow{
   font-family:'Josefin Sans',sans-serif;
   font-weight:100;
-  font-size:0.5rem;
-  letter-spacing:0.45em;
+  font-size:0.48rem;
+  letter-spacing:0.48em;
   text-transform:uppercase;
   color:var(--muted);
-  margin-bottom:0.7rem;
+  margin-bottom:0.6rem;
   text-align:center;
 }
 .s-title{
-  font-size:clamp(1.45rem,4vw,2rem);
+  font-size:clamp(1.4rem,3.8vw,1.95rem);
   line-height:1.25;
-  margin-bottom:2.2rem;
+  margin-bottom:2rem;
   color:var(--cream);
   text-align:center;
+  max-width:560px;
 }
 .s-title em{color:var(--gold);font-style:italic}
 
-.prose{width:min(580px,94vw)}
+.prose{
+  width:min(600px,94vw);
+  margin:0 auto;
+}
 .prose p{
   font-size:1.02rem;
   line-height:1.95;
   color:var(--soft);
-  margin-bottom:1.2rem;
+  margin-bottom:1.3rem;
 }
 .prose p.lead{color:var(--cream)}
 .prose p strong{color:var(--cream);font-weight:normal;font-style:italic}
+.prose h3{
+  font-size:1.1rem;
+  font-weight:normal;
+  color:var(--cream);
+  margin:2rem 0 0.8rem;
+  font-style:italic;
+}
 .pull{
   border-left:1px solid var(--gold);
   padding:0.3rem 0 0.3rem 1.5rem;
   margin:1.8rem 0;
-  font-size:1.15rem;
+  font-size:1.12rem;
   font-style:italic;
   color:var(--cream);
   line-height:1.65;
 }
-
-.next-btn{
-  font-family:'Josefin Sans',sans-serif;
-  font-weight:100;
-  font-size:0.5rem;
-  letter-spacing:0.42em;
-  text-transform:uppercase;
-  color:rgba(184,147,58,0.4);
-  background:none;border:none;
-  cursor:pointer;
-  margin-top:2rem;
-  transition:color 0.3s;
+.divider{
+  width:36px;height:1px;
+  background:rgba(184,147,58,0.3);
+  margin:2rem 0;
 }
-.next-btn:hover{color:var(--gold)}
 
-.tap-hint{
+/* ── COMMON EXAMPLES GRID ── */
+.examples{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background:rgba(184,147,58,0.08);
+  border:1px solid rgba(184,147,58,0.08);
+  margin:1.8rem 0;
+  width:min(600px,94vw);
+}
+.ex{
+  background:var(--ink);
+  padding:1.2rem 1.3rem;
+}
+.ex p{
+  font-size:0.95rem;
+  line-height:1.75;
+  color:var(--soft);
+  margin:0;
+}
+.ex p em{color:rgba(184,147,58,0.7);font-style:italic}
+
+/* ── LEVELS ── */
+.levels{
+  width:min(600px,94vw);
+  margin:1.8rem 0;
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+  background:rgba(184,147,58,0.08);
+}
+.level{
+  background:var(--ink);
+  padding:1.6rem 1.8rem;
+  border-left:2px solid transparent;
+  transition:border-color 0.3s;
+}
+.level.l1{border-left-color:rgba(122,31,31,0.5)}
+.level.l2{border-left-color:rgba(122,31,31,0.3)}
+.level.l3{border-left-color:rgba(184,147,58,0.5)}
+.level-tag{
   font-family:'Josefin Sans',sans-serif;
   font-weight:100;
-  font-size:0.5rem;
-  letter-spacing:0.42em;
+  font-size:0.48rem;
+  letter-spacing:0.4em;
   text-transform:uppercase;
   color:var(--muted);
-  text-align:center;
-  margin-top:0.9rem;
-  animation:blink 2.8s ease-in-out infinite;
+  margin-bottom:0.4rem;
 }
-@keyframes blink{0%,100%{opacity:.18}55%{opacity:.72}}
+.level-name{
+  font-size:1.05rem;
+  color:var(--cream);
+  margin-bottom:0.8rem;
+}
+.level p{
+  font-size:0.97rem;
+  line-height:1.85;
+  color:var(--soft);
+  margin-bottom:0.7rem;
+}
+.level p:last-child{margin-bottom:0}
+.level p strong{color:var(--cream);font-weight:normal;font-style:italic}
 
+/* ── INTERACTIVE WEDGE DIAGRAM ── */
+.diag-wrap{
+  width:min(580px,95vw);
+  margin:0 auto;
+}
 .t{transition:opacity 0.6s ease,fill 0.6s ease,stroke 0.6s ease}
-
 .caption{
   width:min(580px,94vw);
-  margin:0.7rem auto 0;
+  margin:0.6rem auto 0;
   border:1px solid rgba(184,147,58,0.1);
-  padding:1rem 1.4rem;
-  min-height:3rem;
+  padding:0.9rem 1.3rem;
+  min-height:2.8rem;
   display:flex;align-items:center;justify-content:center;
 }
 .cap-text{
-  font-size:0.95rem;
+  font-size:0.92rem;
   font-style:italic;
   text-align:center;
-  line-height:1.6;
+  line-height:1.55;
   color:var(--muted);
   transition:color 0.5s;
 }
 .cap-text.gold{color:var(--gold)}
 .cap-text.red{color:#c07070}
+.tap-hint{
+  font-family:'Josefin Sans',sans-serif;
+  font-weight:100;
+  font-size:0.48rem;
+  letter-spacing:0.42em;
+  text-transform:uppercase;
+  color:var(--muted);
+  text-align:center;
+  margin-top:0.8rem;
+  animation:blink 2.8s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:.15}55%{opacity:.7}}
 
-@media(max-width:480px){.s-title{font-size:1.3rem}}
+/* ── NAV BUTTONS ── */
+.nav-btns{
+  display:flex;
+  gap:2rem;
+  margin-top:2.5rem;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.next-btn{
+  font-family:'Josefin Sans',sans-serif;
+  font-weight:100;
+  font-size:0.48rem;
+  letter-spacing:0.42em;
+  text-transform:uppercase;
+  color:rgba(184,147,58,0.4);
+  background:none;border:none;
+  cursor:pointer;
+  transition:color 0.3s;
+}
+.next-btn:hover{color:var(--gold)}
+.next-btn.back{color:rgba(106,98,82,0.4)}
+.next-btn.back:hover{color:var(--muted)}
+
+@media(max-width:500px){
+  .examples{grid-template-columns:1fr}
+  .s-title{font-size:1.3rem}
+  nav{gap:1rem}
+}
 </style>
 </head>
 <body>
 
 <nav>
-  <a onclick="show('s1')" id="nav-s1">One Thing</a>
-  <a onclick="show('s2')" id="nav-s2">The Wedge</a>
-  <a onclick="show('s3')" id="nav-s3">The Lock</a>
-  <a onclick="show('s4')" id="nav-s4">Moving Over</a>
-  <a onclick="show('s5')" id="nav-s5">Intention</a>
+  <a onclick="show('s1')" id="nav-s1">Reality</a>
+  <a onclick="show('s2')" id="nav-s2">4D State</a>
+  <a onclick="show('s3')" id="nav-s3">One Thing</a>
+  <a onclick="show('s4')" id="nav-s4">The Wedge</a>
+  <a onclick="show('s5')" id="nav-s5">Daily Life</a>
+  <a onclick="show('s6')" id="nav-s6">The Trap</a>
+  <a onclick="show('s7')" id="nav-s7">Three Levels</a>
+  <a onclick="show('s8')" id="nav-s8">Moving Over</a>
+  <a onclick="show('s9')" id="nav-s9">Intention</a>
 </nav>
 
 <!-- ══════════════════════════════
-     S1 — ONE THING
+     S1 — REALITY
 ══════════════════════════════ -->
 <section id="s1">
   <div class="prose">
-    <div class="eyebrow">The Mirror Framework · One</div>
+    <div class="eyebrow">The Mirror · One</div>
+    <h1 class="s-title">Reality is always a manifestation of the depth and clarity of your thoughts</h1>
+
+    <p class="lead">Not sometimes. Not when you are paying attention. Always. What you are experiencing right now as your life — your relationships, your finances, your body, your circumstances — is the current rendering of your assumed identity state. It is not happening to you. It is coming from you.</p>
+
+    <p>This is not a philosophy or a belief system. It is the literal mechanism by which your experience is produced. The quality and direction of your thoughts — their depth, their clarity, and whether they are running clean from what you actually intend or reactive to what you are already experiencing — determines what reality renders next.</p>
+
+    <p>When thought runs reactive — when you are responding to the reflection, reading the circumstances and letting them dictate the next thought — the same reality keeps producing itself. The reflection becomes the input. The input generates the same reflection. A loop that feels like life but is the same assumed state confirming itself continuously.</p>
+
+    <p>When thought runs from depth and clarity of intention — when the assumed state is generating the thought rather than the thought being shaped by the current circumstance — the reality that renders is the accurate expression of what is actually assumed. Not as reward. Not as luck. As the direct manifestation of the depth and clarity of the assumed state expressing outward.</p>
+
+    <div class="pull">The reflection has no nature of its own. It shows the image. Change what is assumed and the reflection changes — because the image changed. Reaching into the reflection to rearrange it is the error almost everyone is making almost all of the time.</div>
+
+    <p>Understanding this precisely — not as inspiration but as mechanism — is the beginning of everything that follows.</p>
+  </div>
+  <div class="nav-btns">
+    <button class="next-btn" onclick="show('s2')">The 4D Identity State →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     S2 — 4D STATE
+══════════════════════════════ -->
+<section id="s2">
+  <div class="prose">
+    <div class="eyebrow">The Mirror · Two</div>
+    <h1 class="s-title">The 4D identity state:<br><em>memory, imagination, trajectory</em></h1>
+
+    <p class="lead">The fourth dimension is the dimension of time. Literal, not metaphorical. Your assumed identity state exists inside a linear structure — memory behind it, imagination and trajectory ahead of it. Everything you experience as your life is being filtered through this structure right now.</p>
+
+    <p>The assumed 4D identity state is not you. It is a state you are currently assuming. That distinction matters completely. A state can be changed — not by working on it from within it, not by therapy applied to the state, not by willpower directed at it — but by assuming a different one. The moment a different state is assumed, everything it contains changes with it.</p>
+
+    <p><strong>The assumed state decides what the past means.</strong> The same history, read through a different assumed state, points in an entirely different direction. Two people can share identical events and assume completely different identity states from them — because the state doesn't emerge from the history. The state filters the history. It selects which memories are relevant, which experiences confirm the current assumption, which possibilities are visible ahead.</p>
+
+    <p>This is why effort applied to circumstances — trying to change the 3D reflection directly — produces no lasting change. The assumed state keeps generating the same reflection because the reflection is downstream of the state, not upstream of it. Change the state and the reflection changes. Work on the reflection and the state remains, generating the same reflection through whatever new circumstances appear.</p>
+
+    <div class="pull">You are not your 4D identity state. You are whatever is doing the assuming. And what is doing the assuming has always been able to assume differently — the only thing that ever made it seem otherwise was the assumed state describing itself as the only state available.</div>
+
+    <p>You are already at 5D — the place prior to any assumed state, where all possible states are available simultaneously. Always. Not as a destination to reach. As what you are before the current assumed state has any presence. The assumed state is what you are currently running. It is not what you are.</p>
+  </div>
+  <div class="nav-btns">
+    <button class="next-btn back" onclick="show('s1')">← Reality</button>
+    <button class="next-btn" onclick="show('s3')">Identity is Intention is Reality →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     S3 — ONE THING
+══════════════════════════════ -->
+<section id="s3">
+  <div class="prose">
+    <div class="eyebrow">The Mirror · Three</div>
     <h1 class="s-title">Identity is intention is reality:<br><em>one thing</em></h1>
 
     <p class="lead">Your identity, your intentions, and your reality are not three things in sequence. They are the same thing. One movement, outward, continuous. Your intentions come from you, are you, expressing into reality. There is no distance between them and you because there is no between.</p>
 
-    <p>This is not a principle to work toward. It is what is already the case. Always. The question is never whether identity and intention are one thing — they are. The question is which identity state is currently assumed, and whether the assumed state contains something that makes them feel like two things.</p>
+    <p>This is the central fact of the framework and the most important thing to understand precisely. Identity is not separate from intention. Intention is not separate from the reality it produces. They are one unbroken act — what you are being is what you are intending is what is manifesting. Simultaneously. Always.</p>
 
-    <p>That something is the wedge.</p>
+    <p>Which means there is no gap between you and what you intend. There cannot be. Your intentions come from you. They are you, expressing outward. The distance you feel between yourself and what you want — the sense that what you intend is out there, ahead of you, bigger than you, not yet real — is not a fact about reality.</p>
 
-    <div class="pull">The wedge is the illusion of separation between identity and intention. It is not a real separation. It is driven into the oneness and makes separation feel real from within it. The oneness was never broken.</div>
+    <p>It is produced by one thing.</p>
 
-    <p>The wedge is the primary human experience. Not because people are weak or confused but because the question it is organised around — <strong>am I worth this</strong> — is installed before there is any capacity to examine it. Before language. Before reasoning. It shapes the assumed identity state from beneath thought, and the reality that renders from that state confirms it daily.</p>
+    <div class="pull">The question is never whether identity and intention are one thing. They are. Always. The question is which identity state is currently assumed — and whether that assumed state contains something that makes them feel like two things.</div>
 
-    <p>Understanding the wedge precisely is the beginning of moving over it.</p>
+    <p>That something is the wedge. And understanding the wedge precisely — what it is, how it holds, and what moves over it — is the complete work.</p>
   </div>
-  <button class="next-btn" onclick="show('s2')">The Wedge →</button>
+  <div class="nav-btns">
+    <button class="next-btn back" onclick="show('s2')">← 4D State</button>
+    <button class="next-btn" onclick="show('s4')">The Wedge →</button>
+  </div>
 </section>
 
 <!-- ══════════════════════════════
-     S2 — THE WEDGE (interactive)
+     S4 — THE WEDGE (interactive)
 ══════════════════════════════ -->
-<section id="s2">
-  <div class="eyebrow">The Mirror Framework · Two</div>
+<section id="s4">
+  <div class="eyebrow">The Mirror · Four</div>
   <h1 class="s-title">The wedge:<br><em>worth driven into oneness</em></h1>
 
-  <div style="width:min(560px,95vw);position:relative;margin:0 auto">
-  <svg id="s2-svg" viewBox="0 0 560 400" style="width:100%;height:auto;overflow:visible;display:block">
+  <div class="diag-wrap">
+  <svg id="s4-svg" viewBox="0 0 580 390" style="width:100%;height:auto;overflow:visible;display:block">
     <defs>
       <radialGradient id="rg-one" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stop-color="#b8933a" stop-opacity="0.18"/>
@@ -204,231 +361,285 @@ section.active{display:flex}
       </marker>
     </defs>
 
-    <!-- UNIFIED STATE -->
-    <circle id="glow-one" cx="280" cy="108" r="78" fill="url(#rg-one)" opacity="1" class="t"/>
-    <circle id="ring-outer" cx="280" cy="108" r="66"
-      fill="none" stroke="rgba(184,147,58,0.1)" stroke-width="1" class="t"/>
-    <circle id="ring-inner" cx="280" cy="108" r="48"
-      fill="rgba(184,147,58,0.05)" stroke="rgba(184,147,58,0.55)" stroke-width="1.2" class="t"/>
-
-    <text id="lbl-one" x="280" y="100" text-anchor="middle"
-      font-family="'IM Fell English',serif" font-size="15" fill="#e2dac8" class="t">Identity · Intention · Reality</text>
-    <text id="lbl-one-sub" x="280" y="120" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5"
-      letter-spacing="2" fill="rgba(184,147,58,0.6)" class="t">one thing · always</text>
+    <!-- UNIFIED -->
+    <circle id="glow-one" cx="290" cy="105" r="80" fill="url(#rg-one)" opacity="1" class="t"/>
+    <circle id="ring-outer" cx="290" cy="105" r="68" fill="none" stroke="rgba(184,147,58,0.1)" stroke-width="1" class="t"/>
+    <circle id="ring-inner" cx="290" cy="105" r="50" fill="rgba(184,147,58,0.05)" stroke="rgba(184,147,58,0.55)" stroke-width="1.2" class="t"/>
+    <text id="lbl-one" x="290" y="97" text-anchor="middle" font-family="'IM Fell English',serif" font-size="14.5" fill="#e2dac8" class="t">Identity · Intention · Reality</text>
+    <text id="lbl-one-sub" x="290" y="117" text-anchor="middle" font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5" letter-spacing="2" fill="rgba(184,147,58,0.6)" class="t">one thing · always</text>
 
     <!-- expansion arcs -->
-    <path id="arc-l" d="M222,80 Q152,28 94,66 Q55,92 76,136 Q94,168 140,165"
-      fill="none" stroke="#b8933a" stroke-width="1.1" opacity="0.8"
-      marker-end="url(#ag)" class="t"/>
-    <path id="arc-r" d="M338,80 Q408,28 466,66 Q505,92 484,136 Q466,168 420,165"
-      fill="none" stroke="#b8933a" stroke-width="1.1" opacity="0.8"
-      marker-end="url(#ag)" class="t"/>
-    <text id="lbl-arc" x="280" y="20" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="8"
-      letter-spacing="2" fill="rgba(184,147,58,0.75)" class="t">REALITY EXPANDS · INTENTIONS MANIFEST</text>
+    <path id="arc-l" d="M228,78 Q155,25 94,64 Q54,90 76,136 Q95,170 144,167" fill="none" stroke="#b8933a" stroke-width="1.1" opacity="0.8" marker-end="url(#ag)" class="t"/>
+    <path id="arc-r" d="M352,78 Q425,25 486,64 Q526,90 504,136 Q485,170 436,167" fill="none" stroke="#b8933a" stroke-width="1.1" opacity="0.8" marker-end="url(#ag)" class="t"/>
+    <text id="lbl-arc" x="290" y="18" text-anchor="middle" font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5" letter-spacing="2" fill="rgba(184,147,58,0.75)" class="t">REALITY EXPANDS · INTENTIONS MANIFEST</text>
 
     <!-- WEDGE STATE -->
-    <circle id="glow-wedged" cx="280" cy="108" r="78" fill="url(#rg-wedged)" opacity="0" class="t"/>
-
-    <!-- wedge driven into circle from top -->
-    <polygon id="wedge-shadow" points="280,55 355,188 205,188"
-      fill="rgba(0,0,0,0.35)" transform="translate(3,5)" opacity="0" class="t"/>
-    <polygon id="wedge-body" points="280,55 355,188 205,188"
-      fill="rgba(12,11,8,0)" stroke="rgba(122,31,31,0)" stroke-width="1.2" class="t"/>
-
+    <circle id="glow-wedged" cx="290" cy="105" r="80" fill="url(#rg-wedged)" opacity="0" class="t"/>
+    <polygon id="wedge-shadow" points="290,53 368,188 212,188" fill="rgba(0,0,0,0.32)" transform="translate(3,5)" opacity="0" class="t"/>
+    <polygon id="wedge-body" points="290,53 368,188 212,188" fill="rgba(12,11,8,0)" stroke="rgba(122,31,31,0)" stroke-width="1.2" class="t"/>
     <g id="hatch" opacity="0" class="t">
-      <line x1="280" y1="55" x2="222" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
-      <line x1="280" y1="55" x2="238" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
-      <line x1="280" y1="55" x2="254" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
-      <line x1="280" y1="55" x2="270" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
-      <line x1="280" y1="55" x2="286" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
-      <line x1="280" y1="55" x2="302" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
-      <line x1="280" y1="55" x2="318" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
-      <line x1="280" y1="55" x2="338" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
+      <line x1="290" y1="53" x2="228" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
+      <line x1="290" y1="53" x2="244" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
+      <line x1="290" y1="53" x2="260" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
+      <line x1="290" y1="53" x2="276" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
+      <line x1="290" y1="53" x2="292" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
+      <line x1="290" y1="53" x2="308" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
+      <line x1="290" y1="53" x2="324" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
+      <line x1="290" y1="53" x2="344" y2="188" stroke="rgba(122,31,31,0.2)" stroke-width="0.8"/>
     </g>
+    <text id="wedge-lbl" x="290" y="128" text-anchor="middle" font-family="'IM Fell English',serif" font-size="12" font-style="italic" fill="rgba(192,112,112,0)" class="t">am I worth this</text>
+    <line id="ill-line" x1="152" y1="158" x2="428" y2="158" stroke="rgba(122,31,31,0)" stroke-width="1" stroke-dasharray="5,4" class="t"/>
+    <text id="lbl-identity" x="290" y="144" text-anchor="middle" font-family="'IM Fell English',serif" font-size="12" fill="rgba(226,218,200,0)" class="t">Identity</text>
+    <text id="lbl-intention" x="290" y="178" text-anchor="middle" font-family="'IM Fell English',serif" font-size="12" fill="rgba(226,218,200,0)" class="t">Intention</text>
+    <line id="arr-down" x1="290" y1="188" x2="290" y2="222" stroke="rgba(122,31,31,0)" stroke-width="1.4" marker-end="url(#ar)" class="t"/>
+    <rect id="box-cur" x="118" y="226" width="344" height="112" fill="rgba(122,31,31,0)" stroke="rgba(122,31,31,0)" stroke-width="1" class="t"/>
+    <text id="cur1" x="290" y="254" text-anchor="middle" font-family="'IM Fell English',serif" font-size="13.5" fill="rgba(192,112,112,0)" class="t">Intentions managed</text>
+    <text id="cur2" x="290" y="274" text-anchor="middle" font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5" letter-spacing="1.5" fill="rgba(122,31,31,0)" class="t">worth still being pursued · reality confirms the question</text>
+    <text id="cur3" x="290" y="292" text-anchor="middle" font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5" letter-spacing="1.4" fill="rgba(122,31,31,0)" class="t">self made small · or self as permanent work in progress</text>
+    <text id="cur4" x="290" y="316" text-anchor="middle" font-family="'IM Fell English',serif" font-size="10" font-style="italic" fill="rgba(155,90,90,0)" class="t">the curated universe · locked · looping</text>
 
-    <!-- worth label inside wedge -->
-    <text id="wedge-lbl" x="280" y="132" text-anchor="middle"
-      font-family="'IM Fell English',serif" font-size="12" font-style="italic"
-      fill="rgba(192,112,112,0)" class="t">am I worth this</text>
-
-    <!-- felt separation line -->
-    <line id="ill-line" x1="148" y1="160" x2="412" y2="160"
-      stroke="rgba(122,31,31,0)" stroke-width="1" stroke-dasharray="5,4" class="t"/>
-    <text id="lbl-identity" x="280" y="146" text-anchor="middle"
-      font-family="'IM Fell English',serif" font-size="12"
-      fill="rgba(226,218,200,0)" class="t">Identity</text>
-    <text id="lbl-intention" x="280" y="182" text-anchor="middle"
-      font-family="'IM Fell English',serif" font-size="12"
-      fill="rgba(226,218,200,0)" class="t">Intention</text>
-
-    <!-- curated reality -->
-    <line id="arr-down" x1="280" y1="188" x2="280" y2="224"
-      stroke="rgba(122,31,31,0)" stroke-width="1.4" marker-end="url(#ar)" class="t"/>
-    <rect id="box-cur" x="120" y="228" width="320" height="108"
-      fill="rgba(122,31,31,0)" stroke="rgba(122,31,31,0)" stroke-width="1" class="t"/>
-    <text id="cur1" x="280" y="256" text-anchor="middle"
-      font-family="'IM Fell English',serif" font-size="13.5"
-      fill="rgba(192,112,112,0)" class="t">Intentions managed</text>
-    <text id="cur2" x="280" y="276" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5"
-      letter-spacing="1.5" fill="rgba(122,31,31,0)" class="t">worth still being pursued · reality confirms the question</text>
-    <text id="cur3" x="280" y="294" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5"
-      letter-spacing="1.4" fill="rgba(122,31,31,0)" class="t">self made small · or self as permanent work in progress</text>
-    <text id="cur4" x="280" y="318" text-anchor="middle"
-      font-family="'IM Fell English',serif" font-size="10" font-style="italic"
-      fill="rgba(155,90,90,0)" class="t">the curated universe · locked · looping</text>
-
-    <rect id="hit" x="0" y="0" width="560" height="400" fill="transparent" cursor="pointer"/>
+    <rect id="hit" x="0" y="0" width="580" height="390" fill="transparent" cursor="pointer"/>
   </svg>
   </div>
 
   <div class="caption">
-    <div class="cap-text gold" id="s2-cap">Identity and intention are one thing — tap to drive the wedge in</div>
+    <div class="cap-text gold" id="s4-cap">Identity and intention are one thing — tap to drive the wedge in</div>
   </div>
   <div class="tap-hint">↑ tap the diagram</div>
 
   <div class="prose" style="margin-top:2rem">
-    <p class="lead">The wedge is not a mechanism that fires. It is an assumed state — one that contains the question of worth inside it. That question is what gets driven into the oneness of identity and intention and makes separation feel real from within it.</p>
-    <p>At level one, worth is sought through what others confirm. The self is here, the confirmation is out there, and the intention is in service of closing that gap. At level two, the confirmation is sought internally — the self becomes the object of its own improvement, permanently assessed, permanently not yet there. Both are the wedge. Both are the question of worth organising the assumed state.</p>
-    <p><strong>The wedge doesn't break the oneness. It occupies it.</strong> Which is precisely why it can be moved over — the oneness was always intact beneath it.</p>
+    <p class="lead">The wedge is the illusion of separation between identity and intention. Not a mechanism that creates the illusion. The illusion itself. It is driven into the oneness of identity and intention the way a wedge is driven into wood — the wood is still one piece, the wedge occupies it and makes separation feel real from within it. The oneness was never broken.</p>
+
+    <p>The wedge is worth. Specifically the question — <strong>am I worth this.</strong> That question is what gets driven into the oneness before there is any capacity to examine it. Before language. Before reasoning. The infant needs to be enough — worthy of care, worthy of survival. That question embeds beneath thought and every identity state assumed at levels one and two is organised around it.</p>
+
+    <p>While the worth question organises the assumed state, identity and intention feel like two things. The self feels here. The intention feels out there — bigger than the self, carrying a worth the self has not yet confirmed. The self is reaching toward its own intentions rather than being them. That reaching is the wedge in operation. And the reality that renders from that assumed state confirms the distance daily.</p>
   </div>
-  <button class="next-btn" onclick="show('s3')">The Lock →</button>
+  <div class="nav-btns">
+    <button class="next-btn back" onclick="show('s3')">← One Thing</button>
+    <button class="next-btn" onclick="show('s5')">How It Runs Daily →</button>
+  </div>
 </section>
 
 <!-- ══════════════════════════════
-     S3 — THE LOCK
+     S5 — DAILY LIFE + DIGITAL TRAP
 ══════════════════════════════ -->
-<section id="s3">
+<section id="s5">
   <div class="prose">
-    <div class="eyebrow">The Mirror Framework · Three</div>
-    <h1 class="s-title">The lock:<br><em>two ways the wedge holds</em></h1>
+    <div class="eyebrow">The Mirror · Five</div>
+    <h1 class="s-title">How the wedge runs:<br><em>in daily life and by design</em></h1>
 
-    <p class="lead">The wedge holds in two distinct ways. Both are human. Both feel completely reasonable from inside them. Both lock the assumed identity state around a question of worth that the state itself cannot answer.</p>
+    <p class="lead">The wedge is not an abstract condition. It is the specific texture of ordinary experience. Most people live inside it continuously without any framework to name what is happening — only the feeling that something is slightly off, that what they intend is not quite arriving, that they are working harder than the results justify.</p>
 
-    <p><strong>The first: making yourself small to protect against harm.</strong> Not from doubt about your own worth — from the consistent experience that being your full size causes a response. People feel harmed by it. They cut you down. They treat the full expression of your intentions as something to be contained. So the smallness becomes deliberate — a compression of intention made from care. Care for yourself, to avoid the bombardment. Care for others, from the belief that your full size harms them.</p>
-
-    <p>This is the wedge at its most compassionate form. The intention is genuine. The compression is chosen. But the assumed state is still one in which the full expression of identity and intention cannot be allowed — not because it is wrong, but because of what it will provoke. The worth of the intention is still subordinated to its reception. The self is still smaller than what it intends, by choice, to manage the response.</p>
-
-    <div class="pull">People feeling harmed and you intending harm are two different things. They can both be real simultaneously. One is not evidence of the other. Collapsing that distinction is where the lock forms.</div>
-
-    <p><strong>The second: the self as permanent work in progress.</strong> Not a blank assumption of smallness — an active project of improvement. The assumed state is not I am small, it is I am not yet what I should be. The self becomes the object of its own obsessive attention. Looking inward for evidence of improvement. Measuring the quality of its own self-seeing. The gap isn't between self and others — it is between self as it is and self as it should become.</p>
-
-    <p>This looks like growth. It feels like honesty. But the self is still the unit of measurement. Still here, still assessing, still looking for evidence that the gap is closing. And the looking is what keeps the gap open. Every piece of evidence gathered is gathered by a self that still has a question about itself.</p>
-
-    <p>In both cases the depth and clarity of intention is filtered. At level one it is filtered toward managing the response. At level two it is filtered toward improving the self. The thought never runs clean to full intention. The wedge is between it and where it would go.</p>
+    <p>These are the most common forms it takes:</p>
   </div>
-  <button class="next-btn" onclick="show('s4')">Moving Over →</button>
+
+  <div class="examples">
+    <div class="ex"><p>You know exactly what you want to say and edit it before it leaves you. <em>Not because the thought was wrong — because of how it might land.</em></p></div>
+    <div class="ex"><p>You work hard and still feel like you haven't done enough. The output is there. <em>The feeling of enough never arrives.</em></p></div>
+    <div class="ex"><p>You achieve the thing and feel nothing, or feel it briefly and then need the next one. <em>The confirmation lands and immediately expires.</em></p></div>
+    <div class="ex"><p>You shrink in rooms where you feel outranked. Not because you have less to offer. <em>Because the assumed self in that room is suddenly smaller.</em></p></div>
+    <div class="ex"><p>You cannot receive a compliment cleanly. <em>Something in it has to be deflected or qualified.</em></p></div>
+    <div class="ex"><p>You overprepare. Not because the preparation is needed. <em>Because being underprepared would expose something.</em></p></div>
+    <div class="ex"><p>You need to know how something will be received before you commit to it fully. <em>The intention waits for permission.</em></p></div>
+    <div class="ex"><p>You perform competence rather than exercise it. <em>The doing is for the audience, not the work.</em></p></div>
+    <div class="ex"><p>You are generous publicly and privately keep score. <em>The generosity is managing a perception of worth.</em></p></div>
+    <div class="ex"><p>You mistake the absence of criticism for approval. <em>Worth confirmed by what didn't happen.</em></p></div>
+  </div>
+
+  <div class="prose">
+    <p>All of these are the same thing. The question of worth — am I enough for this — running beneath every one of them, shaping what gets expressed, what gets compressed, what gets performed. The thought never running clean to full intention because it is being intercepted and redirected toward managing the worth question.</p>
+
+    <div class="divider"></div>
+
+    <h3>The industrial exploitation of the wedge</h3>
+
+    <p class="lead">What began as a private question installed in infancy is now being commercially exploited at a scale and precision that has never existed before. The attention economy did not create the worth question. It found it already installed and built an infinite confirmation machine on top of it.</p>
+
+    <p>Every metric the platforms surface — likes, views, followers, engagement, reach — is a worth confirmation mechanism. Not accidentally. Deliberately. The entire business model depends on the worth question remaining open. <strong>If you felt enough, you would stop scrolling.</strong> The feed exists to ensure you never quite do. The notification is a hit of level one recognition. The scroll is the search for it when the last hit expired. The algorithm knows exactly where the boundary of your assumed self is and keeps placing content just at that edge — just threatening enough, just validating enough, just comparative enough to keep the worth question active and the attention captured.</p>
+
+    <p>Social media comparison is the wedge running at industrial scale in real time. You are not comparing yourself to real people. You are comparing your interior — your doubts, your actual experience, the full complexity of your life — to other people's performed exteriors. Which are also produced by the wedge. Performing worth rather than assuming it. The comparison is between two curated universes, neither of which is the actual assumed state of the person generating it.</p>
+
+    <p>Commercialism runs the same mechanism but older. <strong>It sells you the cure to the wound it opened.</strong> You are not enough as you are — here is the product that closes the gap. The product lands, the gap reasserts, the next product appears. The entire consumer economy runs on the perpetual incompleteness of the level one and two assumed state. A self that is its intentions is its reality does not need to purchase confirmation of its worth. Which is why that self is not the target market and never will be.</p>
+
+    <p>The addiction loop is the wedge in its most physiological form. The substance or behaviour produces a temporary sensation of the wedge being withdrawn — the worth question goes quiet, the gap closes, there is a moment of what feels like wholeness. Then it expires and the question returns louder than before. The person is reaching for something real — the experience of identity and intention unified is real — but through a mechanism that deepens the wedge every time it runs.</p>
+
+    <p>The therapeutic and self-help industries built on top of all of this are largely level two responses to level one problems. Here is how to manage your relationship with the phone. Here is how to build a better morning routine. Here is how to rewire your nervous system. All of it is the self working on itself — the observer studying the observed, the gap kept open by the very attention being brought to closing it. Useful at the surface. Structurally maintaining the wedge because the framework is still the self being improved toward a version of itself that is finally enough.</p>
+
+    <div class="pull">The person scrolling at midnight is not weak. They are running a worth confirmation loop on a machine designed by some of the most sophisticated engineers alive specifically to keep that loop running. The wedge is being commercially exploited at a scale and precision that has never existed before. The exit is not digital detox or better habits. Those are level two responses. The exit is assuming a state from which the worth question is not the organising principle.</div>
+  </div>
+  <div class="nav-btns">
+    <button class="next-btn back" onclick="show('s4')">← The Wedge</button>
+    <button class="next-btn" onclick="show('s6')">Two Deeper Patterns →</button>
+  </div>
 </section>
 
 <!-- ══════════════════════════════
-     S4 — MOVING OVER
+     S6 — TWO DEEPER PATTERNS
 ══════════════════════════════ -->
-<section id="s4">
-  <div class="eyebrow">The Mirror Framework · Four</div>
-  <h1 class="s-title">Moving over the wedge:<br><em>not through it</em></h1>
+<section id="s6">
+  <div class="prose">
+    <div class="eyebrow">The Mirror · Six</div>
+    <h1 class="s-title">Two deeper patterns:<br><em>the wedge at its most human</em></h1>
 
-  <!-- SVG: wedge below, self moving over it -->
+    <p class="lead">Beneath the surface expressions of the worth question are patterns that are more intricate, more considered, and more difficult to see as the wedge — precisely because they are responses to real experience rather than simple fear or desire.</p>
+
+    <h3>Making yourself small to protect against harm</h3>
+
+    <p>This is not smallness born from doubt about worth. It is smallness chosen deliberately — as protection. The experience that precedes it is real and consistent: being your full size draws a response. People feel harmed by it. They cut you down. They treat the full expression of your intentions as something to be contained. The bombardment is real enough to treat as fact.</p>
+
+    <p>So the compression becomes an act of care. For yourself — to avoid the bombardment. For others — from the genuine belief that your full size harms them. The intention behind the smallness is not cowardice. It is consideration. Which makes it the hardest form of the wedge to see, because it is organised around something that feels like virtue.</p>
+
+    <p>The critical distinction that has to be established and held — within yourself, not argued to anyone else — is this: <strong>people feeling harmed and you intending harm are two different things.</strong> Both can be real simultaneously. One is not evidence of the other. The moment that distinction collapses — the moment their response becomes information about your intention — the compression feels not just reasonable but necessary. And your intentions become permanently smaller than they are, managed down to the size that provokes the least response.</p>
+
+    <p>Holding the clarity of your intention clearly enough within yourself that the response to it does not rewrite it — that is what allows full expression without compression. Not indifference to others. Not disregard for impact. The precise knowledge of what you intend and the refusal to let the reception of it become the definition of it.</p>
+
+    <div class="divider"></div>
+
+    <h3>Obsessing over improving how you see yourself</h3>
+
+    <p>This is level two at its most honest and most sophisticated. Not vanity. Not ego in the casual sense. A genuine, committed attempt to get better — at seeing yourself clearly, at being better, at closing the gap between what you are and what you know you could be. The self as the object of its own serious, sustained attention.</p>
+
+    <p>The assumed state here is not I am small. It is <strong>I am not yet what I should be.</strong> The self becomes the object of its own improvement. Looking inward for evidence of progress. Measuring the quality of self-seeing. Assessing whether the work is producing results. This feels like the most honest thing a person can do — taking responsibility for who they are and how they show up.</p>
+
+    <p>But the self is still the unit of measurement. Still here, still assessing, still looking for the evidence that the gap is closing. And the looking is what keeps the gap open. Every piece of evidence gathered is gathered by a self that still has a question about itself. The improvement project requires the incomplete self to remain incomplete enough to keep improving. The wedge is load-bearing inside the project.</p>
+
+    <p>The movement out of this is not dissolving the obsession or overcoming it. It is moving what the obsession is pointed at. <strong>From the image of yourself to your intentions.</strong> Getting clearer and deeper in your intentions — knowing there is no separation between you and them. This is not self-obsession in the level two sense at all. There is no gap being measured. No self being improved toward a better version. Just the intention getting clearer and deeper. The thought running at full depth because nothing is intercepting it on behalf of a self that needs something from it.</p>
+  </div>
+  <div class="nav-btns">
+    <button class="next-btn back" onclick="show('s5')">← Daily Life</button>
+    <button class="next-btn" onclick="show('s7')">Three Levels →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     S7 — THREE LEVELS
+══════════════════════════════ -->
+<section id="s7">
+  <div class="prose">
+    <div class="eyebrow">The Mirror · Seven</div>
+    <h1 class="s-title">Three levels:<br><em>how the worth question organises the assumed state</em></h1>
+
+    <p class="lead">The worth question does not operate at the same depth in everyone. It has three distinct levels — not of motivation, but of how deeply the wedge is embedded in the assumed identity state and what it is using to try to answer itself.</p>
+  </div>
+
+  <div class="levels">
+    <div class="level l1">
+      <div class="level-tag">Level One</div>
+      <div class="level-name">Worth through recognition from others</div>
+      <p>The outcome carries the worth. Achieve it, receive the recognition, and worth is confirmed. The entire orientation is toward the reflection — thought doesn't run outward from identity, it runs toward the 3D output and tries to shape it. Managing outcomes. Managing perception. Managing how things land.</p>
+      <p>The confirmation lands and immediately expires. Because the assumed state at level one requires the worth question to remain open. A self that has fully confirmed its worth through recognition would have no further use for the mechanism. The gap is load-bearing. The reaching continues.</p>
+      <p><strong>This is the level the attention economy, social media, and the entire recognition economy are built on.</strong> They did not create it. They industrialised it — offering infinite worth confirmation hits that expire on contact, keeping the loop running indefinitely by design.</p>
+    </div>
+    <div class="level l2">
+      <div class="level-tag">Level Two</div>
+      <div class="level-name">Worth through self-proof</div>
+      <p>The confirmation moves inward. This feels like progress — like authenticity, like doing the real work rather than seeking external validation. But the structure is identical. The self becomes the object of its own work. Observing itself. Assessing itself. Measuring the quality of its own seeing. The gap doesn't close — it gets privatised.</p>
+      <p>Identity and intention are perpetually kept apart as a permanent condition. The self is here and its better version is out there, the distance managed through sustained self-improvement. The depth and clarity of thought that would run from pure intention is filtered at every point by the question of whether this confirms progress.</p>
+      <p><strong>The entire ego framework is a level two trap.</strong> Observe the ego, manage the ego, transcend the ego — all of it makes the self the object of its own improvement, the observer permanently separate from the observed. Every tradition built on ego transcendence assumes the self is the problem. Which is the contracted assumed state describing itself as the human condition and selling the gap as the path. The self working on itself from within the wedge, using the wedge's own framework to do it.</p>
+    </div>
+    <div class="level l3">
+      <div class="level-tag">Level Three</div>
+      <div class="level-name">The worth question loses its organising role</div>
+      <p>This is not a higher level of motivation. It is the end of the motivational structure entirely. Motivation only exists because the gap appears to exist — because there is a self here and an intention out there and distance between them to be crossed. When the gap is not the assumed condition, motivation has nothing to generate.</p>
+      <p>What happens at level three is not that something outside the self becomes more important than the self. <strong>Purpose expands the self — because identity is intentions.</strong> Larger intentions are a larger self. The self assumed at level three is those intentions is that reality. The worth question belonged to a smaller assumed state. The expanded assumed state simply doesn't contain it.</p>
+      <p>The wedge is not removed. It is moved over. The geometry of the worth question no longer reaches the assumed state. Identity is intention is reality — one unbroken movement outward — not as something arrived at but as the natural condition of a self whose assumed state is no longer organised around the question of its own worth.</p>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="next-btn back" onclick="show('s6')">← Two Deeper Patterns</button>
+    <button class="next-btn" onclick="show('s8')">Moving Over →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     S8 — MOVING OVER
+══════════════════════════════ -->
+<section id="s8">
+  <div class="prose">
+    <div class="eyebrow">The Mirror · Eight</div>
+    <h1 class="s-title">Moving over the wedge:<br><em>not through it</em></h1>
+  </div>
+
   <div style="width:min(560px,95vw);margin:0 auto 1.5rem">
-  <svg viewBox="0 0 560 240" style="width:100%;height:auto;overflow:visible;display:block">
+  <svg viewBox="0 0 560 230" style="width:100%;height:auto;overflow:visible;display:block">
     <defs>
       <radialGradient id="rg-over" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stop-color="#b8933a" stop-opacity="0.2"/>
         <stop offset="100%" stop-color="#b8933a" stop-opacity="0"/>
       </radialGradient>
-      <marker id="ag2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <marker id="ag3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
         <path d="M0,0 L0,6 L8,3 z" fill="#b8933a"/>
       </marker>
     </defs>
-
-    <!-- the wedge — still there, beneath -->
-    <polygon points="280,100 420,220 140,220"
-      fill="rgba(122,31,31,0.12)" stroke="rgba(122,31,31,0.25)" stroke-width="1"/>
-    <g stroke="rgba(122,31,31,0.12)" stroke-width="0.8">
-      <line x1="280" y1="100" x2="195" y2="220"/>
-      <line x1="280" y1="100" x2="218" y2="220"/>
-      <line x1="280" y1="100" x2="241" y2="220"/>
-      <line x1="280" y1="100" x2="264" y2="220"/>
-      <line x1="280" y1="100" x2="287" y2="220"/>
-      <line x1="280" y1="100" x2="310" y2="220"/>
-      <line x1="280" y1="100" x2="333" y2="220"/>
-      <line x1="280" y1="100" x2="356" y2="220"/>
-      <line x1="280" y1="100" x2="379" y2="220"/>
+    <!-- wedge still there beneath -->
+    <polygon points="280,98 430,218 130,218" fill="rgba(122,31,31,0.1)" stroke="rgba(122,31,31,0.22)" stroke-width="1"/>
+    <g stroke="rgba(122,31,31,0.1)" stroke-width="0.7">
+      <line x1="280" y1="98" x2="180" y2="218"/>
+      <line x1="280" y1="98" x2="205" y2="218"/>
+      <line x1="280" y1="98" x2="230" y2="218"/>
+      <line x1="280" y1="98" x2="255" y2="218"/>
+      <line x1="280" y1="98" x2="280" y2="218"/>
+      <line x1="280" y1="98" x2="305" y2="218"/>
+      <line x1="280" y1="98" x2="330" y2="218"/>
+      <line x1="280" y1="98" x2="355" y2="218"/>
+      <line x1="280" y1="98" x2="380" y2="218"/>
     </g>
-    <text x="280" y="175" text-anchor="middle"
-      font-family="'IM Fell English',serif" font-size="11" font-style="italic"
-      fill="rgba(122,31,31,0.4)">the wedge · still there</text>
-    <text x="280" y="192" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7"
-      letter-spacing="1.6" fill="rgba(122,31,31,0.3)">not removed · beneath</text>
-
-    <!-- the unified circle ABOVE the wedge -->
-    <circle cx="280" cy="58" r="44" fill="url(#rg-over)"/>
-    <circle cx="280" cy="58" r="32"
-      fill="rgba(184,147,58,0.06)" stroke="rgba(184,147,58,0.6)" stroke-width="1.2"/>
-    <text x="280" y="52" text-anchor="middle"
-      font-family="'IM Fell English',serif" font-size="13" fill="#e2dac8">Identity · Intention</text>
-    <text x="280" y="68" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7"
-      letter-spacing="1.8" fill="rgba(184,147,58,0.65)">one · above</text>
-
-    <!-- expansion arcs from above -->
-    <path d="M250,38 Q200,8 160,28 Q130,44 144,72"
-      fill="none" stroke="#b8933a" stroke-width="1" opacity="0.7"
-      marker-end="url(#ag2)"/>
-    <path d="M310,38 Q360,8 400,28 Q430,44 416,72"
-      fill="none" stroke="#b8933a" stroke-width="1" opacity="0.7"
-      marker-end="url(#ag2)"/>
-
-    <!-- level labels on wedge sides -->
-    <text x="168" y="152" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5"
-      letter-spacing="1.4" fill="rgba(122,31,31,0.45)"
-      transform="rotate(-48,168,152)">level one</text>
-    <text x="394" y="152" text-anchor="middle"
-      font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7.5"
-      letter-spacing="1.4" fill="rgba(122,31,31,0.45)"
-      transform="rotate(48,394,152)">level two</text>
+    <text x="280" y="170" text-anchor="middle" font-family="'IM Fell English',serif" font-size="11" font-style="italic" fill="rgba(122,31,31,0.35)">the wedge · still there · beneath</text>
+    <text x="165" y="148" text-anchor="middle" font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7" letter-spacing="1.4" fill="rgba(122,31,31,0.3)" transform="rotate(-46,165,148)">level one</text>
+    <text x="396" y="148" text-anchor="middle" font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7" letter-spacing="1.4" fill="rgba(122,31,31,0.3)" transform="rotate(46,396,148)">level two</text>
+    <!-- unified circle above -->
+    <circle cx="280" cy="54" r="44" fill="url(#rg-over)"/>
+    <circle cx="280" cy="54" r="32" fill="rgba(184,147,58,0.06)" stroke="rgba(184,147,58,0.6)" stroke-width="1.2"/>
+    <text x="280" y="48" text-anchor="middle" font-family="'IM Fell English',serif" font-size="12.5" fill="#e2dac8">Identity · Intention</text>
+    <text x="280" y="64" text-anchor="middle" font-family="'Josefin Sans',sans-serif" font-weight="100" font-size="7" letter-spacing="1.8" fill="rgba(184,147,58,0.65)">one · above</text>
+    <!-- expansion arcs -->
+    <path d="M252,36 Q200,6 158,26 Q128,42 142,70" fill="none" stroke="#b8933a" stroke-width="1" opacity="0.7" marker-end="url(#ag3)"/>
+    <path d="M308,36 Q360,6 402,26 Q432,42 418,70" fill="none" stroke="#b8933a" stroke-width="1" opacity="0.7" marker-end="url(#ag3)"/>
   </svg>
   </div>
 
   <div class="prose">
-    <p class="lead">You do not move through the wedge. You move over it. The wedge is still there — the bombardment still happens, people still feel harmed, the level two structure still exists as a possible state to assume. None of that is removed. You assumed a state that is above the level at which the wedge operates.</p>
+    <p class="lead">You do not move through the wedge. You do not dissolve it, defeat it, or resolve it. You move over it. The wedge remains — beneath the assumed state, still there, still recognisable. The bombardment still happens. The old patterns are still visible. The worth question is still installed. None of that is removed.</p>
 
-    <p>The wedge sits between a self and its intentions. When you moved to where identity is intentions — when there was no longer a self here and an intention out there — the wedge had nothing to sit between. Not because it was overcome. Because you assumed a state from which its geometry simply doesn't apply.</p>
+    <p>What changes is the assumed state. You assume a state that is above the level at which the wedge operates. The wedge sits between a self and its intentions. When the assumed state is one in which identity is intentions — when there is no self here and intention out there — the wedge has nothing to sit between. Its geometry does not reach the assumed state above it.</p>
 
-    <p>This is what makes it honest. It doesn't promise the wedge disappears. The question of worth is still installed. The responses from others are still real. The old pattern of self-assessment is still recognisable. But none of it is the organising principle of the assumed state anymore. <strong>It is beneath you, not gone.</strong></p>
+    <p>This is what makes it honest as a description of human experience. It does not promise the worth question disappears. It does not promise the responses of others change. It does not promise the old patterns become unrecognisable. <strong>It says that none of those things are the organising principle of the assumed state anymore.</strong> The wedge is beneath you, not gone. And from above it, intention runs clean.</p>
 
-    <div class="pull">Moving over the wedge is not an achievement. It is an assumed state. Which means it is also what was always available — not as a destination to reach but as a state to assume. The wedge was never structural. It was always just occupying something that was already whole.</div>
+    <div class="pull">Moving over the wedge is not an achievement. It is an assumed state. Which means it is always available — not as a destination to reach through sustained effort but as a state that can be assumed now. The wedge was never structural. It occupied something that was always already whole.</div>
   </div>
-  <button class="next-btn" onclick="show('s5')">Intention →</button>
+  <div class="nav-btns">
+    <button class="next-btn back" onclick="show('s7')">← Three Levels</button>
+    <button class="next-btn" onclick="show('s9')">Clarity of Intention →</button>
+  </div>
 </section>
 
 <!-- ══════════════════════════════
-     S5 — INTENTION
+     S9 — INTENTION
 ══════════════════════════════ -->
-<section id="s5">
+<section id="s9">
   <div class="prose">
-    <div class="eyebrow">The Mirror Framework · Five</div>
+    <div class="eyebrow">The Mirror · Nine</div>
     <h1 class="s-title">Clarity and depth of intention:<br><em>unattached, unfiltered, clean</em></h1>
 
-    <p class="lead">Two things cleared the way. Neither of them was insight about the wedge. Both of them were movements of intention itself.</p>
+    <p class="lead">When the assumed state is above the wedge — when identity is intentions is reality, one unbroken movement — thought runs at full depth and clarity. Not as a practice. Not as something maintained through discipline. As the natural condition of a self that is not smaller than what it intends and is not using its intentions to answer a question about its own worth.</p>
 
-    <p><strong>The first: separating intention from its reception.</strong> People feel harmed. That is real. And the intention is not to harm. That is also real. These two things exist simultaneously without one cancelling the other. The intention is not responsible for the gap between itself and how it lands. Holding that distinction clearly enough — within yourself, not argued to anyone else — is what allowed the full expression of intention without pre-emptive compression. You didn't stop being big. You stopped treating their response as information about your intention.</p>
+    <p>Clarity and depth of intention deepen when the intention is not attached. Not attached to how it will be received. Not attached to what it will confirm about the self. Not attached to the outcome it will produce. Just the intention itself — what it actually is, running outward from the assumed state without interception.</p>
 
-    <p><strong>The second: moving the obsession.</strong> Not dissolving it. Not overcoming it. Moving what it was pointed at. From the image of yourself — which keeps the self as the object, permanently assessed, permanently not yet there — to your intentions. Getting clearer and deeper in your intentions. Knowing there is no separation between you and them.</p>
+    <p>Attached intention is always partly about something other than the intention. Attached to reception — the thought is shaped by the anticipated response before it is even expressed. Attached to self-proof — the intention is in service of confirming something about the self that needs confirming. Attached to outcome — the intention is managed toward a result rather than running from a state. In each case the depth and clarity are filtered. The thought arrives at the intention having already been intercepted by the worth question in one of its forms.</p>
 
-    <p>And this is the precise mechanism. Obsessing over the clarity and depth of your intentions is not self-obsession in the level two sense. There is no gap being measured. There is no self being improved toward a better version. There is just the intention getting clearer and deeper. The thought running at full depth because there is nothing intercepting it on behalf of a self that needs something from it.</p>
+    <p><strong>Unattached intention is not indifference.</strong> It is the opposite — the fullest possible expression of what is actually intended, without the compression that the worth question imposes. The intention is clear because there is nothing it needs to be other than what it is. It is deep because the thought runs all the way to it without being redirected toward managing its reception or confirming its author.</p>
 
-    <div class="pull">Clarity and depth of intention are deepened when they are not attached. Not attached to how the intention will land. Not attached to what it will confirm about the self. Just the intention itself — what it actually is, at full depth, running clean.</div>
+    <div class="pull">Your size is your worth. Not as an achievement. Not as something confirmed by outcomes or recognition or self-proof. As what you are when the assumed state is not organised around the question. Identity is intention is reality — one thing — and the depth and clarity of that one thing, running clean, is what creates.</div>
 
-    <p>This is the human experience of identity being intention being reality. Not as a concept arrived at. As what actually happened when the filtering stopped. The thought ran to full intention. The reality rendered from that. Not because the wedge was removed — because the assumed state was one in which the wedge is beneath you, and the intention runs from above it, uninterrupted, at full depth and clarity.</p>
+    <p>This is not a state to work toward. It is a state to assume. The work — if it can be called that — is getting clear enough on your intentions that the assumed state naturally moves above the level at which the worth question organises it. Clear enough to know what you intend. Deep enough to know it is yours and no one else's reading of it changes what it is. Unattached enough that the thought runs all the way from the assumed state outward into reality without being intercepted on the way.</p>
 
-    <p><strong>That is what is available.</strong> Not as achievement. As assumption. The same assumption you made — that your intentions are yours, are clear, are not in service of managing harm or building a better self — is available to anyone who moves their attention from the image to the intention. From the self being improved to the intention being deepened. From managing the reflection to running clean from the source.</p>
+    <p>That is what is available. Identity is intention is reality. It always was. The wedge occupied the oneness temporarily. The oneness was never broken. It is what you return to — or more precisely, what you find you never left.</p>
   </div>
-  <button class="next-btn" onclick="show('s1')">↑ Begin again</button>
+  <div class="nav-btns">
+    <button class="next-btn back" onclick="show('s8')">← Moving Over</button>
+    <button class="next-btn" onclick="show('s1')">↑ Begin again</button>
+  </div>
 </section>
 
 <script>
@@ -441,13 +652,12 @@ function show(id){
 }
 show('s1');
 
-// S2 diagram
+// S4 wedge diagram
 let wedgeIn=false;
 function g(id){return document.getElementById(id)}
-
 function setWedge(on){
   wedgeIn=on;
-  const cap=g('s2-cap');
+  const cap=g('s4-cap');
   if(on){
     g('glow-one').style.opacity='0';
     g('glow-wedged').style.opacity='1';
@@ -500,7 +710,6 @@ function setWedge(on){
     cap.className='cap-text gold';
   }
 }
-
 g('hit').addEventListener('click',()=>setWedge(!wedgeIn));
 </script>
 </body>
